@@ -1,8 +1,7 @@
 # Sistema Híbrido de Predicción de OEE, Estimación de Riesgo de Plan y Diagnóstico de Fallas
 
-**Proyecto Individual de Aplicación Industrial**  
+**Salma Paulette Becerra Cervantes**  
 **Empresa:** Laboratorios PiSA S.A. de C.V. — Dirección de Planeación de la Producción  
-*Alineado a los contenidos y rúbrica formal de evaluación de la materia (Bases de Datos, Pipelines/ETL, Jobs Programados, Machine Learning y Arquitectura Medallion).*
 
 ---
 
