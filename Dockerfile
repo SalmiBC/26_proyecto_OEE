@@ -1,4 +1,4 @@
-# Imagen base ligera de Python
+# Imagen base ultra ligera de Python
 FROM python:3.11-slim
 
 # Metadatos del contenedor
@@ -13,14 +13,13 @@ ENV WORKERS=2
 
 WORKDIR /app
 
-# Instalar dependencias del sistema mínimas requeridas
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copiar requirements e instalar paquetes Python
+# Copiar requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Instalar PyTorch versión CPU (180MB en vez de 4GB de drivers CUDA innecesarios) y dependencias
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copiar código fuente, interfaces web y artefactos del modelo
 COPY src/ ./src/
