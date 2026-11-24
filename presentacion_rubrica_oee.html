@@ -1,1121 +1,1248 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full">
+<html lang="es" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presentación Ejecutiva e Interactiva | Proyecto Predictivo OEE & Rúbrica MLOps</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- FontAwesome 6 Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
-  <!-- Google Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- KaTeX para fórmulas matemáticas -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema Predictivo de OEE — Laboratorios PiSA</title>
+<script>
+(function(){try{
+  var q=new URLSearchParams(location.search).get('tema');
+  var t=q==='claro'?'light':(q==='oscuro'?'dark':null);
+  if(!t){try{t=localStorage.getItem('oee-tema')}catch(e){}}
+  if(t!=='light'&&t!=='dark')t=document.documentElement.getAttribute('data-theme')||'dark';
+  document.documentElement.setAttribute('data-theme',t);
+}catch(e){}})();
+</script>
+<style>@font-face{font-family:'Archivo';src:local('Archivo');font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:local('JetBrains Mono');font-weight:100 800;font-display:swap}
+</style>
+<style>
+:root{
+  --sans:'Archivo','Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,'DejaVu Sans Mono',monospace;
+  --bg:#0a1020;--panel:#111b30;--panel2:#17233d;--line:#2a3a5c;
+  --txt:#eaf0ff;--muted:#a9b8d6;
+  --blue:#58a6ff;--red:#ff6f6f;--gold:#f3c555;--gray:#8d9bb5;--on-color:#07101f;
+  --mk:rgba(243,197,85,.30);--sombra:0 14px 40px rgba(0,0,0,.35);
+  --g1:60,120,255;--g2:30,190,170;--g3:130,90,255;--g4:50,160,255;--g5:240,170,60;--mota:200,220,255;--glow-a:.30;
+}
+:root[data-theme="light"]{
+  --bg:#f3f6fc;--panel:#ffffff;--panel2:#eef3fb;--line:#c3cfe4;
+  --txt:#0e1a30;--muted:#43526d;
+  --blue:#0b5fd1;--red:#bf242b;--gold:#8a5600;--gray:#56637c;--on-color:#ffffff;
+  --mk:rgba(243,197,85,.60);--sombra:0 12px 30px rgba(30,50,90,.12);
+  --g1:90,140,255;--g2:60,200,185;--g3:150,120,255;--g4:80,170,255;--g5:255,190,90;--mota:60,100,180;--glow-a:.20;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#04070d;overflow:hidden}
+body{font-family:var(--sans);color:var(--txt);-webkit-font-smoothing:antialiased}
+button,input,select{font-family:inherit}
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    code, pre, .font-mono {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .slide {
-      display: none;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .slide.active {
-      display: flex;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .custom-scroll::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 4px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-    @media print {
-      body { background: white !important; color: black !important; }
-      .no-print { display: none !important; }
-      .slide { display: block !important; opacity: 1 !important; page-break-after: always; height: auto !important; min-height: 100vh; }
-    }
-  </style>
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;margin:-450px 0 0 -800px;
+  background:var(--bg);overflow:hidden;transform-origin:center center}
+#fondo{position:absolute;left:0;top:0;width:1600px;height:900px;z-index:0}
+#grano{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.10;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+/* ---------- riel de actos ---------- */
+#riel{position:absolute;left:0;right:0;top:0;height:58px;z-index:6;display:flex;align-items:center;gap:6px;
+  padding:0 150px 0 64px;transition:opacity .4s,transform .4s}
+#stage.bare #riel{opacity:0;transform:translateY(-20px);pointer-events:none}
+.acto{display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;font-size:16px;font-weight:600;
+  color:var(--muted);cursor:pointer;border:1px solid transparent;transition:.3s;white-space:nowrap}
+.acto b{font-family:var(--mono);font-size:15px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--line);color:var(--muted)}
+.acto.hecho b{background:var(--blue);color:var(--on-color);border-color:var(--blue)}
+.acto.act{color:var(--txt);background:var(--panel);border-color:var(--line)}
+.acto.act b{background:var(--blue);color:var(--on-color);border-color:var(--blue)}
+.acto:hover{color:var(--txt)}
+#avance{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--line);opacity:.6}
+#avance i{display:block;height:100%;width:0;background:var(--blue);transition:width .6s}
+#cuenta{position:absolute;right:76px;top:0;height:58px;z-index:6;display:flex;align-items:center;font:600 16px var(--mono);color:var(--muted);transition:opacity .4s}
+#stage.bare #cuenta{opacity:0}
+#btnTema{position:absolute;right:24px;top:11px;z-index:8;width:40px;height:36px;border-radius:10px;border:1px solid var(--line);
+  background:var(--panel);color:var(--txt);cursor:pointer;display:grid;place-items:center;outline-offset:2px}
+#btnTema:hover{border-color:var(--blue)}
+#btnTema svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+
+/* ---------- láminas ---------- */
+.slide{position:absolute;inset:0;visibility:hidden}
+.slide.on,.slide.out{visibility:visible}
+.slide.on{z-index:2}.slide.out{z-index:1}
+.cab{position:absolute;left:64px;right:64px;top:80px}
+.kick{font-size:17px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:12px}
+.kick::before{content:"";width:34px;height:3px;background:var(--blue);border-radius:2px}
+.tit{margin:8px 0 0;font-size:52px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-stretch:100%}
+.etq{position:absolute;right:0;top:4px;font-size:16px;font-weight:600;padding:7px 16px;border-radius:999px;border:1px solid var(--line);
+  background:var(--panel);color:var(--muted)}
+.cuerpo{position:absolute;left:64px;right:64px;top:196px;bottom:68px}
+.pie{position:absolute;left:64px;right:64px;bottom:22px;display:flex;justify-content:space-between;align-items:center;font-size:15px;color:var(--muted)}
+.pie .rub{font-weight:700;color:var(--txt);padding:5px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
+
+.w{display:inline-block;opacity:0;transform:translateY(.55em);white-space:pre}
+.slide.on .w{opacity:1;transform:none;transition:opacity .55s calc(var(--i)*70ms + 350ms),transform .65s cubic-bezier(.2,.8,.2,1) calc(var(--i)*70ms + 350ms)}
+.slide.out .w{opacity:1;transform:none}
+
+/* pasos */
+[data-step]{opacity:0;transform:translateX(-38px);transition:opacity .55s,transform .65s cubic-bezier(.2,.8,.2,1)}
+[data-step].mostrado{opacity:1;transform:none}
+svg [data-step]{transform:none!important}
+[data-step].casc>*{opacity:0;transform:translateX(-30px);transition:opacity .5s calc(var(--i,0)*150ms + 150ms),transform .6s cubic-bezier(.2,.8,.2,1) calc(var(--i,0)*150ms + 150ms)}
+[data-step].casc.mostrado>*{opacity:1;transform:none}
+.mk{background:linear-gradient(transparent 58%,var(--mk) 58%) no-repeat;background-size:0 100%;transition:background-size .8s .45s;color:inherit;padding:0 2px}
+.mostrado .mk,.slide.on .mk.fijo{background-size:100% 100%}
+.todo .mk{background-size:100% 100%}
+
+/* componentes */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px 24px;box-shadow:var(--sombra)}
+.card.rojo{border-color:var(--red)}
+.card.azul{border-color:var(--blue)}
+.t{font-size:17px;line-height:1.42;color:var(--muted)}
+.t b,.t strong{color:var(--txt);font-weight:700}
+.lede{font-size:23px;line-height:1.4;color:var(--txt);max-width:1250px;margin:0}
+.h3{font-size:21px;font-weight:700;margin:0 0 6px;line-height:1.2}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700}
+.ic{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em;flex:none}
+.rojo-t{color:var(--red)}.azul-t{color:var(--blue)}.gris-t{color:var(--gray)}.oro-t{color:var(--gold)}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:16px;font-weight:700;padding:6px 14px;border-radius:999px;border:1px solid currentColor}
+.mono{font-family:var(--mono)}
+code,.cod{font-family:var(--mono);font-size:.92em;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:var(--txt)}
+
+/* ---- S1 portada ---- */
+#s1 .centro{position:absolute;left:100px;right:100px;top:78px;text-align:center}
+#s1 .ins{display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:8px 20px;border-radius:999px;border:1px solid var(--blue);color:var(--blue);background:color-mix(in srgb,var(--blue) 10%,transparent)}
+#s1 h1{font-size:62px;font-weight:800;line-height:1.06;margin:26px auto 0;max-width:1300px;letter-spacing:-.015em}
+#s1 .sub{font-size:23px;line-height:1.45;color:var(--muted);max-width:1100px;margin:22px auto 0}
+#s1 .sub b{color:var(--txt)}
+#s1 .crit{position:absolute;left:64px;right:64px;top:520px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+#s1 .crit .card{padding:22px 22px 20px;position:relative;overflow:hidden}
+#s1 .crit .card::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--blue)}
+#s1 .crit .n{font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:8px}
+#s1 .crit .n .ic{width:26px;height:26px}
+#s1 .crit h3{font-size:22px;margin:8px 0 6px}
+#s1 .crit p{margin:0;font-size:16px;line-height:1.4;color:var(--muted)}
+
+/* ---- S2 ---- */
+#s2 .dos{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+#s2 .panel{border-radius:20px;padding:18px 22px;position:relative;overflow:hidden;border:1px solid}
+#s2 .panel.r{background:linear-gradient(160deg,color-mix(in srgb,var(--red) 14%,var(--panel)),var(--panel) 60%);border-color:var(--red)}
+#s2 .panel.a{background:linear-gradient(160deg,color-mix(in srgb,var(--blue) 14%,var(--panel)),var(--panel) 60%);border-color:var(--blue)}
+#s2 .panel h3{margin:0 0 10px;font-size:22px;display:flex;align-items:center;gap:10px}
+#s2 .panel.r h3{color:var(--red)}#s2 .panel.a h3{color:var(--blue)}
+#s2 .it{border-left:4px solid;padding:6px 0 6px 14px;margin:0 0 9px}
+#s2 .r .it{border-color:var(--red)}#s2 .a .it{border-color:var(--blue)}
+#s2 .it b{display:block;font-size:18px;margin-bottom:2px}
+#s2 .it span{font-size:16px;line-height:1.38;color:var(--muted);display:block}
+#s2 .it span strong{color:var(--txt)}
+#s2 .foot{font-size:16px;font-weight:600;padding:9px 14px;border-radius:12px;display:flex;gap:10px;align-items:center}
+#s2 .r .foot{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--txt)}
+#s2 .a .foot{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--txt)}
+#s2 .conts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}
+#s2 .cont{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px 18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+#s2 .cont .num{font-size:36px;line-height:1}
+#s2 .cont small{font-size:15px;color:var(--muted);line-height:1.25;display:block}
+#s2 .cont .col{display:block}
+
+/* ---- S3 ---- */
+#s3 .capas{display:grid;grid-template-columns:1fr 70px 1fr 70px 1fr;align-items:stretch}
+#s3 .capa{padding:18px 20px;border-radius:18px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--sombra)}
+#s3 .capa header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+#s3 .capa .ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:var(--on-color)}
+#s3 .capa .ico .ic{width:26px;height:26px}
+#s3 .capa .nm{font-size:21px;font-weight:800;line-height:1.1}
+#s3 .capa .sb{font-size:15px;color:var(--muted);line-height:1.25}
+#s3 .capa .fi{border-top:1px solid var(--line);padding:9px 0 3px}
+#s3 .capa .fi b{display:block;font-size:17px}
+#s3 .capa .fi span{font-size:15.5px;line-height:1.36;color:var(--muted);display:block}
+#s3 .tub{display:flex;align-items:center;justify-content:center}
+.flecha{position:relative;width:100%;height:8px;border-radius:4px;background:repeating-linear-gradient(90deg,var(--blue) 0 14px,transparent 14px 26px);background-size:26px 100%;animation:flujo 1s linear infinite}
+.flecha::after{content:"";position:absolute;right:-6px;top:-8px;border-left:16px solid var(--blue);border-top:12px solid transparent;border-bottom:12px solid transparent}
+@keyframes flujo{to{background-position:26px 0}}
+#s3 .part{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px 20px 8px;position:relative}
+#s3 .part .nota{position:absolute;right:24px;top:12px;font-size:16px;font-weight:700;color:var(--gold)}
+
+/* ---- S4 ---- */
+#s4 .izq{position:absolute;left:0;top:0;width:790px}
+#s4 .der{position:absolute;left:820px;top:0;width:652px}
+#s4 .redbox{padding:6px 8px;height:290px}
+#s4 .forma{margin-top:12px;padding:14px 22px;height:160px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.fo{font-size:21px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.frac{display:inline-flex;flex-direction:column;align-items:center;text-align:center}
+.frac>span:first-child{padding:0 10px 4px;border-bottom:2px solid var(--txt)}
+.frac>span:last-child{padding:4px 10px 0}
+.regla{font-size:20px;font-weight:700;display:flex;align-items:center;gap:12px}
+#s4 .banda{height:196px;padding:10px 14px}
+#s4 .met{margin-top:12px;height:264px;padding:12px 18px}
+#s4 .just{position:absolute;left:0;right:0;top:482px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+#s4 .just .card{padding:16px 20px}
+#s4 .just .h3{font-size:19px;margin-bottom:4px}
+#s4 .just .t{font-size:16px}
+.tag{font-size:15px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* ---- S5 ---- */
+#s5 .fila1{display:grid;grid-template-columns:230px 60px 330px 60px 1fr;grid-template-rows:auto;align-items:center;height:290px;position:relative}
+#s5 .cli{grid-column:1;padding:20px;text-align:center}
+#s5 .cli .ic{width:46px;height:46px;color:var(--blue)}
+#s5 .arr{grid-column:2/5;grid-row:1;z-index:0}
+#s5 .gate{grid-column:3;grid-row:1;z-index:1;padding:14px 16px;border-color:var(--red);position:relative}
+#s5 .gate ul{margin:8px 0 0;padding:0;list-style:none;font-family:var(--mono);font-size:15px;line-height:1.55;color:var(--muted)}
+#s5 .gate .r422{margin-top:10px;display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--red)}
+#s5 .dk{grid-column:5;border:2px dashed var(--blue);border-radius:22px;padding:14px 20px;height:100%;position:relative;background:color-mix(in srgb,var(--blue) 6%,transparent);display:flex;flex-direction:column;justify-content:center;gap:12px}
+#s5 .dk .lbl{position:absolute;left:18px;top:-14px;background:var(--bg);padding:0 10px;font-size:16px;font-weight:700;color:var(--blue);display:flex;gap:8px;align-items:center}
+#s5 .api{padding:12px 18px}
+#s5 .modelos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#s5 .modelos .card{padding:12px 16px;display:flex;align-items:center;gap:12px}
+#s5 .eps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+#s5 .ep{display:flex;align-items:center;gap:14px;padding:14px 18px}
+#s5 .ep .m{font:700 15px var(--mono);padding:4px 10px;border-radius:8px;color:var(--on-color);background:var(--blue)}
+#s5 .ep .m.post{background:var(--gray)}
+#s5 .ep span{font-size:17px}
+#s5 .ep .cod{font-size:16px}
+#s5 .dock{margin-top:16px;display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+#s5 .term{font-family:var(--mono);font-size:15px;line-height:1.65;background:#0a0f1c;color:#dce6ff;border-radius:14px;padding:12px 18px;border:1px solid var(--line)}
+#s5 .term i{color:#7fb4ff;font-style:normal}
+#s5 .term em{color:#a9b8d6;font-style:normal;display:block;margin-top:4px}
+
+/* ---- S6 ---- */
+#s6 .izq{position:absolute;left:0;top:0;width:760px;height:620px}
+#s6 .der{position:absolute;left:800px;top:0;width:672px;display:grid;gap:14px}
+#s6 .cl{position:absolute;left:0;width:300px;padding:16px 20px;height:150px}
+#s6 .cl .tg{font:700 15px var(--mono);padding:3px 10px;border-radius:8px;color:var(--on-color);background:var(--blue);display:inline-block;margin-bottom:6px}
+#s6 .cl .tg.t2{background:var(--gray)}
+#s6 .cl b{font-size:19px;display:block}
+#s6 .cl .t{font-size:16px;margin-top:2px}
+#s6 .ep{position:absolute;left:470px;top:150px;width:290px;height:230px;padding:18px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+#s6 .ep .ic{width:44px;height:44px;color:var(--blue)}
+#s6 .conn{position:absolute;left:300px;width:170px}
+#s6 .sin{position:absolute;left:0;top:420px;width:760px;padding:16px 22px;display:flex;gap:16px;align-items:center}
+#s6 .res{display:flex;align-items:center;gap:20px;padding:12px 22px;height:196px}
+#s6 .res .tx{flex:1}
+#s6 .res .tx .h3{font-size:20px;display:flex;align-items:center;gap:8px}
+#s6 .res .tx .t{font-size:16px}
+.ring{flex:none;width:130px;height:130px}
+.ring-p{stroke-dasharray:289;stroke-dashoffset:0}
+.mostrado .ring-p{animation:agota 12s linear forwards}
+@keyframes agota{to{stroke-dashoffset:289}}
+.ban422{flex:none;width:210px;border-radius:12px;border:2px solid var(--red);background:color-mix(in srgb,var(--red) 14%,var(--panel));padding:12px 14px;font-size:16px;font-weight:700}
+.ban422 small{display:block;font-weight:500;color:var(--muted);font-size:15px;margin-top:3px}
+.ban422 .campo{margin-top:8px;border:2px solid var(--red);border-radius:8px;height:30px;background:var(--panel);display:flex;align-items:center;padding:0 8px;font:500 14px var(--mono);color:var(--muted)}
+.hbox{flex:none;width:210px;height:76px;position:relative}
+.hb{position:absolute;inset:0;border-radius:14px;display:flex;align-items:center;gap:12px;padding:0 18px;font-size:18px;font-weight:700;border:2px solid;background:var(--panel)}
+.hb i{width:14px;height:14px;border-radius:50%;background:currentColor;flex:none}
+.hb.on{color:var(--blue)}.hb.off{color:var(--gray);opacity:0}
+.hb.off i{border-radius:3px}
+.mostrado .hb.on{animation:conm 6s infinite}
+.mostrado .hb.off{animation:conm2 6s infinite}
+@keyframes conm{0%,45%{opacity:1}55%,95%{opacity:0}100%{opacity:1}}
+@keyframes conm2{0%,45%{opacity:0}55%,95%{opacity:1}100%{opacity:0}}
+.hb.on i{animation:latido 1.6s infinite}
+@keyframes latido{50%{transform:scale(1.5);opacity:.5}}
+
+/* ---- S7 ---- */
+#s7 .lede{height:66px}
+#s7 .a{position:absolute;top:84px;height:360px}
+#s7 .g{left:0;width:560px;padding:14px 18px}
+#s7 .p{left:580px;width:420px;padding:14px 22px}
+#s7 .b{left:1020px;width:452px;padding:14px 22px}
+#s7 .pillgrp{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+#s7 .vals{display:flex;justify-content:space-between;gap:10px;margin-top:2px}
+#s7 .vals div{font-size:16px;line-height:1.25;color:var(--muted)}
+#s7 .vals .num{font-size:30px;display:block;line-height:1.05}
+#s7 .fila{position:absolute;left:0;right:0;top:464px;display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:16px}
+#s7 .big{display:flex;align-items:center;gap:18px;padding:14px 22px}
+#s7 .big .num{font-size:50px;line-height:1}
+#s7 .big small{font-size:17px;color:var(--muted);line-height:1.25;display:block}
+#s7 .sesgo{display:flex;align-items:center;font-size:19px;line-height:1.4;padding:14px 22px}
+.cap{font-size:15px;color:var(--muted);line-height:1.3}
+
+/* ---- S8 ---- */
+#s8 .grid{display:grid;grid-template-columns:560px 1fr;gap:20px}
+#s8 label{display:block;font-size:16px;font-weight:600;color:var(--muted);margin-bottom:5px}
+#s8 .campo{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:17px;color:var(--txt);outline-offset:2px}
+#s8 .campo.m{font-family:var(--mono)}
+#s8 .campo:focus{border-color:var(--blue);outline:2px solid var(--blue)}
+#s8 .f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#s8 .gap{margin-top:12px}
+.btn{cursor:pointer;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--txt);font-size:16px;font-weight:600;padding:9px 12px}
+.btn:hover{border-color:var(--blue)}
+.btn.prim{background:var(--blue);color:var(--on-color);border-color:var(--blue);font-size:18px;font-weight:700;padding:13px;width:100%}
+#s8 .presets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#demoErr{color:var(--red);font-size:16px;font-weight:600;min-height:20px;margin-top:6px}
+#demoBanner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;border-radius:14px;border:2px solid var(--red);background:color-mix(in srgb,var(--red) 13%,var(--panel))}
+#demoBanner.ok{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 13%,var(--panel))}
+#demoBanner .bt{font-size:21px;font-weight:800;display:flex;align-items:center;gap:10px}
+#demoBanner .bs{font-size:16px;color:var(--muted);margin-top:2px}
+#demoBanner .bd{font:700 17px var(--mono);padding:7px 14px;border-radius:999px;background:var(--red);color:var(--on-color);white-space:nowrap}
+#demoBanner.ok .bd{background:var(--blue)}
+.barsat{position:relative;height:30px;border-radius:15px;background:var(--panel2);border:1px solid var(--line);overflow:hidden;margin-top:34px}
+.barsat i{position:absolute;left:0;top:0;bottom:0;border-radius:15px;background:var(--red);width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.barsat.ok i{background:var(--blue)}
+.zona{position:absolute;top:0;bottom:0;right:0;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--red) 28%,transparent) 0 6px,transparent 6px 12px)}
+.marca100{position:absolute;top:-4px;bottom:-4px;width:3px;background:var(--txt)}
+.rot100{position:absolute;top:-24px;transform:translateX(-50%);font-size:15px;font-weight:700;color:var(--txt)}
+.mets{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+.met1{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.met1 small{font-size:15px;color:var(--muted);display:block}
+.met1 .num{font-size:25px}
+.paros{margin-top:16px}
+.paros .row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:17px}
+.paros .row:first-of-type{border-top:0}
+.paros .row .num{font-size:17px}
+#demoCarga{display:none;font-size:16px;color:var(--muted);margin-top:8px}
+#demoCarga.on{display:block}
+#demoApiStatus{position:absolute;right:0;top:4px}
+.estado{display:inline-flex;align-items:center;gap:9px;font-size:16px;font-weight:700;padding:7px 16px;border-radius:999px;border:1px solid var(--blue);color:var(--blue);background:var(--panel)}
+.estado i{width:11px;height:11px;border-radius:50%;background:currentColor;animation:latido 1.8s infinite}
+.estado.local{color:var(--gray);border-color:var(--gray)}
+.estado.local i{animation:none;border-radius:2px}
+
+/* extras */
+#filo{position:absolute;top:-100px;left:0;width:8px;height:1100px;z-index:5;pointer-events:none;opacity:0;
+  background:linear-gradient(var(--gold),var(--gold));box-shadow:0 0 24px 4px color-mix(in srgb,var(--gold) 70%,transparent)}
+#pasos{position:absolute;left:0;right:0;bottom:30px;z-index:6;display:flex;justify-content:center;gap:8px;pointer-events:none}
+#pasos i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted);transition:.3s}
+#pasos i.l{background:var(--blue);border-color:var(--blue)}
+#ayuda{position:absolute;right:24px;bottom:56px;z-index:9;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 18px;font-size:15px;line-height:1.7;color:var(--muted);transition:opacity .6s;box-shadow:var(--sombra)}
+#ayuda b{font-family:var(--mono);color:var(--txt);font-weight:700}
+#ayuda.off{opacity:0;pointer-events:none}
+.todo #ayuda,.todo #pasos{display:none}
+#cine{position:absolute;left:24px;bottom:56px;z-index:9;font-size:15px;font-weight:700;color:var(--blue);padding:4px 12px;border:1px solid var(--blue);border-radius:999px;background:var(--panel);display:none}
+#cine.on{display:block}
+#negro{position:absolute;inset:0;background:#000;z-index:20;display:none}
+#negro.on{display:block}
+
+/* sin movimiento */
+.todo *,.todo *::before,.todo *::after,.rm *,.rm *::before,.rm *::after{animation:none!important;transition:none!important}
+.todo [data-step],.rm [data-step]{transform:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---- gráficas ---- */
+.dib{stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset 1.4s cubic-bezier(.3,.7,.2,1) .15s}
+.mostrado .dib{stroke-dashoffset:0}
+.crece{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);transition:transform 1.1s cubic-bezier(.2,.8,.2,1) var(--d,.2s)}
+.mostrado .crece{transform:scaleX(1)}
+.pop{transform-box:fill-box;transform-origin:center;opacity:0;transform:scale(.4);transition:opacity .4s var(--d,0s),transform .5s cubic-bezier(.3,1.5,.5,1) var(--d,0s)}
+.mostrado .pop{opacity:1;transform:scale(1)}
+.needle{transform:rotate(-90deg);transform-origin:250px 250px;transition:transform 1.3s cubic-bezier(.3,1.35,.5,1)}
+.mostrado .needle{transform:rotate(var(--rot))}
+.todo .crece,.rm .crece{transform:scaleX(1)}
+.todo .dib,.rm .dib{stroke-dashoffset:0}
+.todo .pop,.rm .pop{opacity:1;transform:none}
+.todo .needle,.rm .needle{transform:rotate(var(--rot))}
+.todo .w,.rm .w{opacity:1;transform:none}
+.todo [data-step].casc>*,.rm [data-step].casc>*{opacity:1;transform:none}
+.barsat{overflow:visible}
+.zona{border-radius:0 15px 15px 0}
+#s7 .a{height:380px}
+#s7 .fila{top:484px}
+
+/* ---- ajustes tras revisar capturas ---- */
+code,.cod{white-space:nowrap}
+#s1 .crit{top:478px}
+#s2 .it b{font-size:19px}#s2 .it span{font-size:17px}
+#s2 .cont{flex-wrap:nowrap}#s2 .cont .num{font-size:34px}
+#s2 .conts{margin-top:18px}
+#s4 .fo{font-size:19px;flex-wrap:nowrap;white-space:nowrap}
+#s4 .forma{height:172px}
+#s5 .fila1{height:330px}
+#s5 .eps{margin-top:30px}
+#s5 .ep{padding:18px 20px}
+#s5 .dock{margin-top:26px}
+#s5 .term{font-size:17px;padding:16px 22px}
+#s5 .dock .t{font-size:19px}
+#s5 .api{padding:16px 20px}
+#s5 .dk{gap:16px}
+#s6 .cl{width:330px;height:170px;padding:18px 22px}
+#s6 .cl b{font-size:22px}
+#s6 .conn{left:330px;width:130px}
+#s6 .ep{left:470px;top:70px;width:290px;height:240px}
+#s6 .sin{top:410px}
+#s6 .res .tx .h3{display:block;font-size:20px}
+#s6 .res .tx .h3 .ic{margin-right:6px}
+#s7 .a{height:404px}
+#s7 .g{padding:12px 18px}
+#s7 .g svg{max-width:452px;margin:0 auto}
+#s7 .fila{top:508px;grid-template-columns:1.1fr 1fr 1.25fr}
+#s7 .big .num{font-size:44px;white-space:nowrap}
+#s7 .big{gap:16px}
+#s8 .grid{grid-template-columns:580px 1fr;gap:24px}
+#s8 label{font-size:17px;margin-bottom:6px}
+#s8 .campo{font-size:19px;padding:12px 14px}
+#s8 .gap{margin-top:18px}
+#s8 .btn{font-size:17px;padding:12px}
+#s8 .btn.prim{font-size:19px;padding:15px}
+#demoBanner .bt{font-size:18px}
+#demoBanner .bs{font-size:17px}
+#demoBanner .bd{font-size:15px;padding:6px 12px}
+.barsat{height:36px;border-radius:18px;margin-top:48px}
+.barsat i{border-radius:18px}.zona{border-radius:0 18px 18px 0}
+.mets{margin-top:22px;gap:14px}
+.met1{padding:14px 16px}.met1 small{font-size:16px}.met1 .num{font-size:30px}
+.paros .row{padding:11px 0;font-size:19px}.paros .row .num{font-size:19px}
+#s8 .f2{grid-template-columns:1.45fr 1fr}
+
+/* si el JS no corre, al menos se ve la portada */
+html:not(.js) #s1{visibility:visible}
+html:not(.js) .w,html:not(.js) [data-step]{opacity:1;transform:none}
+</style>
 </head>
-<body class="bg-slate-900 text-slate-100 h-full flex flex-col overflow-hidden select-none">
+<body>
 
-  <!-- ================= Barra de Progreso Superior ================= -->
-  <div class="h-1.5 bg-slate-800 w-full fixed top-0 left-0 z-50">
-    <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 transition-all duration-300" style="width: 12.5%;"></div>
-  </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5zM3 12l9 5 9-5M3 16l9 5 9-5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M7 15l4-5 3 3 5-7"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 9.5 3.7 3.7 0 0 1 17 18H7z"/></symbol>
+  <symbol id="i-desk" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3 2 21h20L12 3zM12 10v5M12 18v.5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="6" rx="1.5"/><rect x="3" y="14" width="18" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><path d="M5 19 17 7M14 4l1 2 2 1-2 1-1 2-1-2-2-1 2-1zM19 12l.7 1.3L21 14l-1.3.7L19 16l-.7-1.3L17 14l1.3-.7z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h6"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/></symbol>
+  <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></symbol>
+</svg>
 
-  <!-- ================= Header Superior ================= -->
-  <header class="no-print h-14 bg-slate-900/90 backdrop-blur border-b border-slate-800 px-6 flex items-center justify-between text-xs z-40 shrink-0">
-    <div class="flex items-center gap-3">
-      <span class="bg-indigo-950 text-indigo-400 font-bold px-2.5 py-1 rounded-md border border-indigo-800 flex items-center gap-1.5">
-        <i class="fa-solid fa-graduation-cap"></i>
-        <span>ENTREGABLE MLOPS</span>
-      </span>
-      <span class="text-slate-500 hidden sm:inline">|</span>
-      <span class="text-slate-300 font-semibold hidden sm:inline">Laboratorios PiSA S.A. de C.V. — Dirección de Planeación</span>
+<div id="stage" data-sec="1">
+  <canvas id="fondo" width="1600" height="900"></canvas>
+  <div id="grano"></div>
+  <div id="filo"></div>
+
+  <nav id="riel" aria-label="Actos"></nav>
+  <div id="cuenta"><span id="nSlide">1</span>&nbsp;/&nbsp;<span id="nTotal">8</span></div>
+  <button id="btnTema" type="button" title="Tema claro / oscuro (T)" aria-label="Cambiar tema">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+  </button>
+  <div id="avance"><i></i></div>
+
+  <!-- ============ 1 · PORTADA ============ -->
+  <section class="slide bare" id="s1" data-sec="1">
+    <div class="centro">
+      <span class="ins"><svg class="ic"><use href="#i-chart"/></svg>Defensa y presentación de entregable de maestría</span>
+      <h1 class="tit">Sistema Predictivo de OEE, Saturación y Prevención de Incumplimiento</h1>
+      <p class="sub">Solución integral de <b>Deep Learning (LSTM + Monte Carlo Dropout)</b> y microservicios MLOps para la planeación de manufactura en <b>Laboratorios PiSA</b>, desplegada en producción en <b>Amazon Web Services (AWS)</b>.</p>
     </div>
-
-    <!-- Navegación Rápida por Criterios -->
-    <div class="hidden md:flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
-      <button onclick="goToSlide(0)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="0">Inicio</button>
-      <button onclick="goToSlide(1)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="1">Problema & Solución</button>
-      <button onclick="goToSlide(2)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="2">1. Datos (Medallion)</button>
-      <button onclick="goToSlide(3)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="3">2. Problema & Métricas</button>
-      <button onclick="goToSlide(4)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="4">3. Publicación (API)</button>
-      <button onclick="goToSlide(5)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="5">4. Integración</button>
-      <button onclick="goToSlide(6)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="6">Salida & Interpretación</button>
-      <button onclick="goToSlide(7)" class="nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium" data-slide="7">Demo en Vivo</button>
+    <div class="crit">
+      <div class="card" data-step="1">
+        <div class="n"><svg class="ic"><use href="#i-layers"/></svg>Criterio 1</div>
+        <h3>Limpieza y Medallion</h3>
+        <p>Arquitectura Bronce, Plata y Oro con partición temporal estricta 2024–ene 2026 vs. feb–sep 2026.</p>
+      </div>
+      <div class="card" data-step="2">
+        <div class="n"><svg class="ic"><use href="#i-chart"/></svg>Criterio 2</div>
+        <h3>Problema y métricas</h3>
+        <p>Regresión LSTM multi-salida y clasificación de saturación &gt; 100%, con métricas MAE, RMSE y MAPE.</p>
+      </div>
+      <div class="card" data-step="3">
+        <div class="n"><svg class="ic"><use href="#i-cloud"/></svg>Criterio 3</div>
+        <h3>Publicación API en AWS</h3>
+        <p>Microservicio FastAPI en Docker desplegado en AWS EC2 (Ohio us-east-2), Swagger y Pydantic V2.</p>
+      </div>
+      <div class="card" data-step="4">
+        <div class="n"><svg class="ic"><use href="#i-desk"/></svg>Criterio 4</div>
+        <h3>Integración y app</h3>
+        <p>Aplicación desacoplada web y CLI con tolerancia a fallas, timeouts de 12s y manejo de errores 422.</p>
+      </div>
     </div>
+    <footer class="pie"><span>Laboratorios PiSA S.A. de C.V. — Dirección de Planeación de la Producción</span><span class="rub">Entregable MLOps · 4 criterios de la rúbrica</span></footer>
+  </section>
 
-    <!-- Controles de Diapositivas -->
-    <div class="flex items-center gap-3">
-      <div class="bg-slate-800 px-3 py-1 rounded-md font-mono text-slate-300 font-semibold">
-        <span id="slideCounter" class="text-cyan-400">1</span> / <span id="totalSlides">8</span>
+  <!-- ============ 2 · PROBLEMA vs SOLUCIÓN ============ -->
+  <section class="slide" id="s2" data-sec="1">
+    <header class="cab"><div class="kick">Contexto operacional y justificación de negocio</div>
+      <h2 class="tit">El problema de planeación vs. la solución</h2><span class="etq">Manufactura farmacéutica PiSA</span></header>
+    <div class="cuerpo">
+      <div class="dos">
+        <div class="panel r">
+          <h3><svg class="ic"><use href="#i-warn"/></svg>El problema tradicional · determinista y reactivo</h3>
+          <div class="lista casc" data-step="1">
+          <div class="it"><b>Metas de OEE fijas y teóricas</b><span>El Plan Maestro asume eficiencias constantes y lineales (ej. 55% a 60%) sin considerar la fatiga mecánica acumulada, el desgaste de piezas ni la inercia reciente de la maquinaria.</span></div>
+          <div class="it"><b>Datos oscuros de mantenimiento</b><span>Más de <strong>21,100 bitácoras de avería</strong> en SAP PM permanecen en texto libre sin estructurar, desaprovechadas al proyectar la capacidad disponible.</span></div>
+          <div class="it"><b>Ceguera operativa y detección tardía</b><span>La sobre-saturación de línea (&gt; 100%) se descubre hasta el cierre de mes, cuando ya es imposible prevenir el desabasto de medicamentos ni amortiguar horas extra de emergencia.</span></div>
+          </div>
+          <div class="foot" data-step="2"><svg class="ic rojo-t"><use href="#i-x"/></svg><span><b>Impacto en planta:</b> quiebres de inventario, reprogramaciones costosas y tensión logística.</span></div>
+        </div>
+        <div class="panel a">
+          <h3><svg class="ic"><use href="#i-chart"/></svg>La alternativa · Deep Learning + MLOps</h3>
+          <div class="lista casc" data-step="3">
+          <div class="it"><b>Inferencia probabilística (PyTorch LSTM + MC Dropout)</b><span>Proyecta la distribución completa del OEE (μ, σ, bandas P10–P90) cuantificando la incertidumbre estocástica de planta en 19 líneas de manufactura.</span></div>
+          <div class="it"><b>Descomposición causal de paros en 7 familias</b><span>Estima simultáneamente horas perdidas en ineficiencia, cambios y fallas, integrando variables cuantitativas con minería semántica de averías.</span></div>
+          <div class="it"><b>Prescripción proactiva y despliegue en API REST</b><span>Calcula en microsegundos <strong>Piezas Faltantes</strong> y <strong>Horas Requeridas</strong> antes de iniciar el mes, alertando al planeador para rebalancear líneas.</span></div>
+          </div>
+          <div class="foot" data-step="4"><svg class="ic azul-t"><use href="#i-ok"/></svg><span><b>Beneficio directo:</b> de una reacción correctiva tardía a una <mark class="mk">planeación prescriptiva anticipada</mark>.</span></div>
+        </div>
       </div>
-      <button onclick="toggleFullscreen()" class="p-1.5 hover:text-white text-slate-400 transition rounded hover:bg-slate-800" title="Pantalla Completa (F)">
-        <i class="fa-solid fa-expand"></i>
-      </button>
+      <div class="conts" data-step="5">
+        <div class="cont"><span class="num" data-count="18959">18,959</span><small>Registros OEE históricos<span class="col">2024 a 2026 diario</span></small></div>
+        <div class="cont"><span class="num azul-t" data-count="21100">21,100</span><small>Bitácoras SAP PM<span class="col">Averías y mantenimientos</span></small></div>
+        <div class="cont"><span class="num" data-count="19">19</span><small>Líneas<span class="col">AV3, A4, BP, HM, SOV, etc.</span></small></div>
+        <div class="cont"><span class="num" data-count="167">167</span><small>SKUs<span class="col">Órdenes programadas</span></small></div>
+      </div>
     </div>
-  </header>
+    <footer class="pie"><span>De una reacción correctiva tardía a una planeación prescriptiva anticipada</span><span class="rub">Contexto de negocio</span></footer>
+  </section>
 
-  <!-- ================= Contenedor Principal de Diapositivas ================= -->
-  <main class="flex-1 overflow-y-auto custom-scroll relative p-4 md:p-8 flex items-center justify-center">
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 1: PORTADA & RESUMEN EJECUTIVO                              -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide active w-full max-w-6xl flex-col items-center justify-center text-center space-y-6 my-auto" id="slide-0">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-950/80 border border-indigo-700/60 text-indigo-300 text-xs font-bold uppercase tracking-wider">
-        <i class="fa-solid fa-award text-indigo-400"></i>
-        <span>Defensa y Presentación de Entregable de Maestría</span>
-      </div>
-
-      <h1 class="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight max-w-4xl">
-        Sistema Predictivo de OEE, Saturación de Línea y Prevención de Incumplimiento
-      </h1>
-
-      <p class="text-base md:text-xl text-slate-400 font-light max-w-3xl">
-        Solución integral de <strong class="text-cyan-400 font-semibold">Deep Learning (LSTM + Monte Carlo Dropout)</strong> y microservicios MLOps para la planeación de la manufactura en <strong class="text-white font-semibold">Laboratorios PiSA</strong>.
-      </p>
-
-      <!-- Tabla Resumen de los 4 Criterios de la Rúbrica -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full pt-4 text-left">
-        <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 hover:border-cyan-500/60 transition group cursor-pointer" onclick="goToSlide(2)">
-          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-700/50 flex items-center justify-center text-cyan-400 mb-3 group-hover:scale-110 transition">
-            <i class="fa-solid fa-layer-group text-lg"></i>
-          </div>
-          <span class="text-xs font-bold text-cyan-400 uppercase tracking-wide">Criterio 1</span>
-          <h3 class="font-bold text-white text-base mt-1">Limpieza & Medallion</h3>
-          <p class="text-xs text-slate-400 mt-1">Arquitectura Bronce, Plata y Oro con partición temporal estricta 2024-Ene 2026 vs Feb-Sep 2026.</p>
+  <!-- ============ 3 · MEDALLION ============ -->
+  <section class="slide" id="s3" data-sec="2">
+    <header class="cab"><div class="kick">Criterio 1 · Limpieza y transformación de datos</div>
+      <h2 class="tit">Limpieza y arquitectura Medallion</h2><span class="etq">3 archivos integrados</span></header>
+    <div class="cuerpo">
+      <div class="capas">
+        <div class="capa" data-step="1">
+          <header><div class="ico"><svg class="ic"><use href="#i-db"/></svg></div><div><div class="nm">Capa Bronce</div><div class="sb">Ingesta de fuentes crudas sin alteración.</div></div></header>
+          <div class="fi"><b>OEE 2024-2026.xlsx</b><span>Histórico diario de manufactura: paros no planeados (cols. O a U), fabricación (col. N) y tiempo programado (col. AL).</span></div>
+          <div class="fi"><b>avisos.xlsx (21,100 registros)</b><span>Bitácoras textuales de mantenimiento preventivo y correctivo con descripciones de averías.</span></div>
+          <div class="fi"><b>Velocidad y OEE meta.xlsx</b><span>Especificaciones nominales de ingeniería de las 19 líneas: PVOs/hora y metas comprometidas.</span></div>
         </div>
-
-        <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 hover:border-indigo-500/60 transition group cursor-pointer" onclick="goToSlide(3)">
-          <div class="w-10 h-10 rounded-xl bg-indigo-950 border border-indigo-700/50 flex items-center justify-center text-indigo-400 mb-3 group-hover:scale-110 transition">
-            <i class="fa-solid fa-chart-line text-lg"></i>
-          </div>
-          <span class="text-xs font-bold text-indigo-400 uppercase tracking-wide">Criterio 2</span>
-          <h3 class="font-bold text-white text-base mt-1">Problema & Métricas</h3>
-          <p class="text-xs text-slate-400 mt-1">Regresión LSTM Multi-Output + Clasificación de saturación > 100% y métricas MAE, RMSE y MAPE.</p>
+        <div class="tub" data-step="2"><div class="flecha"></div></div>
+        <div class="capa" data-step="2">
+          <header><div class="ico"><svg class="ic"><use href="#i-wand"/></svg></div><div><div class="nm">Capa Plata</div><div class="sb">Tipificación, nulos, outliers y cruce NLP.</div></div></header>
+          <div class="fi"><b>Nulos y guiones</b><span>Reemplazo de cadenas residuales (' - ') por 0.0 e imputación temporal basada en el calendario operativo.</span></div>
+          <div class="fi"><b>Normalización de líneas</b><span>Mapeo canónico de las 19 subfamilias (ej. 'LINEA AV3' → 'AV3').</span></div>
+          <div class="fi"><b>Enriquecimiento NLP de avisos</b><span>Vectorización TF-IDF y conteos móviles de fallas por línea, cruzados con merge temporal estricto (master_df).</span></div>
         </div>
-
-        <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 hover:border-purple-500/60 transition group cursor-pointer" onclick="goToSlide(4)">
-          <div class="w-10 h-10 rounded-xl bg-purple-950 border border-purple-700/50 flex items-center justify-center text-purple-400 mb-3 group-hover:scale-110 transition">
-            <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
-          </div>
-          <span class="text-xs font-bold text-purple-400 uppercase tracking-wide">Criterio 3</span>
-          <h3 class="font-bold text-white text-base mt-1">Publicación API</h3>
-          <p class="text-xs text-slate-400 mt-1">Microservicio REST FastAPI en Docker con Swagger interactivo y validación Pydantic V2.</p>
-        </div>
-
-        <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 hover:border-emerald-500/60 transition group cursor-pointer" onclick="goToSlide(5)">
-          <div class="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-700/50 flex items-center justify-center text-emerald-400 mb-3 group-hover:scale-110 transition">
-            <i class="fa-solid fa-desktop text-lg"></i>
-          </div>
-          <span class="text-xs font-bold text-emerald-400 uppercase tracking-wide">Criterio 4</span>
-          <h3 class="font-bold text-white text-base mt-1">Integración & App</h3>
-          <p class="text-xs text-slate-400 mt-1">Aplicación desacoplada web y CLI con tolerancia a fallas, timeouts y manejo de errores 422.</p>
+        <div class="tub" data-step="3"><div class="flecha"></div></div>
+        <div class="capa" data-step="3">
+          <header><div class="ico"><svg class="ic"><use href="#i-chip"/></svg></div><div><div class="nm">Capa Oro</div><div class="sb">Secuencias 30d, escalado y partición estricta.</div></div></header>
+          <div class="fi"><b>Ventanas deslizantes</b><span>Secuencias de 30 días de lookback por línea para capturar patrones de degradación y estacionalidad.</span></div>
+          <div class="fi"><b>Normalización robusta</b><span>MinMaxScaler ajustado solo con Train (&le; 2026-01-31) y congelado en <code>scaler.joblib</code>.</span></div>
+          <div class="fi"><b>Partición out-of-sample</b><span>Entrenamiento 2024–ene 2026 vs. prueba feb–sep 2026.</span></div>
         </div>
       </div>
-
-      <div class="flex items-center gap-4 pt-4">
-        <button onclick="goToSlide(1)" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-indigo-500/25 transition flex items-center gap-2">
-          <span>Comenzar: El Problema & La Solución</span>
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
+      <div class="part" data-step="4">
+        <div class="tag">Partición temporal estricta sin data leakage</div>
+        <div id="tl-part"></div>
+        <div class="nota" data-step="5">Test: feb–sep 2026</div>
       </div>
-    </section>
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 1: CONTEXTO DE NEGOCIO — EL PROBLEMA Y LA SOLUCIÓN          -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide w-full max-w-6xl flex-col space-y-5 my-auto" id="slide-1">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div>
-          <span class="text-rose-400 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-bullseye"></i> Contexto Operacional & Justificación de Negocio
-          </span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">El Problema de Planeación vs. La Alternativa de Solución</h2>
-        </div>
-        <span class="bg-rose-950/80 text-rose-300 text-xs font-bold px-3 py-1 rounded-full border border-rose-800">Manufactura Farmacéutica PiSA</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Columna Izquierda: El Problema Tradicional -->
-        <div class="bg-slate-800/60 border border-rose-900/50 rounded-2xl p-5 space-y-3.5 relative overflow-hidden">
-          <div class="flex items-center gap-2 text-rose-400 font-bold text-base">
-            <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-            <span>El Problema Tradicional (Determinista & Reactivo)</span>
-          </div>
-
-          <p class="text-xs text-slate-300 leading-relaxed">
-            La planeación de la manufactura farmacéutica mediante hojas de cálculo o ERP convencional presenta tres fallas estructurales críticas:
-          </p>
-
-          <div class="space-y-2.5 text-xs">
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-rose-950/80 space-y-1">
-              <strong class="text-rose-300 font-semibold flex items-center gap-1.5">
-                <i class="fa-solid fa-circle-xmark text-rose-400 text-[10px]"></i> Metas de OEE Fijas y Teóricas
-              </strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
-                El Plan Maestro asume eficiencias constantes y lineales (ej. 55% a 60%) sin considerar la fatiga mecánica acumulada, el desgaste de piezas ni la inercia reciente de la maquinaria.
-              </p>
-            </div>
-
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-rose-950/80 space-y-1">
-              <strong class="text-rose-300 font-semibold flex items-center gap-1.5">
-                <i class="fa-solid fa-file-circle-xmark text-rose-400 text-[10px]"></i> Desconexión de Datos Oscuros de Mantenimiento
-              </strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
-                Más de <strong class="text-slate-200">21,100 bitácoras de avería</strong> en SAP PM permanecen en texto libre sin estructurar, totalmente desaprovechadas al proyectar la capacidad disponible.
-              </p>
-            </div>
-
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-rose-950/80 space-y-1">
-              <strong class="text-rose-300 font-semibold flex items-center gap-1.5">
-                <i class="fa-solid fa-eye-slash text-rose-400 text-[10px]"></i> Ceguera Operativa & Detección Tardía
-              </strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
-                La sobre-saturación de línea (&gt; 100%) se descubre hasta el cierre de mes, cuando ya es imposible prevenir el desabasto de medicamentos ni amortiguar horas extra de emergencia.
-              </p>
-            </div>
-          </div>
-
-          <div class="p-2.5 bg-rose-950/50 rounded-xl border border-rose-800/60 text-[11px] text-rose-300 flex items-center gap-2">
-            <i class="fa-solid fa-radiation text-rose-400 shrink-0"></i>
-            <span><strong>Impacto en Planta:</strong> Quiebres de inventario, reprogramaciones costosas y tensión logística.</span>
-          </div>
-        </div>
-
-        <!-- Columna Derecha: La Alternativa de Solución -->
-        <div class="bg-slate-800/60 border border-cyan-900/50 rounded-2xl p-5 space-y-3.5 relative overflow-hidden">
-          <div class="flex items-center gap-2 text-cyan-400 font-bold text-base">
-            <i class="fa-solid fa-brain text-lg"></i>
-            <span>La Alternativa de Solución (Deep Learning + MLOps)</span>
-          </div>
-
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Un ecosistema integral que sustituye suposiciones fijas por modelado estocástico y microservicios de inferencia en tiempo real:
-          </p>
-
-          <div class="space-y-2.5 text-xs">
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-cyan-950/80 space-y-1">
-              <strong class="text-cyan-300 font-semibold flex items-center gap-1.5">
-                <i class="fa-solid fa-chart-line text-cyan-400 text-[10px]"></i> Inferencia Probabilística (PyTorch LSTM + MC Dropout)
-              </strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
-                Proyecta la distribución completa del OEE ($\mu$, $\sigma$, bandas P10–P90) cuantificando la incertidumbre estocástica de planta en 19 líneas de manufactura.
-              </p>
-            </div>
-
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-indigo-950/80 space-y-1">
-              <strong class="text-indigo-300 font-semibold flex items-center gap-1.5">
-                <i class="fa-solid fa-diagram-project text-indigo-400 text-[10px]"></i> Descomposición Causal de Paros en 7 Familias
-              </strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
-                Estima simultáneamente horas perdidas en ineficiencia, cambios y fallas, integrando variables cuantitativas con minería semántica de averías.
-              </p>
-            </div>
-
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-emerald-950/80 space-y-1">
-              <strong class="text-emerald-300 font-semibold flex items-center gap-1.5">
-                <i class="fa-solid fa-bolt text-emerald-400 text-[10px]"></i> Prescripción Proactiva & Despliegue en API REST
-              </strong>
-              <p class="text-slate-400 text-[11px] leading-relaxed">
-                Calcula en microsegundos <em>Piezas Faltantes</em> y <em>Horas Requeridas</em> antes de iniciar el mes, alertando al planeador para rebalancear líneas.
-              </p>
-            </div>
-          </div>
-
-          <div class="p-2.5 bg-emerald-950/50 rounded-xl border border-emerald-800/60 text-[11px] text-emerald-300 flex items-center gap-2">
-            <i class="fa-solid fa-circle-check text-emerald-400 shrink-0"></i>
-            <span><strong>Beneficio Directo:</strong> Transición de una reacción correctiva tardía a una planeación prescriptiva anticipada.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Métricas Clave de Escala del Problema en PiSA -->
-      <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-3.5 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-          <div class="text-lg font-black text-white font-mono">18,959</div>
-          <div class="text-[10px] text-slate-400 uppercase font-semibold">Registros OEE Históricos</div>
-          <span class="text-[9px] text-slate-500">2024 a 2026 diario</span>
-        </div>
-        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-          <div class="text-lg font-black text-cyan-400 font-mono">21,100</div>
-          <div class="text-[10px] text-slate-400 uppercase font-semibold">Bitácoras SAP PM</div>
-          <span class="text-[9px] text-slate-500">Averías y mantenimientos</span>
-        </div>
-        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-          <div class="text-lg font-black text-amber-400 font-mono">19 Líneas</div>
-          <div class="text-[10px] text-slate-400 uppercase font-semibold">Subfamilias Farmacéuticas</div>
-          <span class="text-[9px] text-slate-500">AV3, A4, BP, HM, SOV, etc.</span>
-        </div>
-        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-          <div class="text-lg font-black text-indigo-400 font-mono">167 SKUs</div>
-          <div class="text-[10px] text-slate-400 uppercase font-semibold">Órdenes Programadas</div>
-          <span class="text-[9px] text-slate-500">Catálogo de producción</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 2: CRITERIO 1 — LIMPIEZA Y ARQUITECTURA MEDALLION           -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide w-full max-w-6xl flex-col space-y-5 my-auto" id="slide-2">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div>
-          <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Criterio 1 de Rúbrica</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Limpieza y Transformación de Datos: Arquitectura Medallion</h2>
-        </div>
-        <span class="bg-cyan-950 text-cyan-300 text-xs font-bold px-3 py-1 rounded-full border border-cyan-800">3 Archivos Integrados</span>
-      </div>
-
-      <!-- Selector de Capas Interactivo -->
-      <div class="grid grid-cols-3 gap-3">
-        <button onclick="selectMedallion('bronze')" id="btnBronze" class="p-3.5 rounded-xl border text-left transition bg-amber-950/40 border-amber-600/70 text-white shadow-sm">
-          <div class="text-xs font-bold text-amber-400 flex items-center gap-2 mb-1">
-            <i class="fa-solid fa-database"></i> CAPA BRONCE (Raw)
-          </div>
-          <p class="text-xs text-slate-300">Ingesta de fuentes crudas sin alteración.</p>
-        </button>
-
-        <button onclick="selectMedallion('silver')" id="btnSilver" class="p-3.5 rounded-xl border text-left transition bg-slate-800/40 border-slate-700 text-slate-400 hover:border-slate-500">
-          <div class="text-xs font-bold text-slate-300 flex items-center gap-2 mb-1">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> CAPA PLATA (Cleaned)
-          </div>
-          <p class="text-xs text-slate-300">Tipificación, nulos, outliers y cruce NLP.</p>
-        </button>
-
-        <button onclick="selectMedallion('gold')" id="btnGold" class="p-3.5 rounded-xl border text-left transition bg-slate-800/40 border-slate-700 text-slate-400 hover:border-slate-500">
-          <div class="text-xs font-bold text-yellow-400 flex items-center gap-2 mb-1">
-            <i class="fa-solid fa-microchip"></i> CAPA ORO (Feature Store)
-          </div>
-          <p class="text-xs text-slate-300">Secuencias 30d, escalado y partición estricta.</p>
-        </button>
-      </div>
-
-      <!-- Contenido Dinámico de la Capa Seleccionada -->
-      <div id="medallionDetails" class="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 space-y-4">
-        <!-- Renderizado vía JS -->
-      </div>
-
-      <!-- Regla de Partición Temporal de Datos -->
-      <div class="bg-indigo-950/40 border border-indigo-800/60 rounded-xl p-4 flex items-center justify-between text-xs">
-        <div class="flex items-center gap-3">
-          <i class="fa-solid fa-calendar-check text-indigo-400 text-xl"></i>
-          <div>
-            <strong class="text-white text-sm">Partición Temporal Estricta Sin Data Leakage:</strong>
-            <p class="text-slate-300 mt-0.5">
-              <span class="text-emerald-400 font-bold">Entrenamiento:</span> 2024 al 31 de Enero de 2026 (13,325 secuencias) &bull; 
-              <span class="text-amber-400 font-bold">Prueba Fuera de Muestra:</span> Febrero a Septiembre 2026 (5,326 registros reales).
-            </p>
-          </div>
-        </div>
-        <span class="font-mono text-cyan-300 font-bold bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700">Test: Feb-Sep 2026</span>
-      </div>
-    </section>
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 3: CRITERIO 2 — MODELADO FORMAL Y MÉTRICAS                  -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide w-full max-w-6xl flex-col space-y-5 my-auto" id="slide-3">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div>
-          <span class="text-indigo-400 text-xs font-bold uppercase tracking-wider">Criterio 2 de Rúbrica</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Definición del Problema, Modelado & Justificación de Métricas</h2>
-        </div>
-        <span class="bg-indigo-950 text-indigo-300 text-xs font-bold px-3 py-1 rounded-full border border-indigo-800">Dual: Regresión + Clasificación</span>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <!-- Columna Izquierda: Arquitectura LSTM Multi-Output -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="flex items-center gap-2 text-indigo-400 font-bold text-sm">
-            <i class="fa-solid fa-network-wired"></i> Red Neuronal LSTM Multi-Output con Monte Carlo Dropout
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Se implementó una arquitectura basada en <strong>PyTorch</strong> capaz de resolver simultáneamente la predicción del OEE y la descomposición causal de fallas:
-          </p>
-          <div class="space-y-2 text-xs">
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-              <strong class="text-cyan-400 font-mono">Head 1 (Regresión de OEE):</strong> Proyecta la media esperada $\mu_{\text{OEE}}$ y su varianza $\sigma^2_{\text{OEE}}$ mediante $N=200$ simulaciones estocásticas de Dropout activo en inferencia.
-            </div>
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-              <strong class="text-purple-400 font-mono">Head 2 (Desglose Causal de Paros):</strong> Proyecta simultáneamente las horas perdidas en las <strong>7 categorías oficiales de paros no planeados</strong> (Ineficiencia, Cambios y limpiezas, Falta de material, etc.).
-            </div>
-          </div>
-          <div class="p-3 bg-indigo-950/40 rounded-xl border border-indigo-800 text-[11px] text-indigo-300">
-            <strong>Fórmula de Saturación e Incumplimiento:</strong>
-            $$\text{Saturación (\%)} = \frac{\text{PVOs a Fabricar}}{\text{Velocidad Nominal} \times \mu_{\text{OEE}} \times \text{Horas Disponibles}} \times 100\%$$
-            $$\text{Si Saturación} > 100\% \implies \text{INCUMPLE PLAN}$$
-          </div>
-        </div>
-
-        <!-- Columna Derecha: Métricas Justificadas Out-of-Sample -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-            <i class="fa-solid fa-chart-pie"></i> Métricas de Desempeño Fuera de Muestra (Feb - Sep 2026)
-          </div>
-
-          <div class="grid grid-cols-3 gap-2 text-center">
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700">
-              <span class="text-[10px] text-slate-400 font-bold uppercase">MAE Global</span>
-              <div class="text-xl font-black text-cyan-400 font-mono mt-1">14.55%</div>
-              <span class="text-[9px] text-slate-500">Error medio absoluto</span>
-            </div>
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700">
-              <span class="text-[10px] text-slate-400 font-bold uppercase">RMSE Global</span>
-              <div class="text-xl font-black text-indigo-400 font-mono mt-1">20.17%</div>
-              <span class="text-[9px] text-slate-500">Penaliza picos de paro</span>
-            </div>
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-700">
-              <span class="text-[10px] text-slate-400 font-bold uppercase">Muestras Test</span>
-              <div class="text-xl font-black text-emerald-400 font-mono mt-1">5,326</div>
-              <span class="text-[9px] text-slate-500">Días reales evaluados</span>
-            </div>
-          </div>
-
-          <!-- Justificación Técnica -->
-          <div class="space-y-2 text-xs pt-1 text-slate-300">
-            <div class="flex items-start gap-2">
-              <i class="fa-solid fa-check text-cyan-400 mt-0.5"></i>
-              <span><strong>¿Por qué MAE?</strong> Refleja el error directo promedio en puntos porcentuales de OEE sin distorsión por eventos extremos atípicos.</span>
-            </div>
-            <div class="flex items-start gap-2">
-              <i class="fa-solid fa-check text-indigo-400 mt-0.5"></i>
-              <span><strong>¿Por qué Monte Carlo Dropout?</strong> La manufactura es estocástica; un valor puntual es engañoso. Los percentiles <strong>P10 (pesimista)</strong> y <strong>P90 (optimista)</strong> otorgan al planeador bandas de tolerancia.</span>
-            </div>
-            <div class="flex items-start gap-2">
-              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
-              <span><strong>Cuantificación de Incumplimiento:</strong> Se calculan <em>Piezas Faltantes</em> y <em>Horas Máquina Faltantes</em> para rebalanceo ágil de líneas.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 4: CRITERIO 3 — PUBLICACIÓN DEL MODELO (API REST)           -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide w-full max-w-6xl flex-col space-y-5 my-auto" id="slide-4">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div>
-          <span class="text-purple-400 text-xs font-bold uppercase tracking-wider">Criterio 3 de Rúbrica</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Publicación del Modelo: Microservicio REST con FastAPI & Docker</h2>
-        </div>
-        <span class="bg-purple-950 text-purple-300 text-xs font-bold px-3 py-1 rounded-full border border-purple-800">OpenAPI 3.1 & Pydantic V2</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Tarjeta 1: Arquitectura API -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-purple-950 border border-purple-800 flex items-center justify-center text-purple-400 font-bold">
-            <i class="fa-solid fa-server"></i>
-          </div>
-          <h3 class="font-bold text-white text-base">FastAPI Asíncrono</h3>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Microservicio Python de ultra-baja latencia gestionado por Uvicorn. Carga en memoria los pesos entrenados de PyTorch (<code>best_lstm_model.pth</code>) y el transformador de características (<code>scaler.joblib</code>) durante el ciclo de vida (lifespan).
-          </p>
-          <div class="text-[11px] font-mono text-purple-300 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-            Puerto: 8000 &bull; Workers: Asincrónicos &bull; Docs: /docs
-          </div>
-        </div>
-
-        <!-- Tarjeta 2: Validación de Entradas -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400 font-bold">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <h3 class="font-bold text-white text-base">Validación con Pydantic V2</h3>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Validación estricta de tipos de datos. Rechaza automáticamente peticiones inválidas con código <strong>HTTP 422</strong> si la línea no existe, si las horas son negativas, o si el OEE meta supera el 100%.
-          </p>
-          <ul class="text-[11px] text-slate-400 space-y-1 font-mono">
-            <li>&bull; Field(ge=1.0, le=1000.0)</li>
-            <li>&bull; @field_validator("linea")</li>
-            <li>&bull; Alias de compatibilidad JSON</li>
-          </ul>
-        </div>
-
-        <!-- Tarjeta 3: Contenerización Docker -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="w-10 h-10 rounded-xl bg-blue-950 border border-blue-800 flex items-center justify-center text-blue-400 font-bold">
-            <i class="fa-brands fa-docker"></i>
-          </div>
-          <h3 class="font-bold text-white text-base">Docker Container</h3>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Empaquetado reproducible en imagen Docker multi-etapa basada en Python 3.11/3.14-slim, optimizada para despliegue en Google Cloud Run o Kubernetes corporativo.
-          </p>
-          <div class="text-[11px] font-mono text-blue-300 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-            docker build -t oee-prediction-api .<br>
-            docker run -p 8000:8000 oee-prediction-api
-          </div>
-        </div>
-      </div>
-
-      <!-- Endpoints Documentados -->
-      <div class="bg-slate-800/40 border border-slate-700/80 rounded-2xl p-4">
-        <span class="text-xs font-bold text-slate-400 uppercase tracking-wide block mb-2">Catálogo de Endpoints REST Publicados:</span>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
-          <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex items-center gap-2">
-            <span class="bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded font-bold">GET</span>
-            <span class="text-slate-300">/health &bull; Estado del servicio</span>
-          </div>
-          <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex items-center gap-2">
-            <span class="bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded font-bold">GET</span>
-            <span class="text-slate-300">/line-specs &bull; Catálogo 19 líneas</span>
-          </div>
-          <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex items-center gap-2">
-            <span class="bg-indigo-950 text-indigo-400 px-2 py-0.5 rounded font-bold">POST</span>
-            <span class="text-slate-300">/evaluate-risk &bull; Motor de Saturación</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 5: CRITERIO 4 — INTEGRACIÓN Y RESILIENCIA                   -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide w-full max-w-6xl flex-col space-y-5 my-auto" id="slide-5">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div>
-          <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Criterio 4 de Rúbrica</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Integración del Modelo con Aplicaciones de Consulta</h2>
-        </div>
-        <span class="bg-emerald-950 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-800">Cero Modelos Locales</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Tarjeta: Consumo Desacoplado -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-            <i class="fa-solid fa-arrows-split-up-and-left"></i> Consumo Exclusivo vía Endpoint Publicado
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Ni la interfaz gráfica web (<code>app_consulta.html</code>) ni el cliente de consola (<code>client.py</code>) copian pesos ni ejecutan código PyTorch localmente. <strong>Ambos son clientes puros que consumen el endpoint REST publicado vía HTTP JSON.</strong>
-          </p>
-
-          <div class="space-y-2 text-xs">
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
-              <div>
-                <strong class="text-white">Web UI (<code>app_consulta.html</code>)</strong>
-                <p class="text-[11px] text-slate-400">Dashboard interactivo con Tailwind CSS y Fetch asíncrono.</p>
-              </div>
-              <span class="bg-indigo-950 text-indigo-400 px-2.5 py-1 rounded-lg font-mono text-[11px] border border-indigo-800">Browser</span>
-            </div>
-
-            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
-              <div>
-                <strong class="text-white">CLI Client (<code>client.py</code>)</strong>
-                <p class="text-[11px] text-slate-400">Herramienta interactiva de consola (<code>python client.py -i</code>).</p>
-              </div>
-              <span class="bg-cyan-950 text-cyan-400 px-2.5 py-1 rounded-lg font-mono text-[11px] border border-cyan-800">Terminal</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tarjeta: Manejo de Errores y Resiliencia -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="flex items-center gap-2 text-amber-400 font-bold text-sm">
-            <i class="fa-solid fa-shield-virus"></i> Protocolo de Resiliencia y Manejo de Errores
-          </div>
-
-          <div class="space-y-2.5 text-xs text-slate-300">
-            <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
-              <strong class="text-amber-400 flex items-center gap-1.5 mb-0.5">
-                <i class="fa-solid fa-clock"></i> 1. Control de Tiempos de Espera (Timeout)
-              </strong>
-              Implementación de <code>AbortController</code> con cancelación estricta a los <strong>12 segundos</strong> para evitar bloqueos del navegador si la red colapsa.
-            </div>
-
-            <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
-              <strong class="text-rose-400 flex items-center gap-1.5 mb-0.5">
-                <i class="fa-solid fa-ban"></i> 2. Captura de Errores de Entrada (HTTP 422)
-              </strong>
-              Intercepta respuestas de validación fallida y muestra un banner amigable señalando el campo erróneo sin romper la aplicación.
-            </div>
-
-            <div class="p-3 bg-slate-900/90 rounded-xl border border-slate-800">
-              <strong class="text-cyan-400 flex items-center gap-1.5 mb-0.5">
-                <i class="fa-solid fa-signal"></i> 3. Monitoreo Activo de Conexión (/health)
-              </strong>
-              Badge reactivo en pantalla que detecta en tiempo real si el microservicio está en línea o desconectado.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 6: LA SALIDA DEL MODELO Y CÓMO INTERPRETARLA                -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide w-full max-w-6xl flex-col space-y-5 my-auto" id="slide-6">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <div>
-          <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Interpretación de Salidas</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Análisis de la Salida del Modelo: De Datos a Decisiones</h2>
-        </div>
-        <span class="bg-cyan-950 text-cyan-300 text-xs font-bold px-3 py-1 rounded-full border border-cyan-800">Reporte Ejecutivo</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Bloque 1: Dictamen de Saturación -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="text-xs font-bold text-rose-400 uppercase tracking-wide flex items-center gap-2">
-            <i class="fa-solid fa-triangle-exclamation"></i> 1. El Dictamen
-          </div>
-          <div class="bg-rose-950/60 border border-rose-800/60 p-3 rounded-xl text-center">
-            <span class="text-rose-300 font-bold text-xs">🔴 INCUMPLE PLAN</span>
-            <div class="text-lg font-black text-white font-mono mt-0.5">Saturación > 100%</div>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Si la saturación proyectada supera el 100%, la física de la planta impide fabricar el volumen con las horas asignadas, alertando inmediatamente al planeador.
-          </p>
-        </div>
-
-        <!-- Bloque 2: Doble Comparativa -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="text-xs font-bold text-indigo-400 uppercase tracking-wide flex items-center gap-2">
-            <i class="fa-solid fa-code-compare"></i> 2. Doble Comparativa
-          </div>
-          <div class="space-y-2 text-xs">
-            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex justify-between">
-              <span class="text-slate-400">Saturación Teórica (Meta):</span>
-              <span class="font-bold text-white font-mono">99.0% (Cumple en papel)</span>
-            </div>
-            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 flex justify-between">
-              <span class="text-slate-400">Saturación Proyectada (Real):</span>
-              <span class="font-bold text-rose-400 font-mono">134.1% (Incumplimiento)</span>
-            </div>
-          </div>
-          <p class="text-xs text-slate-300 leading-relaxed">
-            Elimina el sesgo de asumir metas ideales que en la realidad operativa de la máquina no son viables.
-          </p>
-        </div>
-
-        <!-- Bloque 3: Las Dos Dimensiones de Paros -->
-        <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3">
-          <div class="text-xs font-bold text-amber-400 uppercase tracking-wide flex items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left"></i> 3. Dimensiones de Paros
-          </div>
-          <div class="space-y-2 text-xs">
-            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-              <div class="flex justify-between font-mono">
-                <span class="text-slate-400">Tasa Diaria:</span>
-                <span class="text-cyan-400 font-bold">5.8 h/día</span>
-              </div>
-              <span class="text-[10px] text-slate-500">Estimado por día típico de 24h</span>
-            </div>
-            <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-              <div class="flex justify-between font-mono">
-                <span class="text-slate-400">Total en 510 h:</span>
-                <span class="text-amber-400 font-bold">122.1 h acum.</span>
-              </div>
-              <span class="text-[10px] text-slate-500">Proyectado en las 510 h del lote</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cuantificación Numérica Exacta -->
-      <div class="bg-slate-800/40 border border-slate-700 rounded-2xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
-        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-          <span class="text-slate-400 uppercase text-[10px] font-bold">Incumplimiento Piezas</span>
-          <div class="text-lg font-black text-rose-400 font-mono mt-1">25.42%</div>
-          <span class="text-[10px] text-slate-500">Volumen inalcanzable</span>
-        </div>
-        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-          <span class="text-slate-400 uppercase text-[10px] font-bold">Sobre-Saturación</span>
-          <div class="text-lg font-black text-rose-400 font-mono mt-1">+34.08%</div>
-          <span class="text-[10px] text-slate-500">Exceso sobre 100%</span>
-        </div>
-        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-          <span class="text-slate-400 uppercase text-[10px] font-bold">Piezas Faltantes</span>
-          <div class="text-lg font-black text-amber-400 font-mono mt-1">1,270,796</div>
-          <span class="text-[10px] text-slate-500">Unidades de faltante</span>
-        </div>
-        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-          <span class="text-slate-400 uppercase text-[10px] font-bold">Horas Faltantes</span>
-          <div class="text-lg font-black text-amber-400 font-mono mt-1">173.8 h</div>
-          <span class="text-[10px] text-slate-500">Tiempo adicional neto</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ----------------------------------------------------------------- -->
-    <!-- SLIDE 7: DEMOSTRADOR EN VIVO INTERACTIVO                          -->
-    <!-- ----------------------------------------------------------------- -->
-    <section class="slide w-full max-w-6xl flex-col space-y-4 my-auto" id="slide-7">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-        <div>
-          <span class="text-cyan-400 text-xs font-bold uppercase tracking-wider">Demostración en Tiempo Real</span>
-          <h2 class="text-2xl md:text-3xl font-extrabold text-white">Simulador Interactivo de Saturación & Riesgo</h2>
-        </div>
-        <div class="flex items-center gap-2">
-          <span id="demoApiStatus" class="bg-emerald-950 text-emerald-400 text-xs font-bold px-3 py-1 rounded-full border border-emerald-800 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>API Conectada (127.0.0.1:8000)</span>
-          </span>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        <!-- Formulario Rápido -->
-        <div class="lg:col-span-5 bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-3 text-xs">
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Línea de Producción</label>
-            <select id="demoLinea" onchange="actualizarDemoSpecs()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-              <option value="AV3" selected>Línea AV3 (Vel: 17,782 pvo/h | Meta: 55.7%)</option>
-              <option value="A4">Línea A4 (Vel: 24,000 pvo/h | Meta: 60.0%)</option>
-              <option value="BP">Línea BP (Vel: 8,500 pvo/h | Meta: 50.0%)</option>
-              <option value="HM">Línea HM (Vel: 12,000 pvo/h | Meta: 52.0%)</option>
-              <option value="SOV">Línea SOV (Vel: 15,000 pvo/h | Meta: 58.0%)</option>
-            </select>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block font-semibold text-slate-300 mb-1">Horas Programadas (máx 744 h/mes)</label>
-              <input id="demoHoras" type="number" value="510" step="1" min="1" max="744" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-            </div>
-            <div>
-              <label class="block font-semibold text-slate-300 mb-1">OEE Meta (%)</label>
-              <input id="demoMeta" type="number" value="55.7" step="0.1" min="10" max="100" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-            </div>
-          </div>
-
-          <div>
-            <label class="block font-semibold text-slate-300 mb-1">Volumen en Piezas (PVOs)</label>
-            <input id="demoPiezas" type="number" value="5000000" step="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white font-mono focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-          </div>
-
-          <!-- Botones de Casos Rápidos -->
-          <div class="flex gap-2 pt-1">
-            <button onclick="setDemoPreset(50000, 510)" class="flex-1 bg-slate-900 hover:bg-slate-700 border border-slate-700 py-1.5 rounded-lg text-[11px] text-slate-300 transition">
-              Caso Factible (50k)
-            </button>
-            <button onclick="setDemoPreset(5000000, 510)" class="flex-1 bg-slate-900 hover:bg-slate-700 border border-slate-700 py-1.5 rounded-lg text-[11px] text-slate-300 transition">
-              Caso Saturado (5M)
-            </button>
-          </div>
-
-          <button onclick="ejecutarDemoSimulacion()" id="btnDemoRun" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-bolt"></i>
-            <span>Consultar API en Tiempo Real</span>
-          </button>
-        </div>
-
-        <!-- Resultado en Tiempo Real -->
-        <div class="lg:col-span-7 bg-slate-800/60 border border-slate-700 rounded-2xl p-5 flex flex-col justify-between">
-          <div id="demoOutputLoading" class="hidden text-center py-16 text-slate-400">
-            <i class="fa-solid fa-circle-notch fa-spin text-3xl text-indigo-400 mb-3"></i>
-            <p>Calculando inferencia probabilística con Monte Carlo Dropout...</p>
-          </div>
-
-          <div id="demoOutputContent" class="space-y-4 text-xs">
-            <!-- Banner Dictamen -->
-            <div id="demoBanner" class="p-4 rounded-xl border bg-rose-950/60 border-rose-800/80 text-rose-100 flex items-center justify-between">
-              <div>
-                <div id="demoBannerTitle" class="font-extrabold text-sm flex items-center gap-2">
-                  <i id="demoBannerIcon" class="fa-solid fa-circle-xmark text-rose-400"></i>
-                  <span>INCUMPLE PLAN DE FABRICACIÓN (Saturación > 100%)</span>
-                </div>
-                <div id="demoBannerSubtitle" class="text-[11px] text-rose-300 mt-0.5">
-                  La saturación proyectada de 134.1% supera las horas disponibles.
-                </div>
-              </div>
-              <span id="demoBadge" class="bg-rose-600 text-white font-bold px-3 py-1 rounded-full text-xs font-mono">
-                25.4% Incumplimiento
-              </span>
-            </div>
-
-            <!-- Métricas Rápidas -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-              <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                <span class="text-slate-400 text-[10px]">OEE Proyectado (μ)</span>
-                <div id="demoResOee" class="text-base font-bold text-cyan-400 font-mono">41.1%</div>
-              </div>
-              <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                <span class="text-slate-400 text-[10px]">Saturación Real</span>
-                <div id="demoResSat" class="text-base font-bold text-rose-400 font-mono">134.1%</div>
-              </div>
-              <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                <span class="text-slate-400 text-[10px]">Piezas Faltantes</span>
-                <div id="demoResPiezas" class="text-base font-bold text-amber-400 font-mono">1,270,796</div>
-              </div>
-              <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                <span class="text-slate-400 text-[10px]">Horas Faltantes</span>
-                <div id="demoResHoras" class="text-base font-bold text-amber-400 font-mono">173.8 h</div>
-              </div>
-            </div>
-
-            <!-- Paros Principales -->
-            <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 space-y-2">
-              <div class="flex justify-between text-[11px] text-slate-400 font-bold border-b border-slate-800 pb-1">
-                <span>Causas Raíz de Paros No Planeados</span>
-                <span>Día Típico | Total Período</span>
-              </div>
-              <div class="flex justify-between items-center text-xs">
-                <span class="text-slate-300">Ineficiencia</span>
-                <span class="font-mono text-cyan-300 font-bold">5.8 h/día &bull; 122.1 h en período</span>
-              </div>
-              <div class="flex justify-between items-center text-xs">
-                <span class="text-slate-300">Cambios y limpiezas</span>
-                <span class="font-mono text-indigo-300 font-bold">1.1 h/día &bull; 22.5 h en período</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ================= Footer Inferior con Controles ================= -->
-  <footer class="no-print h-14 bg-slate-900/90 backdrop-blur border-t border-slate-800 px-6 flex items-center justify-between text-xs shrink-0 z-40">
-    <div class="text-slate-400 flex items-center gap-2">
-      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">←</kbd>
-      <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">→</kbd>
-      <span>Navegar con flechas o barra espaciadora</span>
     </div>
+    <footer class="pie"><span>Bronce → Plata → Oro</span><span class="rub">Criterio 1 · Limpieza y transformación</span></footer>
+  </section>
 
-    <div class="flex items-center gap-2">
-      <button onclick="prevSlide()" id="btnPrev" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold transition flex items-center gap-1.5 disabled:opacity-30">
-        <i class="fa-solid fa-chevron-left"></i>
-        <span>Anterior</span>
-      </button>
-
-      <button onclick="nextSlide()" id="btnNext" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition flex items-center gap-1.5">
-        <span>Siguiente</span>
-        <i class="fa-solid fa-chevron-right"></i>
-      </button>
+  <!-- ============ 4 · MODELO ============ -->
+  <section class="slide" id="s4" data-sec="3">
+    <header class="cab"><div class="kick">Criterio 2 · Definición del problema, modelado y métricas</div>
+      <h2 class="tit">Modelo LSTM multi-salida y métricas</h2><span class="etq">Dual: regresión + clasificación</span></header>
+    <div class="cuerpo">
+      <div class="izq">
+        <div class="card redbox"><div id="red"></div></div>
+        <div class="card forma" data-step="4">
+          <div class="tag">Fórmula de saturación e incumplimiento</div>
+          <div class="fo"><span>Saturación (%) =</span>
+            <span class="frac"><span>PVOs a fabricar</span><span>Velocidad nominal × μ<sub>OEE</sub> × Horas disponibles</span></span>
+            <span>× 100%</span></div>
+          <div class="regla">Si Saturación &gt; 100% <span>⟹</span> <span class="pill rojo-t"><svg class="ic"><use href="#i-x"/></svg>INCUMPLE PLAN</span></div>
+        </div>
+      </div>
+      <div class="der">
+        <div class="card banda" data-step="2"><div id="banda"></div></div>
+        <div class="card met" data-step="5">
+          <div class="tag">Métricas fuera de muestra · feb–sep 2026</div>
+          <div id="bars-met"></div>
+          <div style="display:flex;align-items:baseline;gap:12px;margin-top:2px"><span class="num" style="font-size:30px" data-count="5326">5,326</span><span class="t" style="font-size:16px">muestras de prueba · días reales evaluados</span></div>
+        </div>
+      </div>
+      <div class="just" data-step="6">
+        <div class="card"><div class="h3">¿Por qué MAE?</div><div class="t">Refleja el error directo promedio en puntos porcentuales de OEE sin distorsión por eventos extremos atípicos.</div></div>
+        <div class="card"><div class="h3">¿Por qué Monte Carlo Dropout?</div><div class="t">La manufactura es estocástica; un valor puntual es engañoso. <b>P10 (pesimista)</b> y <b>P90 (optimista)</b> dan al planeador bandas de tolerancia.</div></div>
+        <div class="card"><div class="h3">Cuantificación de incumplimiento</div><div class="t">Se calculan <b>Piezas Faltantes</b> y <b>Horas Máquina Faltantes</b> para rebalanceo ágil de líneas.</div></div>
+      </div>
     </div>
-  </footer>
+    <footer class="pie"><span>PyTorch · 200 simulaciones con Dropout activo</span><span class="rub">Criterio 2 · Modelado y métricas</span></footer>
+  </section>
 
-  <!-- ================= Lógica de Navegación e Interactividad ================= -->
-  <script>
-    const slides = document.querySelectorAll('.slide');
-    const totalSlides = slides.length;
-    let currentSlide = 0;
-
-    const medallionData = {
-      bronze: {
-        title: "Capa Bronce: Ingesta Cruda y Preservación de Fuentes",
-        badge: "Bronze Layer",
-        badgeClass: "bg-amber-950 text-amber-300 border border-amber-800",
-        items: [
-          { bold: "OEE 2024-2026.xlsx:", desc: "Histórico transaccional diario de manufactura (Cols O a U para paros no planeados, Col N para fabricación, Col AL para tiempo programado)." },
-          { bold: "avisos.xlsx (21,100 registros):", desc: "Bitácoras textuales cualitativas de órdenes de mantenimiento preventivo y correctivo con descripciones de averías." },
-          { bold: "Velocidad y OEE meta.xlsx:", desc: "Especificaciones nominales de ingeniería para las 19 subfamilias/líneas oficiales (PVOs/hora y metas comprometidas)." }
-        ]
-      },
-      silver: {
-        title: "Capa Plata: Depuración, Tipificación y Enriquecimiento NLP",
-        badge: "Silver Layer",
-        badgeClass: "bg-slate-800 text-slate-200 border border-slate-600",
-        items: [
-          { bold: "Tratamiento de Nulos y Guiones:", desc: "Reemplazo de cadenas residuales (' - ') por 0.0 e imputación temporal basada en el calendario operativo." },
-          { bold: "Normalización de Líneas:", desc: "Mapeo canónico estricto de las 19 subfamilias (ej. 'LINEA AV3' -> 'AV3', 'ANES' -> 'ANES')." },
-          { bold: "Enriquecimiento NLP de Avisos:", desc: "Vectorización TF-IDF y conteos móviles de fallas por línea cruzados mediante merge temporal estricto (master_df)." }
-        ]
-      },
-      gold: {
-        title: "Capa Oro: Feature Store Tensorizado para Deep Learning",
-        badge: "Gold Layer",
-        badgeClass: "bg-yellow-950 text-yellow-300 border border-yellow-800",
-        items: [
-          { bold: "Ventanas Deslizantes (Sliding Windows):", desc: "Secuencias de 30 días de lookback por línea para capturar patrones de degradación y estacionalidad." },
-          { bold: "Normalización Robusta:", desc: "Escalamiento MinMaxScaler ajustado exclusivamente en el set de Train (<= 2026-01-31) y congelado en scaler.joblib." },
-          { bold: "Partición Out-of-Sample:", desc: "Entrenamiento (2024-Ene 2026: 13,325 secuencias) vs Evaluación de Prueba (Feb-Sep 2026: 5,326 registros)." }
-        ]
-      }
-    };
-
-    function selectMedallion(layer) {
-      document.getElementById('btnBronze').className = layer === 'bronze' 
-        ? "p-3.5 rounded-xl border text-left transition bg-amber-950/40 border-amber-600/70 text-white shadow-sm"
-        : "p-3.5 rounded-xl border text-left transition bg-slate-800/40 border-slate-700 text-slate-400 hover:border-slate-500";
-      document.getElementById('btnSilver').className = layer === 'silver'
-        ? "p-3.5 rounded-xl border text-left transition bg-slate-800 border-slate-500 text-white shadow-sm"
-        : "p-3.5 rounded-xl border text-left transition bg-slate-800/40 border-slate-700 text-slate-400 hover:border-slate-500";
-      document.getElementById('btnGold').className = layer === 'gold'
-        ? "p-3.5 rounded-xl border text-left transition bg-yellow-950/40 border-yellow-600/70 text-white shadow-sm"
-        : "p-3.5 rounded-xl border text-left transition bg-slate-800/40 border-slate-700 text-slate-400 hover:border-slate-500";
-
-      const data = medallionData[layer];
-      const container = document.getElementById('medallionDetails');
-      let itemsHtml = data.items.map(it => `
-        <div class="flex items-start gap-2.5 text-xs text-slate-300">
-          <i class="fa-solid fa-check-circle text-cyan-400 mt-0.5"></i>
-          <div><strong class="text-white">${it.bold}</strong> ${it.desc}</div>
+  <!-- ============ 5 · PUBLICACIÓN ============ -->
+  <section class="slide" id="s5" data-sec="4">
+    <header class="cab"><div class="kick">Criterio 3 · Publicación del modelo</div>
+      <h2 class="tit">Publicación: FastAPI + Docker en AWS EC2</h2><span class="etq">OpenAPI 3.1 &amp; Pydantic V2</span></header>
+    <div class="cuerpo">
+      <div class="fila1">
+        <div class="card cli" data-step="1"><svg class="ic"><use href="#i-user"/></svg><div class="h3" style="margin-top:6px">Cliente</div><div class="t" style="font-size:16px">Petición HTTP JSON</div></div>
+        <div class="arr" data-step="1"><div class="flecha"></div></div>
+        <div class="card gate" data-step="4">
+          <div class="h3"><svg class="ic rojo-t"><use href="#i-shield"/></svg> Validación Pydantic V2</div>
+          <div class="t" style="font-size:16px">Validación estricta de tipos. Rechaza si la línea no existe, si las horas superan 744h o si el OEE meta supera el 100%.</div>
+          <ul><li>Field(ge=1.0, le=744.0)</li><li>@field_validator("linea")</li><li>Control de errores HTTP 422</li></ul>
+          <div class="r422"><svg class="ic"><use href="#i-ban"/></svg>HTTP 422 · validación estricta</div>
         </div>
-      `).join('');
-
-      container.innerHTML = `
-        <div class="flex items-center justify-between border-b border-slate-700/80 pb-2">
-          <h4 class="font-bold text-white text-sm">${data.title}</h4>
-          <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${data.badgeClass}">${data.badge}</span>
+        <div class="dk" data-step="1">
+          <div class="lbl"><svg class="ic"><use href="#i-cloud"/></svg>Contenedor Docker (AWS EC2)</div>
+          <div class="card api"><div class="h3"><svg class="ic azul-t"><use href="#i-server"/></svg> FastAPI asíncrono</div><div class="t" style="font-size:16px">Microservicio gestionado por Uvicorn · puertos <b>80 / 8000</b> · docs en <b>/docs</b></div></div>
+          <div class="modelos" data-step="2">
+            <div class="card"><svg class="ic azul-t" style="width:30px;height:30px"><use href="#i-file"/></svg><div><code>best_lstm_model.pth</code><div class="cap">pesos PyTorch CPU</div></div></div>
+            <div class="card"><svg class="ic azul-t" style="width:30px;height:30px"><use href="#i-file"/></svg><div><code>scaler.joblib</code><div class="cap">transformador de features</div></div></div>
+          </div>
+          <div class="cap" data-step="2" style="font-weight:600;color:var(--txt)">Cargados en memoria durante el ciclo de vida (lifespan).</div>
         </div>
-        <div class="space-y-2.5 pt-1">
-          ${itemsHtml}
+      </div>
+      <div class="eps" data-step="3">
+        <div class="card ep"><span class="m">GET</span><span><code>/health</code> · estado del servicio</span></div>
+        <div class="card ep"><span class="m">GET</span><span><code>/line-specs</code> · catálogo 19 líneas</span></div>
+        <div class="card ep"><span class="m post">POST</span><span><code>/evaluate-risk</code> · motor de saturación</span></div>
+      </div>
+      <div class="dock" data-step="5">
+        <div class="term"><i>$</i> docker build -t oee-api .<br><i>$</i> docker run -d --restart always -p 80:8000 -p 8000:8000 oee-api<br><em># Desplegado en AWS EC2 (Ohio us-east-2, t4g.micro ARM64): http://13.59.96.134</em></div>
+        <div class="t" style="align-self:center">Contenedor Docker ligero con soporte universal ARM64/x86_64, desplegado en producción en <b>Amazon Web Services (AWS EC2)</b> en Ohio (<code>us-east-2</code>), 100% activo en la nube bajo <mark class="mk">AWS Free Tier ($0 USD)</mark>.</div>
+      </div>
+    </div>
+    <footer class="pie"><span>Cliente → validación → API REST → modelo PyTorch en AWS</span><span class="rub">Criterio 3 · Publicación del modelo</span></footer>
+  </section>
+
+  <!-- ============ 6 · INTEGRACIÓN ============ -->
+  <section class="slide" id="s6" data-sec="4">
+    <header class="cab"><div class="kick">Criterio 4 · Integración con aplicaciones de consulta</div>
+      <h2 class="tit">Integración con aplicaciones de consulta</h2><span class="etq">Cero modelos locales</span></header>
+    <div class="cuerpo">
+      <div class="izq" data-step="1">
+        <div class="card cl" style="top:0"><span class="tg">Browser</span><b>Web UI</b><div class="t"><code>app_consulta.html</code> · interfaz desacoplada con Fetch asíncrono.</div></div>
+        <div class="card cl" style="top:190px"><span class="tg t2">Terminal</span><b>CLI</b><div class="t"><code>client.py</code> · herramienta de consola (<code>python client.py -i</code>).</div></div>
+        <div class="conn" style="top:92px"><div class="flecha"></div></div>
+        <div class="conn" style="top:282px"><div class="flecha"></div></div>
+        <div class="card azul ep"><svg class="ic"><use href="#i-server"/></svg><div class="h3" style="margin:0">Endpoint REST en AWS</div><div class="t" style="font-size:16px">http://13.59.96.134/evaluate-risk</div></div>
+        <div class="card sin"><svg class="ic rojo-t" style="width:40px;height:40px"><use href="#i-ban"/></svg><div class="t" style="font-size:19px">Ni la web ni la consola copian pesos ni ejecutan PyTorch. <b>Ambos son clientes puros</b> que consumen el endpoint publicado en AWS.</div></div>
+      </div>
+      <div class="der">
+        <div class="card res" data-step="2">
+          <svg class="ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="none" style="stroke:var(--line)" stroke-width="10"/><circle class="ring-p" cx="60" cy="60" r="46" fill="none" style="stroke:var(--blue)" stroke-width="10" stroke-linecap="round" transform="rotate(-90 60 60)"/><text x="60" y="68" text-anchor="middle" style="fill:var(--txt);font:700 24px var(--mono)">12 s</text></svg>
+          <div class="tx"><div class="h3"><svg class="ic"><use href="#i-clock"/></svg>1 · Control de tiempos de espera</div><div class="t">Implementación de <code>AbortController</code> con cancelación estricta a los <b>12 segundos</b> para evitar bloqueos del navegador si la red colapsa.</div></div>
         </div>
-      `;
+        <div class="card res" data-step="3">
+          <div class="ban422"><svg class="ic rojo-t"><use href="#i-x"/></svg> HTTP 422<small>Revisa el campo señalado</small><div class="campo">campo erróneo</div></div>
+          <div class="tx"><div class="h3"><svg class="ic rojo-t"><use href="#i-ban"/></svg>2 · Captura de errores de entrada (HTTP 422)</div><div class="t">Intercepta respuestas de validación fallida y muestra un banner amigable señalando el campo erróneo sin romper la aplicación.</div></div>
+        </div>
+        <div class="card res" data-step="4">
+          <div class="hbox"><div class="hb on"><i></i>API en línea</div><div class="hb off"><i></i>Desconectada</div></div>
+          <div class="tx"><div class="h3"><svg class="ic"><use href="#i-pulse"/></svg>3 · Monitoreo activo de conexión (<code>/health</code>)</div><div class="t">Badge reactivo en pantalla que detecta en tiempo real si el microservicio en AWS está en línea o desconectado.</div></div>
+        </div>
+      </div>
+    </div>
+    <footer class="pie"><span>Protocolo de resiliencia y manejo de errores</span><span class="rub">Criterio 4 · Integración</span></footer>
+  </section>
+
+  <!-- ============ 7 · INTERPRETACIÓN ============ -->
+  <section class="slide" id="s7" data-sec="5">
+    <header class="cab"><div class="kick">Interpretación de salidas</div>
+      <h2 class="tit">De datos a decisiones: lectura de la salida</h2><span class="etq">Reporte ejecutivo</span></header>
+    <div class="cuerpo">
+      <p class="lede" data-step="1">Si la saturación proyectada supera el 100%, la <mark class="mk">física de la planta impide fabricar el volumen</mark> con las horas asignadas, alertando inmediatamente al planeador.</p>
+      <div class="card a g" data-step="1">
+        <div class="pillgrp"><span class="pill rojo-t"><svg class="ic"><use href="#i-x"/></svg>INCUMPLE PLAN · Saturación &gt; 100%</span></div>
+        <div id="g-sat"></div>
+        <div class="vals">
+          <div data-step="2"><span class="num azul-t" data-count="99.0" data-dec="1" data-suf="%">99.0%</span>Meta teórica · cumple en papel</div>
+          <div data-step="3" style="text-align:right"><span class="num rojo-t" data-count="134.1" data-dec="1" data-suf="%">134.1%</span>Proyectada real · incumplimiento</div>
+        </div>
+      </div>
+      <div class="card a p" data-step="4">
+        <div class="tag">Incumplimiento de piezas</div>
+        <div class="num rojo-t" style="font-size:54px;line-height:1.1" data-count="25.42" data-dec="2" data-suf="%">25.42%</div>
+        <div id="picto"></div>
+        <div class="cap">≈ 5 de cada 20 piezas (redondeo de 25.42%) · volumen inalcanzable</div>
+      </div>
+      <div class="card a b" data-step="5">
+        <div class="tag">Dimensiones de paros</div>
+        <div id="barras-paro"></div>
+      </div>
+      <div class="fila" data-step="6">
+        <div class="card big"><span class="num rojo-t" data-count="1270796">1,270,796</span><small>Piezas faltantes<br>unidades de faltante</small></div>
+        <div class="card big"><span class="num rojo-t" data-count="173.8" data-dec="1" data-suf=" h">173.8 h</span><small>Horas faltantes<br>tiempo adicional neto</small></div>
+        <div class="card sesgo"><span>Elimina el sesgo de asumir metas ideales que en la realidad operativa de la máquina <b>no son viables</b>.</span></div>
+      </div>
+    </div>
+    <footer class="pie"><span>Dictamen · doble comparativa · dimensiones de paros</span><span class="rub">Interpretación de salidas</span></footer>
+  </section>
+
+  <!-- ============ 8 · DEMO ============ -->
+  <section class="slide" id="s8" data-sec="5">
+    <header class="cab"><div class="kick">Demostración en tiempo real</div>
+      <h2 class="tit">Demo en vivo: simulador de saturación en AWS</h2>
+      <span id="demoApiStatus" class="estado local"><i></i><span>Verificando conexión API...</span></span></header>
+    <div class="cuerpo demo-ui">
+      <div class="grid">
+        <div class="card" data-step="1">
+          <div><label for="demoLinea">Línea de producción</label><select id="demoLinea" class="campo"></select></div>
+          <div class="f2 gap">
+            <div><label for="demoHoras">Horas programadas (máx 744 h/mes)</label><input id="demoHoras" class="campo m" type="number" value="510" step="1" min="1" max="744"></div>
+            <div><label for="demoMeta">OEE meta (%)</label><input id="demoMeta" class="campo m" type="number" value="55.7" step="0.1" min="10" max="100"></div>
+          </div>
+          <div class="gap"><label for="demoPiezas">Volumen en piezas (PVOs)</label><input id="demoPiezas" class="campo m" type="number" value="5000000" step="1" min="1"></div>
+          <div class="presets gap"><button type="button" class="btn" data-preset="50000">Caso factible (50k)</button><button type="button" class="btn" data-preset="5000000">Caso saturado (5M)</button></div>
+          <div class="gap"><button type="button" id="btnDemoRun" class="btn prim">Consultar API en tiempo real</button></div>
+          <div id="demoErr" role="alert"></div><div id="demoCarga">Calculando inferencia probabilística con Monte Carlo Dropout en AWS…</div>
+        </div>
+        <div>
+          <div class="card" data-step="2">
+            <div id="demoBanner">
+              <div><div class="bt"><svg class="ic" id="demoIcono"><use href="#i-x"/></svg><span id="demoTitulo">INCUMPLE PLAN DE FABRICACIÓN (Saturación &gt; 100%)</span></div><div class="bs" id="demoSub">La saturación proyectada de 134.1% supera las 510 horas disponibles.</div></div>
+              <span class="bd" id="demoBadge">25.42% incumplimiento</span>
+            </div>
+            <div class="barsat" id="demoBarra"><div class="zona" id="demoZona"></div><i id="demoRelleno"></i><span class="marca100" id="demoM100"></span><span class="rot100" id="demoR100">100%</span></div>
+            <div class="mets">
+              <div class="met1"><small>OEE proyectado (μ)</small><span class="num azul-t" id="demoResOee">41.1%</span></div>
+              <div class="met1"><small>Saturación real</small><span class="num rojo-t" id="demoResSat">134.1%</span></div>
+              <div class="met1"><small>Piezas faltantes</small><span class="num rojo-t" id="demoResPiezas">1,270,796</span></div>
+              <div class="met1"><small>Horas faltantes</small><span class="num rojo-t" id="demoResHoras">173.8 h</span></div>
+            </div>
+          </div>
+          <div class="card paros" data-step="3" style="margin-top:14px;padding:12px 24px">
+            <div class="tag">Causas raíz de paros no planeados · día típico | total del período</div>
+            <div class="row"><span>Ineficiencia</span><span class="num rojo-t">5.8 h/día · 122.1 h en período</span></div>
+            <div class="row"><span>Cambios y limpiezas</span><span class="num rojo-t">1.1 h/día · 22.5 h en período</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="pie"><span>Consulta el endpoint publicado en AWS EC2 (http://13.59.96.134) con fallback local</span><span class="rub">Demostración de los 4 criterios</span></footer>
+  </section>
+
+  <div id="pasos"></div>
+  <div id="cine">▶ Modo cine</div>
+  <div id="ayuda"><b>→ / espacio</b> siguiente · <b>←</b> anterior · <b>F</b> pantalla completa · <b>T</b> tema<br><b>1–5</b> saltar de acto · <b>R</b> repetir · <b>A</b> mostrar todo · <b>P</b> modo cine · <b>B</b> negro</div>
+  <div id="negro"></div>
+</div>
+
+<script>window.DATOS={"registros": 18959, "bitacoras": 21100, "lineas": 19, "skus": 167, "train": 13325, "test": 5326, "corte": "2026-01-31", "mae": 14.55, "rmse": 20.17, "mc": 200, "meta": 99.0, "real": 134.1, "sobre": 34.08, "incumple": 25.42, "piezas_falt": 1270796, "horas_falt": 173.8, "paro_dia": 5.8, "paro_total": 122.1, "horas_lote": 510, "horas_dia": 24, "cambios_dia": 1.1, "cambios_total": 22.5, "oee_mu": 41.1, "oee_mu_frac": 0.4112, "timeout": 12, "specs": {"AV3": {"vel": 17782.5, "meta": 55.7}, "A4": {"vel": 24000.0, "meta": 60.0}, "BP": {"vel": 8500.0, "meta": 50.0}, "HM": {"vel": 12000.0, "meta": 52.0}, "SOV": {"vel": 15000.0, "meta": 58.0}}};</script>
+<script>/* Motor de la presentación: escenario escalado, pasos con clic, gráficas SVG desde window.DATOS,
+   fondo en canvas, tema, teclado, modo cine y demo. Sin librerías. */
+(function () {
+  'use strict';
+  var D = window.DATOS || {};
+  var Q = new URLSearchParams(location.search);
+  var TODO = Q.has('todo');
+  var RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var NOANIM = TODO || RM;
+  var root = document.documentElement;
+  root.classList.add('js');
+  if (TODO) root.classList.add('todo');
+  if (RM) root.classList.add('rm');
+
+  var NS = 'http://www.w3.org/2000/svg';
+  function $(s, c) { return (c || document).querySelector(s); }
+  function $$(s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
+  function fmt(n, dec) { return Number(n).toLocaleString('en-US', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }); }
+  function S(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function svgIn(host, w, h) {
+    return S('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h, style: 'display:block;width:100%;height:auto', role: 'img' }, host);
+  }
+  var TX = 'font-family:var(--sans);';
+  function txt(parent, x, y, str, size, weight, fill, anchor, mono) {
+    return S('text', { x: x, y: y, 'text-anchor': anchor || 'start',
+      style: (mono ? 'font-family:var(--mono);' : TX) + 'font-size:' + size + 'px;font-weight:' + (weight || 500) + ';fill:' + (fill || 'var(--txt)') + ';font-variant-numeric:tabular-nums' }, parent, str);
+  }
+
+  /* ================= GRÁFICAS ================= */
+  var MAXSAT = 150; // escala del medidor (eje), no es un dato
+
+  function gauge(host) {
+    var cx = 250, cy = 250, R = 185;
+    var s = svgIn(host, 500, 296);
+    var defs = S('defs', {}, s);
+    var pat = S('pattern', { id: 'hach', width: 9, height: 9, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, defs);
+    S('line', { x1: 0, y1: 0, x2: 0, y2: 9, style: 'stroke:var(--red);stroke-width:4' }, pat);
+    function pt(v, r) { var a = Math.PI * (1 - v / MAXSAT); return [cx + r * Math.cos(a), cy - r * Math.sin(a)]; }
+    function arc(v0, v1, r) { var a = pt(v0, r), b = pt(v1, r); return 'M' + a[0] + ' ' + a[1] + ' A' + r + ' ' + r + ' 0 0 1 ' + b[0] + ' ' + b[1]; }
+    S('path', { d: arc(0, 100, R), fill: 'none', pathLength: 1, class: 'dib', style: 'stroke:var(--line);stroke-width:28' }, s);
+    S('path', { d: arc(100, MAXSAT, R), fill: 'none', style: 'stroke:var(--red);stroke-width:30;opacity:.18' }, s);
+    S('path', { d: arc(100, MAXSAT, R), fill: 'none', pathLength: 1, class: 'dib', style: 'stroke:url(#hach);stroke-width:28' }, s);
+    S('path', { d: arc(100, MAXSAT, R + 15), fill: 'none', style: 'stroke:var(--red);stroke-width:2' }, s);
+    S('path', { d: arc(100, MAXSAT, R - 15), fill: 'none', style: 'stroke:var(--red);stroke-width:2' }, s);
+    [0, 5, 50, 100, 150].forEach(function (v) {
+      if (v === 5) return;
+      var a = pt(v, R - 24), b = pt(v, R + 22), l = pt(v, R + 40);
+      S('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], style: 'stroke:var(--txt);stroke-width:' + (v === 100 ? 3 : 1.5) }, s);
+      txt(s, l[0], l[1] + 5, v + '%', 16, v === 100 ? 800 : 500, v === 100 ? 'var(--txt)' : 'var(--muted)', 'middle', true);
+    });
+    function needle(v, step, cls) {
+      var g = S('g', { 'data-step': step }, s);
+      var n = S('g', { class: 'needle', style: '--rot:' + (-90 + v / MAXSAT * 180) + 'deg' }, g);
+      if (cls === 'meta') S('path', { d: 'M' + (cx - 7) + ' ' + cy + ' L' + cx + ' ' + (cy - (R - 36)) + ' L' + (cx + 7) + ' ' + cy + ' Z', style: 'fill:var(--panel);stroke:var(--blue);stroke-width:3;stroke-dasharray:6 4' }, n);
+      else S('path', { d: 'M' + (cx - 9) + ' ' + cy + ' L' + cx + ' ' + (cy - (R - 8)) + ' L' + (cx + 9) + ' ' + cy + ' Z', style: 'fill:var(--red)' }, n);
     }
+    needle(D.meta, 2, 'meta');
+    needle(D.real, 3, 'real');
+    S('circle', { cx: cx, cy: cy, r: 13, style: 'fill:var(--txt)' }, s);
+    var gs = S('g', { 'data-step': 3 }, s);
+    var t = txt(gs, cx, 288, '+' + fmt(D.sobre, 2) + '% ', 21, 800, 'var(--red)', 'middle', true);
+    S('tspan', { style: TX + 'font-size:16px;font-weight:600;fill:var(--muted)' }, t, 'sobre 100%');
+  }
 
-    function updateSlide() {
-      slides.forEach((s, idx) => {
-        if (idx === currentSlide) {
-          s.classList.add('active');
-        } else {
-          s.classList.remove('active');
-        }
-      });
-
-      document.getElementById('slideCounter').innerText = currentSlide + 1;
-      document.getElementById('totalSlides').innerText = totalSlides;
-      document.getElementById('progressBar').style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
-      document.getElementById('btnPrev').disabled = currentSlide === 0;
-
-      if (currentSlide === totalSlides - 1) {
-        document.getElementById('btnNext').innerHTML = '<span>Finalizar</span> <i class="fa-solid fa-flag-checkered"></i>';
-      } else {
-        document.getElementById('btnNext').innerHTML = '<span>Siguiente</span> <i class="fa-solid fa-chevron-right"></i>';
-      }
-
-      // Actualizar pestañas superiores
-      document.querySelectorAll('.nav-tab').forEach(tab => {
-        const sNum = parseInt(tab.getAttribute('data-slide'));
-        if (sNum === currentSlide) {
-          tab.className = "nav-tab px-2.5 py-1 rounded-lg text-white font-bold bg-indigo-600 shadow-sm transition";
-        } else {
-          tab.className = "nav-tab px-2.5 py-1 rounded-lg text-slate-400 hover:text-white transition font-medium";
-        }
-      });
+  function picto(host) {
+    var cols = 5, rows = 4, c = 54, gap = 8, n = cols * rows;
+    var fill = Math.round(D.incumple / 100 * n);
+    var w = cols * c + (cols - 1) * gap, h = rows * c + (rows - 1) * gap;
+    var s = svgIn(host, w, h);
+    s.style.maxWidth = w + 'px'; s.style.margin = '6px auto 4px';
+    for (var i = 0; i < n; i++) {
+      var x = (i % cols) * (c + gap), y = Math.floor(i / cols) * (c + gap), bad = i < fill;
+      var g = S('g', { class: 'pop', style: '--d:' + (i * 55) + 'ms' }, s);
+      S('rect', { x: x, y: y, width: c, height: c, rx: 12, style: bad ? 'fill:var(--red)' : 'fill:var(--panel2);stroke:var(--gray);stroke-width:2' }, g);
+      if (bad) S('path', { d: 'M' + (x + 16) + ' ' + (y + 16) + 'L' + (x + c - 16) + ' ' + (y + c - 16) + 'M' + (x + c - 16) + ' ' + (y + 16) + 'L' + (x + 16) + ' ' + (y + c - 16), style: 'stroke:var(--on-color);stroke-width:4;stroke-linecap:round' }, g);
+      else S('path', { d: 'M' + (x + 15) + ' ' + (y + 28) + 'L' + (x + 24) + ' ' + (y + 37) + 'L' + (x + 40) + ' ' + (y + 18), style: 'fill:none;stroke:var(--gray);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round' }, g);
     }
+  }
 
-    function nextSlide() {
-      if (currentSlide < totalSlides - 1) {
-        currentSlide++;
-        updateSlide();
-      }
+  function barrasParo(host) {
+    var W = 408, s = svgIn(host, W, 330);
+    function fila(y, etiqueta, val, base, dec, suf, sub) {
+      txt(s, 0, y, etiqueta, 19, 700);
+      S('rect', { x: 0, y: y + 16, width: W, height: 44, rx: 22, style: 'fill:var(--panel2);stroke:var(--line)' }, s);
+      var bw = W * val / base;
+      S('rect', { x: 0, y: y + 16, width: bw, height: 44, rx: 22, class: 'crece', style: 'fill:var(--red)' }, s);
+      var t = txt(s, bw + 14, y + 46, fmt(val, dec) + suf, 22, 800, 'var(--red)', 'start', true);
+      t.setAttribute('data-count', val); t.setAttribute('data-dec', dec); t.setAttribute('data-suf', suf);
+      txt(s, 0, y + 86, sub, 16, 500, 'var(--muted)');
     }
+    fila(34, 'Tasa diaria', D.paro_dia, D.horas_dia, 1, ' h/día', 'Estimado por día típico de ' + D.horas_dia + ' h');
+    fila(190, 'Total en ' + D.horas_lote + ' h', D.paro_total, D.horas_lote, 1, ' h acum.', 'Proyectado en las ' + D.horas_lote + ' h del lote');
+  }
 
-    function prevSlide() {
-      if (currentSlide > 0) {
-        currentSlide--;
-        updateSlide();
-      }
+  function lineaTiempo(host) {
+    var W = 1432, s = svgIn(host, W, 150);
+    var defs = S('defs', {}, s);
+    var pat = S('pattern', { id: 'rayas', width: 10, height: 10, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, defs);
+    S('line', { x1: 0, y1: 0, x2: 0, y2: 10, style: 'stroke:var(--on-color);stroke-width:3;opacity:.28' }, pat);
+    var tot = D.train + D.test, wt = Math.round(W * D.train / tot), ws = W - wt;
+    var y = 46, h = 50;
+    S('rect', { x: 0, y: y, width: wt - 2, height: h, rx: 12, class: 'crece', style: 'fill:var(--blue)' }, s);
+    var r2 = S('g', { class: 'crece', style: '--d:.5s' }, s);
+    S('rect', { x: wt, y: y, width: ws, height: h, rx: 12, style: 'fill:var(--gray)' }, r2);
+    S('rect', { x: wt, y: y, width: ws, height: h, rx: 12, style: 'fill:url(#rayas)' }, r2);
+    var t1 = txt(s, 18, y + 32, 'Entrenamiento · ', 20, 800, 'var(--on-color)');
+    var a = S('tspan', { 'data-count': D.train }, t1, fmt(D.train)); S('tspan', {}, t1, ' secuencias');
+    var t2 = txt(s, wt + 16, y + 32, 'Prueba · ', 20, 800, 'var(--on-color)');
+    S('tspan', { 'data-count': D.test }, t2, fmt(D.test)); S('tspan', {}, t2, ' registros');
+    txt(s, 0, 126, '2024 → 31 de enero de 2026', 16, 500, 'var(--muted)');
+    txt(s, W, 126, 'feb → sep 2026 · fuera de muestra', 16, 500, 'var(--muted)', 'end');
+    S('line', { x1: wt - 1, y1: 24, x2: wt - 1, y2: 112, style: 'stroke:var(--gold);stroke-width:3;stroke-dasharray:5 4' }, s);
+    txt(s, wt - 1, 18, 'Corte · 31-ene-2026', 17, 800, 'var(--gold)', 'middle');
+  }
+
+  function banda(host) {
+    var W = 620, s = svgIn(host, W, 176), base = 124, mu = 310, sg = 82, k = 1.2816;
+    txt(s, 0, 18, 'Esquema ilustrativo de la banda P10–P90', 15, 500, 'var(--muted)');
+    function y(x) { return base - 92 * Math.exp(-Math.pow((x - mu) / sg, 2) / 2); }
+    var d = '', a = '';
+    for (var x = 40; x <= 580; x += 4) d += (x === 40 ? 'M' : 'L') + x + ' ' + y(x).toFixed(1);
+    var x0 = mu - k * sg, x1 = mu + k * sg;
+    a = 'M' + x0 + ' ' + base;
+    for (x = x0; x <= x1; x += 3) a += 'L' + x.toFixed(1) + ' ' + y(x).toFixed(1);
+    a += 'L' + x1 + ' ' + base + 'Z';
+    S('path', { d: a, style: 'fill:var(--blue);opacity:.25' }, s);
+    S('line', { x1: 30, y1: base, x2: 590, y2: base, style: 'stroke:var(--gray);stroke-width:2' }, s);
+    S('path', { d: d, fill: 'none', pathLength: 1, class: 'dib', style: 'stroke:var(--blue);stroke-width:4' }, s);
+    S('line', { x1: x0, y1: y(x0), x2: x0, y2: base, style: 'stroke:var(--gray);stroke-width:2.5;stroke-dasharray:5 4' }, s);
+    S('line', { x1: x1, y1: y(x1), x2: x1, y2: base, style: 'stroke:var(--gray);stroke-width:2.5;stroke-dasharray:5 4' }, s);
+    S('line', { x1: mu, y1: 28, x2: mu, y2: base, style: 'stroke:var(--blue);stroke-width:3' }, s);
+    txt(s, x0, 146, 'P10', 18, 800, 'var(--txt)', 'middle', true); txt(s, x0, 166, 'pesimista', 15, 500, 'var(--muted)', 'middle');
+    txt(s, mu, 146, 'μ', 20, 800, 'var(--blue)', 'middle', true); txt(s, mu, 166, 'media esperada', 15, 500, 'var(--muted)', 'middle');
+    txt(s, x1, 146, 'P90', 18, 800, 'var(--txt)', 'middle', true); txt(s, x1, 166, 'optimista', 15, 500, 'var(--muted)', 'middle');
+  }
+
+  function metricas(host) {
+    var W = 616, s = svgIn(host, W, 150), x0 = 190, mw = W - x0 - 34, MAX = 25, sc = mw / MAX;
+    function fila(y, nombre, sub, v) {
+      txt(s, 0, y + 20, nombre, 18, 800); txt(s, 0, y + 40, sub, 15, 500, 'var(--muted)');
+      S('rect', { x: x0, y: y, width: v * sc, height: 38, rx: 10, class: 'crece', style: 'fill:var(--blue)' }, s);
+      var t = txt(s, x0 + v * sc - 12, y + 27, fmt(v, 2) + '%', 20, 800, 'var(--on-color)', 'end', true);
+      t.setAttribute('data-count', v); t.setAttribute('data-dec', 2); t.setAttribute('data-suf', '%');
     }
+    fila(8, 'MAE global', 'Error medio absoluto', D.mae);
+    fila(64, 'RMSE global', 'Penaliza picos de paro', D.rmse);
+    S('line', { x1: x0, y1: 116, x2: x0 + mw, y2: 116, style: 'stroke:var(--gray);stroke-width:1.5' }, s);
+    [0, 5, 10, 15, 20, 25].forEach(function (v) {
+      S('line', { x1: x0 + v * sc, y1: 112, x2: x0 + v * sc, y2: 120, style: 'stroke:var(--gray);stroke-width:1.5' }, s);
+      txt(s, x0 + v * sc, 140, v + '%', 15, 500, 'var(--muted)', 'middle', true);
+    });
+  }
 
-    function goToSlide(n) {
-      if (n >= 0 && n < totalSlides) {
-        currentSlide = n;
-        updateSlide();
-      }
+  function red(host) {
+    var s = svgIn(host, 774, 276), defs = S('defs', {}, s);
+    var mkr = S('marker', { id: 'pt', markerWidth: 9, markerHeight: 9, refX: 7, refY: 4.5, orient: 'auto' }, defs);
+    S('path', { d: 'M0 0L9 4.5L0 9z', style: 'fill:var(--gray)' }, mkr);
+    function edge(g, d) { S('path', { d: d, fill: 'none', pathLength: 1, class: 'dib', 'marker-end': 'url(#pt)', style: 'stroke:var(--gray);stroke-width:3' }, g); }
+    // paso 1: entrada + LSTM
+    var g1 = S('g', { 'data-step': 1 }, s);
+    S('rect', { x: 8, y: 84, width: 130, height: 96, rx: 14, style: 'fill:var(--panel2);stroke:var(--gray);stroke-width:2' }, g1);
+    for (var i = 0; i < 30; i++) {
+      var hh = 14 + 24 * Math.abs(Math.sin(i * 0.55)) * (0.6 + 0.4 * Math.cos(i * 0.21));
+      S('line', { x1: 19 + i * 3.6, y1: 156, x2: 19 + i * 3.6, y2: 156 - hh, style: 'stroke:var(--blue);stroke-width:2.2;stroke-linecap:round' }, g1);
     }
+    txt(g1, 73, 110, 'Entrada', 17, 800, 'var(--txt)', 'middle');
+    txt(g1, 73, 206, 'Secuencias de', 15.5, 500, 'var(--muted)', 'middle');
+    txt(g1, 73, 226, '30 días por línea', 15.5, 500, 'var(--muted)', 'middle');
+    edge(g1, 'M138 132 H204');
+    S('rect', { x: 208, y: 58, width: 166, height: 150, rx: 16, style: 'fill:var(--panel2);stroke:var(--blue);stroke-width:3' }, g1);
+    txt(g1, 291, 112, 'LSTM', 32, 800, 'var(--blue)', 'middle');
+    txt(g1, 291, 144, 'Dropout activo', 17, 600, 'var(--txt)', 'middle');
+    txt(g1, 291, 166, 'en inferencia', 17, 600, 'var(--txt)', 'middle');
+    txt(g1, 291, 192, 'PyTorch CPU', 15.5, 500, 'var(--muted)', 'middle');
+    // paso 2: cabeza 1
+    var g2 = S('g', { 'data-step': 2 }, s);
+    edge(g2, 'M374 108 C420 108 420 70 462 70');
+    S('rect', { x: 466, y: 10, width: 300, height: 118, rx: 16, style: 'fill:var(--panel2);stroke:var(--blue);stroke-width:3' }, g2);
+    txt(g2, 484, 40, 'Cabeza 1 · Regresión de OEE', 18, 800, 'var(--blue)');
+    txt(g2, 484, 68, 'Media esperada μ y varianza σ²', 16, 500, 'var(--txt)');
+    txt(g2, 484, 92, 'N = ' + D.mc + ' simulaciones', 16, 700, 'var(--txt)');
+    txt(g2, 484, 114, 'con Dropout activo', 16, 500, 'var(--muted)');
+    // paso 3: cabeza 2
+    var g3 = S('g', { 'data-step': 3 }, s);
+    edge(g3, 'M374 158 C420 158 420 206 462 206');
+    S('rect', { x: 466, y: 142, width: 300, height: 126, rx: 16, style: 'fill:var(--panel2);stroke:var(--red);stroke-width:3' }, g3);
+    txt(g3, 484, 172, 'Cabeza 2 · Desglose de paros', 18, 800, 'var(--red)');
+    txt(g3, 484, 198, 'Horas perdidas en las 7 familias', 16, 500, 'var(--txt)');
+    txt(g3, 484, 220, 'oficiales de paros no planeados', 16, 500, 'var(--muted)');
+    var hs = [18, 26, 12, 30, 20, 14, 24];
+    hs.forEach(function (v, j) { S('rect', { x: 484 + j * 34, y: 258 - v, width: 22, height: v, rx: 4, class: 'crece', style: 'fill:var(--red);--d:' + (0.2 + j * 0.08) + 's;transform-origin:bottom' }, g3); });
+  }
 
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen().catch(() => {});
-      }
+  function construirGraficas() {
+    var m = { 'g-sat': gauge, 'picto': picto, 'barras-paro': barrasParo, 'tl-part': lineaTiempo, 'banda': banda, 'bars-met': metricas, 'red': red };
+    for (var id in m) { var h = document.getElementById(id); if (h) m[id](h); }
+  }
+
+  /* ================= CONTADORES ================= */
+  function fc(v, dec, suf) { return fmt(v, dec) + (suf || ''); }
+  function cuenta(e) {
+    var v = parseFloat(e.getAttribute('data-count')), dec = +(e.getAttribute('data-dec') || 0), suf = e.getAttribute('data-suf') || '';
+    if (e._raf) cancelAnimationFrame(e._raf);
+    if (NOANIM) { e.textContent = fc(v, dec, suf); return; }
+    var t0 = null, dur = 1500;
+    function f(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dur), q = 1 - Math.pow(1 - p, 3);
+      e.textContent = p < 1 ? fc(v * q, dec, suf) : fc(v, dec, suf);
+      if (p < 1) e._raf = requestAnimationFrame(f);
     }
+    e._raf = requestAnimationFrame(f);
+  }
+  function misContadores(stepEl) {
+    var l = $$('[data-count]', stepEl);
+    if (stepEl.hasAttribute('data-count')) l.push(stepEl);
+    return l.filter(function (c) { return c.closest('[data-step]') === stepEl; });
+  }
+  function resetCont(stepEl) {
+    misContadores(stepEl).forEach(function (c) {
+      if (c._raf) cancelAnimationFrame(c._raf);
+      c.textContent = fc(0, +(c.getAttribute('data-dec') || 0), c.getAttribute('data-suf') || '');
+    });
+  }
+  function finalCont(stepEl) {
+    misContadores(stepEl).forEach(function (c) {
+      if (c._raf) cancelAnimationFrame(c._raf);
+      c.textContent = fc(parseFloat(c.getAttribute('data-count')), +(c.getAttribute('data-dec') || 0), c.getAttribute('data-suf') || '');
+    });
+  }
 
-    // Teclado
-    window.addEventListener('keydown', (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-        nextSlide();
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
-        prevSlide();
-      } else if (e.key === 'f' || e.key === 'F') {
-        toggleFullscreen();
+  /* ================= FONDO (canvas) ================= */
+  var cv = $('#fondo'), cg = cv.getContext('2d');
+  var colA = [60, 120, 255], colT = [60, 120, 255], glowA = 0.3, motaC = [200, 220, 255], motas = [], actoActual = 1;
+  for (var mi = 0; mi < 46; mi++) motas.push({ x: Math.random() * 1600, y: Math.random() * 900, r: 1 + Math.random() * 2.2, vx: (Math.random() - 0.5) * 0.25, vy: -0.1 - Math.random() * 0.25, a: 0.15 + Math.random() * 0.5 });
+  function leeRGB(n) { var v = getComputedStyle(root).getPropertyValue(n).trim().split(',').map(Number); return v.length === 3 && !isNaN(v[0]) ? v : [60, 120, 255]; }
+  function refrescaColor() {
+    colT = leeRGB('--g' + actoActual); motaC = leeRGB('--mota');
+    glowA = parseFloat(getComputedStyle(root).getPropertyValue('--glow-a')) || 0.3;
+    if (NOANIM) { colA = colT.slice(); dibuja(); }
+  }
+  function dibuja() {
+    cg.clearRect(0, 0, 1600, 900);
+    var c = colA.map(Math.round).join(',');
+    var g1 = cg.createRadialGradient(1250, 60, 0, 1250, 60, 950);
+    g1.addColorStop(0, 'rgba(' + c + ',' + glowA + ')'); g1.addColorStop(1, 'rgba(' + c + ',0)');
+    cg.fillStyle = g1; cg.fillRect(0, 0, 1600, 900);
+    var g2 = cg.createRadialGradient(150, 880, 0, 150, 880, 720);
+    g2.addColorStop(0, 'rgba(' + c + ',' + (glowA * 0.55) + ')'); g2.addColorStop(1, 'rgba(' + c + ',0)');
+    cg.fillStyle = g2; cg.fillRect(0, 0, 1600, 900);
+    motas.forEach(function (m) {
+      cg.beginPath(); cg.arc(m.x, m.y, m.r, 0, 6.2832);
+      cg.fillStyle = 'rgba(' + motaC.join(',') + ',' + (m.a * 0.55) + ')'; cg.fill();
+    });
+  }
+  function bucle() {
+    for (var i = 0; i < 3; i++) colA[i] += (colT[i] - colA[i]) * 0.04;
+    motas.forEach(function (m) { m.x += m.vx; m.y += m.vy; if (m.y < -5) { m.y = 905; m.x = Math.random() * 1600; } if (m.x < -5) m.x = 1605; if (m.x > 1605) m.x = -5; });
+    dibuja(); requestAnimationFrame(bucle);
+  }
+
+  /* ================= MOTOR DE LÁMINAS ================= */
+  var stage = $('#stage'), slides = $$('.slide'), N = slides.length, cur = -1, step = 0;
+  var visited = [], busy = false, filo = $('#filo'), stepsOf = [];
+  function cuentaPasos() {
+    stepsOf = slides.map(function (s, i) {
+      var seen = {}, m = 0;
+      $$('[data-step]', s).forEach(function (e) { var n = +e.getAttribute('data-step'); seen[n] = 1; if (n > m) m = n; });
+      for (var k = 1; k <= m; k++) if (!seen[k]) console.warn('Hueco en data-step: lámina ' + (i + 1) + ', falta el paso ' + k);
+      return m;
+    });
+  }
+
+  function aplicaPasos(i, to, animar) {
+    $$('[data-step]', slides[i]).forEach(function (e) {
+      var n = +e.getAttribute('data-step'), on = n <= to, had = e.classList.contains('mostrado');
+      if (on && !had) {
+        e.classList.add('mostrado');
+        if (animar) misContadores(e).forEach(cuenta); else finalCont(e);
+        if (e.id === 'demoRes') setTimeout(demoBarra, animar ? 250 : 0);
+      } else if (!on && had) {
+        e.classList.remove('mostrado'); resetCont(e);
+        if (e.id === 'demoRes') demoBarra(true);
       }
     });
+  }
 
-    // ---------------- Lógica del Simulador Demo en Vivo ----------------
-    const lineSpecsDemo = {
-      'AV3': { vel: 17782.5, meta: 55.7 },
-      'A4':  { vel: 24000.0, meta: 60.0 },
-      'BP':  { vel: 8500.0,  meta: 50.0 },
-      'HM':  { vel: 12000.0, meta: 52.0 },
-      'SOV': { vel: 15000.0, meta: 58.0 }
-    };
+  function interfaz() {
+    var s = slides[cur], sec = +s.getAttribute('data-sec');
+    stage.setAttribute('data-sec', sec);
+    stage.classList.toggle('bare', s.classList.contains('bare'));
+    $$('.acto').forEach(function (a) {
+      var n = +a.getAttribute('data-act');
+      a.classList.toggle('act', n === sec); a.classList.toggle('hecho', n < sec);
+    });
+    $('#nSlide').textContent = cur + 1; $('#nTotal').textContent = N;
+    var frac = stepsOf[cur] ? step / stepsOf[cur] : 1;
+    $('#avance i').style.width = ((cur + frac) / N * 100) + '%';
+    var pa = $('#pasos'); pa.innerHTML = '';
+    for (var k = 1; k <= stepsOf[cur]; k++) { var d = document.createElement('i'); if (k <= step) d.className = 'l'; pa.appendChild(d); }
+    if (sec !== actoActual) { actoActual = sec; refrescaColor(); }
+  }
 
-    function actualizarDemoSpecs() {
-      const l = document.getElementById('demoLinea').value;
-      if (lineSpecsDemo[l]) {
-        document.getElementById('demoMeta').value = lineSpecsDemo[l].meta;
-      }
+  /* Corte diagonal: un solo reloj (rAF) mueve el recorte de las dos láminas y el filo dorado, para que no se desfasen. */
+  var raf = 0, terminaCorte = null;
+  function wipe(nuevo, viejo) {
+    var dur = 760, t0 = null;
+    function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+    function pinta(p) {
+      var X = 1840 * p;
+      nuevo.style.clipPath = 'polygon(0 0,' + X + 'px 0,' + (X - 240) + 'px 100%,0 100%)';
+      if (viejo) viejo.style.clipPath = 'polygon(' + X + 'px 0,2000px 0,2000px 100%,' + (X - 240) + 'px 100%)';
+      filo.style.opacity = 1; filo.style.transform = 'translateX(' + (X - 124) + 'px) rotate(15deg)';
     }
-
-    function setDemoPreset(piezas, horas) {
-      document.getElementById('demoPiezas').value = piezas;
-      document.getElementById('demoHoras').value = horas;
-      ejecutarDemoSimulacion();
+    function fin() {
+      nuevo.style.clipPath = ''; if (viejo) { viejo.style.clipPath = ''; viejo.classList.remove('out'); }
+      filo.style.opacity = 0; filo.style.transform = ''; busy = false; terminaCorte = null;
     }
-
-    // Detección dinámica de API Base para compatibilidad Local / AWS Cloud
-    const API_BASE = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
-      ? window.location.origin
-      : 'http://127.0.0.1:8000';
-
-    async function ejecutarDemoSimulacion() {
-      const linea = document.getElementById('demoLinea').value;
-      const horas = parseFloat(document.getElementById('demoHoras').value) || 510;
-      const meta = parseFloat(document.getElementById('demoMeta').value) || 55.7;
-      const piezas = parseFloat(document.getElementById('demoPiezas').value) || 5000000;
-
-      if (horas > 744) {
-        alert('Las horas programadas no pueden exceder 744 h (máximo 31 días naturales en el mes).');
-        return;
-      }
-
-      document.getElementById('demoOutputContent').classList.add('hidden');
-      document.getElementById('demoOutputLoading').classList.remove('hidden');
-
-      try {
-        const res = await fetch(`${API_BASE}/evaluate-risk`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            linea: linea,
-            pvos_a_fabricar: piezas,
-            horas_disponibles: horas,
-            oee_meta_pct: meta,
-            mc_samples: 100
-          })
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          renderDemoOutput(data);
-        } else {
-          throw new Error('API status ' + res.status);
-        }
-      } catch (err) {
-        // Fallback matemático exacto si la API externa no está respondiendo
-        renderDemoFallback(linea, horas, meta, piezas);
-      } finally {
-        document.getElementById('demoOutputLoading').classList.add('hidden');
-        document.getElementById('demoOutputContent').classList.remove('hidden');
-      }
+    function f(t) {
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dur); pinta(ease(p));
+      if (p < 1) raf = requestAnimationFrame(f); else fin();
     }
+    busy = true; pinta(0); raf = requestAnimationFrame(f);
+    terminaCorte = function () { cancelAnimationFrame(raf); fin(); };
+  }
 
-    function renderDemoOutput(data) {
-      const banner = document.getElementById('demoBanner');
-      const title = document.getElementById('demoBannerTitle');
-      const sub = document.getElementById('demoBannerSubtitle');
-      const badge = document.getElementById('demoBadge');
-      const icon = document.getElementById('demoBannerIcon');
+  function go(n, o) {
+    o = o || {};
+    if (n < 0 || n >= N || n === cur) return;
+    if (busy && terminaCorte) terminaCorte();
+    var viejo = cur >= 0 ? slides[cur] : null, s = slides[n];
+    var completa = !!(o.complete || visited[n] || TODO);
+    if (viejo) visited[cur] = true;
+    cur = n; step = completa ? stepsOf[n] : 0;
+    slides.forEach(function (x) { if (x !== s && x !== viejo) x.classList.remove('on', 'out'); });
+    if (viejo) { viejo.classList.remove('on'); viejo.classList.add('out'); }
+    aplicaPasos(n, step, !completa);
+    s.classList.add('on');
+    interfaz();
+    if (viejo && !NOANIM && !o.instant) wipe(s, viejo); else if (viejo) viejo.classList.remove('out');
+    cineProg();
+  }
+  function siguiente() {
+    if (step < stepsOf[cur]) { step++; aplicaPasos(cur, step, true); interfaz(); cineProg(); }
+    else if (cur < N - 1) go(cur + 1);
+  }
+  function anterior() {
+    if (step > 0) { step--; aplicaPasos(cur, step, true); interfaz(); cineProg(); }
+    else if (cur > 0) go(cur - 1, { complete: true });
+  }
+  function reiniciar() {
+    var s = slides[cur]; step = 0; aplicaPasos(cur, 0, false);
+    s.classList.remove('on'); void s.offsetWidth; s.classList.add('on');
+    interfaz(); cineProg();
+  }
+  function revelar() { step = stepsOf[cur]; aplicaPasos(cur, step, false); interfaz(); }
 
-      if (data.incumple_plan) {
-        banner.className = "p-4 rounded-xl border bg-rose-950/60 border-rose-800/80 text-rose-100 flex items-center justify-between";
-        icon.className = "fa-solid fa-circle-xmark text-rose-400";
-        title.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-400 mr-2"></i><span>INCUMPLE PLAN DE FABRICACIÓN (Saturación > 100%)</span>';
-        sub.innerText = `La saturación proyectada de ${data.saturacion_proyectada_pct.toFixed(1)}% supera las ${data.horas_disponibles} horas disponibles.`;
-        badge.className = "bg-rose-600 text-white font-bold px-3 py-1 rounded-full text-xs font-mono";
-        badge.innerText = `${data.pct_incumplimiento_piezas.toFixed(1)}% Incumplimiento`;
-      } else {
-        banner.className = "p-4 rounded-xl border bg-emerald-950/60 border-emerald-800/80 text-emerald-100 flex items-center justify-between";
-        icon.className = "fa-solid fa-circle-check text-emerald-400";
-        title.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400 mr-2"></i><span>CUMPLE PLAN FACTIBLEMENTE</span>';
-        sub.innerText = `Línea en capacidad holgada (Saturación: ${data.saturacion_proyectada_pct.toFixed(1)}%).`;
-        badge.className = "bg-emerald-600 text-white font-bold px-3 py-1 rounded-full text-xs font-mono";
-        badge.innerText = `${data.saturacion_proyectada_pct.toFixed(1)}% Saturación`;
-      }
+  /* ---- modo cine ---- */
+  var cine = false, cineT = null;
+  function palabras(e) { return (e.textContent || '').trim().split(/\s+/).filter(Boolean).length; }
+  function cineRetardo() {
+    var s = slides[cur], w = 0;
+    if (step === 0) { var t = $('.tit', s); w = t ? palabras(t) : 8; }
+    else $$('[data-step="' + step + '"]', s).forEach(function (e) { w += palabras(e); });
+    return Math.max(2600, w / 230 * 60000 + 900);
+  }
+  function cineUI() { $('#cine').classList.toggle('on', cine); }
+  function cineProg() {
+    clearTimeout(cineT);
+    if (!cine) return;
+    if (cur === N - 1 && step >= stepsOf[cur]) { cine = false; cineUI(); return; }
+    cineT = setTimeout(function () { siguiente(); }, cineRetardo());
+  }
+  function alternaCine() { cine = !cine; cineUI(); cineProg(); }
 
-      document.getElementById('demoResOee').innerText = `${data.oee_proyectado_mu_pct.toFixed(1)}%`;
-      document.getElementById('demoResSat').innerText = `${data.saturacion_proyectada_pct.toFixed(1)}%`;
-      document.getElementById('demoResPiezas').innerText = Number(data.piezas_faltantes).toLocaleString();
-      document.getElementById('demoResHoras').innerText = `${data.horas_faltantes.toFixed(1)} h`;
-    }
+  /* ---- tema ---- */
+  function setTema(t, guardar) {
+    root.setAttribute('data-theme', t);
+    if (guardar && !Q.has('tema')) { try { localStorage.setItem('oee-tema', t); } catch (e) {} }
+    refrescaColor();
+  }
+  function alternaTema() { setTema(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light', true); }
 
-    function renderDemoFallback(linea, horas, meta, piezas) {
-      const specs = lineSpecsDemo[linea] || { vel: 17782.5, meta: 55.7 };
-      const mu_oee = 0.4112; // Proyección LSTM AV3
-      const vel_eff = specs.vel * mu_oee;
-      const h_req = piezas / vel_eff;
-      const sat = (h_req / horas) * 100.0;
-      const incumple = sat > 100.0;
-      const piezas_pos = horas * vel_eff;
-      const piezas_fal = Math.max(0, piezas - piezas_pos);
-      const horas_fal = Math.max(0, h_req - horas);
-      const pct_inc = incumple ? (piezas_fal / piezas) * 100 : 0;
+  function pantallaCompleta() {
+    if (!document.fullscreenElement) { (root.requestFullscreen || function () { return Promise.resolve(); }).call(root).catch(function () {}); }
+    else document.exitFullscreen().catch(function () {});
+  }
+  function escala() { var s = Math.min(innerWidth / 1600, innerHeight / 900); stage.style.transform = 'scale(' + s + ')'; }
 
-      renderDemoOutput({
-        incumple_plan: incumple,
-        saturacion_proyectada_pct: sat,
-        horas_disponibles: horas,
-        pct_incumplimiento_piezas: pct_inc,
-        oee_proyectado_mu_pct: mu_oee * 100,
-        piezas_faltantes: piezas_fal,
-        horas_faltantes: horas_fal
-      });
-    }
+  /* ================= DEMO ================= */
+  var API_BASE = (location.protocol === 'http:' || location.protocol === 'https:') ? location.origin : 'http://13.59.96.134';
+  var lastSat = D.real;
 
-    // Inicialización
-    window.addEventListener('DOMContentLoaded', () => {
-      selectMedallion('bronze');
-      updateSlide();
-      // Checar API dinámicamente
-      fetch(`${API_BASE}/health`).then(r => {
-        if (!r.ok) throw new Error();
-        const badge = document.getElementById('demoApiStatus');
-        const displayHost = API_BASE.replace(/^https?:\/\//, '');
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>API Conectada (${displayHost})</span>`;
-      }).catch(() => {
-        const badge = document.getElementById('demoApiStatus');
-        badge.className = "bg-amber-950 text-amber-400 text-xs font-bold px-3 py-1 rounded-full border border-amber-800 flex items-center gap-1.5";
-        badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-400"></span><span>Simulador Local Activo</span>';
+  function demoBarra(vaciar) {
+    var r = $('#demoRelleno'); if (!r) return;
+    r.style.width = vaciar ? '0%' : (Math.min(lastSat, MAXSAT) / MAXSAT * 100) + '%';
+  }
+  function pintaDemo(d) {
+    var ok = !d.incumple_plan, sat = d.saturacion_proyectada_pct;
+    $('#demoBanner').className = ok ? 'ok' : '';
+    $('#demoIcono').firstElementChild.setAttribute('href', ok ? '#i-ok' : '#i-x');
+    $('#demoTitulo').textContent = ok ? 'CUMPLE PLAN FACTIBLEMENTE' : 'INCUMPLE PLAN DE FABRICACIÓN (Saturación > 100%)';
+    $('#demoSub').textContent = ok ? 'Línea en capacidad holgada (saturación: ' + sat.toFixed(1) + '%).'
+      : 'La saturación proyectada de ' + sat.toFixed(1) + '% supera las ' + d.horas_disponibles + ' horas disponibles.';
+    $('#demoBadge').textContent = ok ? sat.toFixed(1) + '% saturación' : d.pct_incumplimiento_piezas.toFixed(1) + '% incumplimiento';
+    $('#demoResOee').textContent = d.oee_proyectado_mu_pct.toFixed(1) + '%';
+    var rs = $('#demoResSat'); rs.textContent = sat.toFixed(1) + '%'; rs.className = 'num ' + (ok ? 'azul-t' : 'rojo-t');
+    $('#demoResPiezas').textContent = fmt(d.piezas_faltantes, 0);
+    $('#demoResHoras').textContent = d.horas_faltantes.toFixed(1) + ' h';
+    $('#demoBarra').className = 'barsat' + (ok ? ' ok' : '');
+    $('#demoM100').style.left = (100 / MAXSAT * 100) + '%'; $('#demoR100').style.left = (100 / MAXSAT * 100) + '%';
+    $('#demoZona').style.width = ((MAXSAT - 100) / MAXSAT * 100) + '%';
+    lastSat = sat; demoBarra(false);
+  }
+  function demoFallback(linea, horas, meta, piezas) {
+    var sp = D.specs[linea] || D.specs.AV3, mu = D.oee_mu_frac;
+    var vel = sp.vel * mu, hreq = piezas / vel, sat = hreq / horas * 100, inc = sat > 100;
+    var pos = horas * vel, fal = Math.max(0, piezas - pos), hfal = Math.max(0, hreq - horas);
+    pintaDemo({ incumple_plan: inc, saturacion_proyectada_pct: sat, horas_disponibles: horas,
+      pct_incumplimiento_piezas: inc ? fal / piezas * 100 : 0, oee_proyectado_mu_pct: mu * 100, piezas_faltantes: fal, horas_faltantes: hfal });
+  }
+  function demoEjecuta() {
+    var linea = $('#demoLinea').value, horas = parseFloat($('#demoHoras').value) || D.horas_lote,
+      meta = parseFloat($('#demoMeta').value) || 55.7, piezas = parseFloat($('#demoPiezas').value) || 5000000;
+    var err = $('#demoErr'), car = $('#demoCarga'); err.textContent = '';
+    if (horas > 744) { err.textContent = 'Las horas programadas no pueden exceder 744 h (máximo 31 días naturales en el mes).'; return; }
+    car.classList.add('on');
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var to = setTimeout(function () { if (ctl) ctl.abort(); }, D.timeout * 1000);
+    fetch(API_BASE + '/evaluate-risk', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: ctl ? ctl.signal : undefined,
+      body: JSON.stringify({ linea: linea, pvos_a_fabricar: piezas, horas_disponibles: horas, oee_meta_pct: meta, mc_samples: 100 }) })
+      .then(function (r) { if (!r.ok) throw new Error('API ' + r.status); return r.json(); })
+      .then(pintaDemo)
+      .catch(function () { demoFallback(linea, horas, meta, piezas); })
+      .then(function () { clearTimeout(to); car.classList.remove('on'); });
+  }
+  function iniciaDemo() {
+    var sel = $('#demoLinea');
+    Object.keys(D.specs).forEach(function (k, i) {
+      var o = document.createElement('option'); o.value = k;
+      o.textContent = 'Línea ' + k + ' (vel: ' + fmt(Math.floor(D.specs[k].vel)) + ' pvo/h | meta: ' + D.specs[k].meta.toFixed(1) + '%)';
+      sel.appendChild(o);
+    });
+    sel.addEventListener('change', function () { $('#demoMeta').value = D.specs[sel.value].meta; sel.blur(); });
+    $$('[data-preset]').forEach(function (b) {
+      b.addEventListener('click', function () { $('#demoPiezas').value = b.getAttribute('data-preset'); $('#demoHoras').value = D.horas_lote; demoEjecuta(); b.blur(); });
+    });
+    $('#btnDemoRun').addEventListener('click', function () { demoEjecuta(); this.blur(); });
+    $('#demoMeta').value = D.specs.AV3.meta;
+    pintaDemo({ incumple_plan: true, saturacion_proyectada_pct: D.real, horas_disponibles: D.horas_lote, pct_incumplimiento_piezas: D.incumple,
+      oee_proyectado_mu_pct: D.oee_mu, piezas_faltantes: D.piezas_falt, horas_faltantes: D.horas_falt });
+    // estado de la API
+    var st = $('#demoApiStatus');
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var to = setTimeout(function () { if (ctl) ctl.abort(); }, 4000);
+    if (TODO) return;
+    fetch(API_BASE + '/health', { signal: ctl ? ctl.signal : undefined }).then(function (r) {
+      if (!r.ok) throw new Error();
+      st.className = 'estado'; st.innerHTML = '<i></i><span>API AWS en línea (' + API_BASE.replace(/^https?:\/\//, '') + ')</span>';
+    }).catch(function () { st.className = 'estado local'; st.innerHTML = '<i></i><span>Simulador local activo</span>'; })
+      .then(function () { clearTimeout(to); });
+  }
+
+  /* ================= ARRANQUE ================= */
+  function init() {
+    // títulos palabra por palabra
+    $$('.tit').forEach(function (t) {
+      var ws = t.textContent.trim().split(/\s+/); t.textContent = '';
+      ws.forEach(function (w, i) {
+        var sp = document.createElement('span'); sp.className = 'w'; sp.style.setProperty('--i', i); sp.textContent = w; t.appendChild(sp);
+        if (i < ws.length - 1) t.appendChild(document.createTextNode(' '));
       });
     });
-  </script>
+    $$('.casc').forEach(function (c) { Array.prototype.forEach.call(c.children, function (ch, i) { ch.style.setProperty('--i', i); }); });
+    // riel de actos
+    var nombres = ['Contexto', 'Datos', 'Modelo', 'Publicación e integración', 'Resultados y demo'], riel = $('#riel');
+    nombres.forEach(function (nm, i) {
+      var a = document.createElement('div'); a.className = 'acto'; a.setAttribute('data-act', i + 1);
+      a.innerHTML = '<b>' + (i + 1) + '</b>' + nm; riel.appendChild(a);
+    });
+    riel.addEventListener('click', function (e) {
+      var a = e.target.closest('.acto'); if (a) irActo(+a.getAttribute('data-act'));
+    });
+    construirGraficas(); cuentaPasos(); iniciaDemo();
+    escala(); window.addEventListener('resize', escala);
+    refrescaColor(); colA = colT.slice();
+    if (!NOANIM) requestAnimationFrame(bucle); else dibuja();
+
+    var btn = $('#btnTema');
+    btn.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    btn.addEventListener('click', function (e) { e.stopPropagation(); alternaTema(); btn.blur(); });
+
+    stage.addEventListener('click', function (e) {
+      if (e.target.closest('#riel,#btnTema,.demo-ui,button,input,select,a,#ayuda')) return;
+      var r = stage.getBoundingClientRect();
+      if ((e.clientX - r.left) / r.width < 0.35) anterior(); else siguiente();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      var tn = e.target && e.target.tagName;
+      if (tn === 'INPUT' || tn === 'SELECT' || tn === 'TEXTAREA') return;
+      var k = e.key;
+      if ((k === ' ' || k === 'Enter') && tn === 'BUTTON') return;
+      var lk = k.length === 1 ? k.toLowerCase() : k;
+      if (k === 'ArrowRight' || k === ' ' || k === 'PageDown') { e.preventDefault(); siguiente(); }
+      else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); anterior(); }
+      else if (lk === 'f') pantallaCompleta();
+      else if (lk === 'b') $('#negro').classList.toggle('on');
+      else if (lk === 'r') reiniciar();
+      else if (lk === 'a') revelar();
+      else if (lk === 'p') alternaCine();
+      else if (lk === 't') alternaTema();
+      else if (lk === 'h' || k === '?') $('#ayuda').classList.toggle('off');
+      else if (/^[1-5]$/.test(k)) irActo(+k);
+    });
+
+    var m = /^#d(\d+)$/.exec(location.hash), inicio = m ? Math.min(N, Math.max(1, +m[1])) - 1 : 0;
+    go(inicio, { complete: TODO, instant: true });
+    if (TODO) { $('#ayuda').classList.add('off'); }
+    else setTimeout(function () { $('#ayuda').classList.add('off'); }, 9000);
+  }
+  function irActo(n) {
+    for (var i = 0; i < N; i++) if (+slides[i].getAttribute('data-sec') === n) { go(i); return; }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
 </body>
 </html>
