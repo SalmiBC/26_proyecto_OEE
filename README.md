@@ -1,4 +1,4 @@
-# Sistema Híbrido de Predicción de OEE, Estimación de Riesgo de Plan y Diagnóstico de Fallas (LSTM + LLM)
+# Sistema Híbrido de Predicción de OEE, Estimación de Riesgo de Plan y Diagnóstico de Fallas
 
 **Proyecto Individual de Aplicación Industrial**  
 **Empresa:** Laboratorios PiSA S.A. de C.V. — Dirección de Planeación de la Producción  
