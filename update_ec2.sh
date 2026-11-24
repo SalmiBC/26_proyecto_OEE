@@ -39,6 +39,7 @@ sudo git pull origin main
 sudo docker cp app_consulta.html oee-service:/app/app_consulta.html
 sudo docker cp presentacion_rubrica_oee.html oee-service:/app/presentacion_rubrica_oee.html 2>/dev/null || true
 sudo docker cp dashboard_oee_predictivo.html oee-service:/app/dashboard_oee_predictivo.html 2>/dev/null || true
+sudo docker cp README.md oee-service:/app/README.md 2>/dev/null || true
 echo "Contenedor Docker actualizado con éxito."
 REMOTE_EOF
 
