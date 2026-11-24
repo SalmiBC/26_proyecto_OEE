@@ -1,7 +1,7 @@
 # Sistema Híbrido de Predicción de OEE, Estimación de Riesgo de Plan y Diagnóstico de Fallas
 
 **Salma Paulette Becerra Cervantes**  
-**Empresa:** Laboratorios PiSA S.A. de C.V. — Dirección de Planeación de la Producción  
+**Empresa:** Farma — Dirección de Planeación de la Producción  
 
 ---
 
