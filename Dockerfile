@@ -16,9 +16,14 @@ WORKDIR /app
 # Copiar requirements
 COPY requirements.txt .
 
-# Instalar PyTorch CPU ligero (180MB en vez de 4GB de drivers CUDA innecesarios) y dependencias
+# Instalar PyTorch CPU ligero según arquitectura (x86_64 o arm64/aarch64) y dependencias
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu; \
+    else \
+        pip install --no-cache-dir torch; \
+    fi && \
     pip install --no-cache-dir -r requirements.txt
 
 # Copiar código fuente, datos procesados, modelos e interfaces web
