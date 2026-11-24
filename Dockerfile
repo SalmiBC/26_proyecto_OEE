@@ -16,17 +16,19 @@ WORKDIR /app
 # Copiar requirements
 COPY requirements.txt .
 
-# Instalar PyTorch versión CPU (180MB en vez de 4GB de drivers CUDA innecesarios) y dependencias
+# Instalar PyTorch CPU ligero (180MB en vez de 4GB de drivers CUDA innecesarios) y dependencias
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copiar código fuente, interfaces web y artefactos del modelo
+# Copiar código fuente, datos procesados, modelos e interfaces web
 COPY src/ ./src/
-COPY data/master_oee_dataset.parquet ./data/master_oee_dataset.parquet
+COPY data/ ./data/
 COPY models/ ./models/
 COPY app_consulta.html ./app_consulta.html
 COPY presentacion_rubrica_oee.html ./presentacion_rubrica_oee.html
+COPY dashboard_oee_predictivo.html ./dashboard_oee_predictivo.html
+COPY presentacion_didactica_lstm_llm.html ./presentacion_didactica_lstm_llm.html
 
 # Exponer el puerto por defecto de la API
 EXPOSE 8000
