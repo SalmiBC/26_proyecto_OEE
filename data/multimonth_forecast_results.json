@@ -1,0 +1,1097 @@
+{
+  "metadata": {
+    "n_months": 6,
+    "n_samples": 100,
+    "meses": [
+      "Nov 2026 (M1)",
+      "Dic 2026 (M2)",
+      "Ene 2027 (M3)",
+      "Feb 2027 (M4)",
+      "Mar 2027 (M5)",
+      "Abr 2027 (M6)"
+    ],
+    "metodologia": "Autorregresiva Iterada con Monte Carlo Dropout y Difusión Estocástica de Incertidumbre"
+  },
+  "lines": {
+    "A4": {
+      "line": "A4",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 53.71,
+          "oee_sigma": 1.69,
+          "oee_q10": 51.41,
+          "oee_q50": 53.95,
+          "oee_q90": 55.74
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 53.36,
+          "oee_sigma": 1.88,
+          "oee_q10": 50.61,
+          "oee_q50": 53.65,
+          "oee_q90": 55.66
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 53.93,
+          "oee_sigma": 2.31,
+          "oee_q10": 50.98,
+          "oee_q50": 53.84,
+          "oee_q90": 56.45
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 54.86,
+          "oee_sigma": 2.22,
+          "oee_q10": 51.83,
+          "oee_q50": 55.08,
+          "oee_q90": 57.47
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 55.42,
+          "oee_sigma": 2.23,
+          "oee_q10": 52.22,
+          "oee_q50": 55.51,
+          "oee_q90": 57.97
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 55.26,
+          "oee_sigma": 2.21,
+          "oee_q10": 52.23,
+          "oee_q50": 55.4,
+          "oee_q90": 57.91
+        }
+      ]
+    },
+    "A5": {
+      "line": "A5",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 56.76,
+          "oee_sigma": 1.81,
+          "oee_q10": 54.83,
+          "oee_q50": 56.58,
+          "oee_q90": 58.67
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 58.41,
+          "oee_sigma": 1.6,
+          "oee_q10": 56.42,
+          "oee_q50": 58.42,
+          "oee_q90": 60.44
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 51.46,
+          "oee_sigma": 2.35,
+          "oee_q10": 48.77,
+          "oee_q50": 51.36,
+          "oee_q90": 54.44
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 52.53,
+          "oee_sigma": 2.3,
+          "oee_q10": 49.47,
+          "oee_q50": 52.75,
+          "oee_q90": 55.36
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 54.88,
+          "oee_sigma": 2.54,
+          "oee_q10": 51.91,
+          "oee_q50": 54.89,
+          "oee_q90": 58.06
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 59.49,
+          "oee_sigma": 2.58,
+          "oee_q10": 56.68,
+          "oee_q50": 59.62,
+          "oee_q90": 62.84
+        }
+      ]
+    },
+    "ANES": {
+      "line": "ANES",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 47.88,
+          "oee_sigma": 3.75,
+          "oee_q10": 42.94,
+          "oee_q50": 47.55,
+          "oee_q90": 52.65
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 50.31,
+          "oee_sigma": 2.51,
+          "oee_q10": 47.55,
+          "oee_q50": 50.19,
+          "oee_q90": 53.71
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 55.26,
+          "oee_sigma": 2.28,
+          "oee_q10": 52.55,
+          "oee_q50": 55.26,
+          "oee_q90": 58.04
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 57.26,
+          "oee_sigma": 2.11,
+          "oee_q10": 54.44,
+          "oee_q50": 57.12,
+          "oee_q90": 59.92
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 45.94,
+          "oee_sigma": 3.07,
+          "oee_q10": 41.76,
+          "oee_q50": 45.99,
+          "oee_q90": 49.67
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 55.09,
+          "oee_sigma": 2.36,
+          "oee_q10": 52.56,
+          "oee_q50": 54.81,
+          "oee_q90": 58.15
+        }
+      ]
+    },
+    "AV1": {
+      "line": "AV1",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 64.81,
+          "oee_sigma": 2.18,
+          "oee_q10": 62.43,
+          "oee_q50": 64.75,
+          "oee_q90": 67.46
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 65.18,
+          "oee_sigma": 2.34,
+          "oee_q10": 62.12,
+          "oee_q50": 65.17,
+          "oee_q90": 68.19
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 65.17,
+          "oee_sigma": 2.11,
+          "oee_q10": 62.25,
+          "oee_q50": 65.01,
+          "oee_q90": 67.84
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 65.14,
+          "oee_sigma": 2.91,
+          "oee_q10": 61.21,
+          "oee_q50": 65.14,
+          "oee_q90": 68.41
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 65.24,
+          "oee_sigma": 2.62,
+          "oee_q10": 61.94,
+          "oee_q50": 65.2,
+          "oee_q90": 68.6
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 65.71,
+          "oee_sigma": 2.82,
+          "oee_q10": 61.68,
+          "oee_q50": 65.83,
+          "oee_q90": 69.2
+        }
+      ]
+    },
+    "AV2": {
+      "line": "AV2",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 57.95,
+          "oee_sigma": 2.1,
+          "oee_q10": 55.4,
+          "oee_q50": 58.12,
+          "oee_q90": 60.16
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 59.24,
+          "oee_sigma": 2.18,
+          "oee_q10": 56.31,
+          "oee_q50": 59.22,
+          "oee_q90": 61.63
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 56.98,
+          "oee_sigma": 2.61,
+          "oee_q10": 53.92,
+          "oee_q50": 57.08,
+          "oee_q90": 60.36
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 56.89,
+          "oee_sigma": 2.5,
+          "oee_q10": 53.17,
+          "oee_q50": 56.98,
+          "oee_q90": 59.86
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 56.08,
+          "oee_sigma": 2.55,
+          "oee_q10": 52.72,
+          "oee_q50": 56.29,
+          "oee_q90": 59.33
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 56.3,
+          "oee_sigma": 2.59,
+          "oee_q10": 53.07,
+          "oee_q50": 56.15,
+          "oee_q90": 59.71
+        }
+      ]
+    },
+    "AV3": {
+      "line": "AV3",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 51.59,
+          "oee_sigma": 2.38,
+          "oee_q10": 48.5,
+          "oee_q50": 51.82,
+          "oee_q90": 54.38
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 53.1,
+          "oee_sigma": 1.87,
+          "oee_q10": 50.6,
+          "oee_q50": 53.18,
+          "oee_q90": 55.35
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 52.88,
+          "oee_sigma": 2.45,
+          "oee_q10": 49.53,
+          "oee_q50": 53.31,
+          "oee_q90": 55.52
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 53.23,
+          "oee_sigma": 2.22,
+          "oee_q10": 50.71,
+          "oee_q50": 53.42,
+          "oee_q90": 55.83
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 53.43,
+          "oee_sigma": 2.37,
+          "oee_q10": 50.24,
+          "oee_q50": 53.64,
+          "oee_q90": 56.15
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 53.32,
+          "oee_sigma": 2.48,
+          "oee_q10": 50.27,
+          "oee_q50": 53.44,
+          "oee_q90": 56.67
+        }
+      ]
+    },
+    "AV6": {
+      "line": "AV6",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 38.41,
+          "oee_sigma": 5.18,
+          "oee_q10": 32.31,
+          "oee_q50": 37.89,
+          "oee_q90": 45.72
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 41.71,
+          "oee_sigma": 3.55,
+          "oee_q10": 36.3,
+          "oee_q50": 42.04,
+          "oee_q90": 46.02
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 31.86,
+          "oee_sigma": 5.51,
+          "oee_q10": 24.6,
+          "oee_q50": 31.04,
+          "oee_q90": 38.59
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 31.77,
+          "oee_sigma": 5.25,
+          "oee_q10": 24.98,
+          "oee_q50": 31.88,
+          "oee_q90": 38.69
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 32.8,
+          "oee_sigma": 5.08,
+          "oee_q10": 26.48,
+          "oee_q50": 32.69,
+          "oee_q90": 38.82
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 33.4,
+          "oee_sigma": 4.07,
+          "oee_q10": 28.78,
+          "oee_q50": 33.57,
+          "oee_q90": 37.76
+        }
+      ]
+    },
+    "BP": {
+      "line": "BP",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 72.6,
+          "oee_sigma": 3.46,
+          "oee_q10": 68.0,
+          "oee_q50": 72.33,
+          "oee_q90": 77.53
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 49.39,
+          "oee_sigma": 4.08,
+          "oee_q10": 44.97,
+          "oee_q50": 49.5,
+          "oee_q90": 54.19
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 60.08,
+          "oee_sigma": 2.55,
+          "oee_q10": 57.03,
+          "oee_q50": 60.26,
+          "oee_q90": 63.18
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 59.27,
+          "oee_sigma": 2.42,
+          "oee_q10": 56.2,
+          "oee_q50": 59.19,
+          "oee_q90": 62.16
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 60.27,
+          "oee_sigma": 2.51,
+          "oee_q10": 57.54,
+          "oee_q50": 60.08,
+          "oee_q90": 63.53
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 61.99,
+          "oee_sigma": 2.78,
+          "oee_q10": 59.0,
+          "oee_q50": 62.16,
+          "oee_q90": 65.25
+        }
+      ]
+    },
+    "HM": {
+      "line": "HM",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 67.6,
+          "oee_sigma": 2.7,
+          "oee_q10": 64.12,
+          "oee_q50": 67.91,
+          "oee_q90": 70.85
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 63.52,
+          "oee_sigma": 2.38,
+          "oee_q10": 60.24,
+          "oee_q50": 63.99,
+          "oee_q90": 66.03
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 63.6,
+          "oee_sigma": 2.18,
+          "oee_q10": 61.28,
+          "oee_q50": 63.79,
+          "oee_q90": 66.43
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 62.6,
+          "oee_sigma": 2.54,
+          "oee_q10": 58.88,
+          "oee_q50": 62.7,
+          "oee_q90": 65.7
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 63.88,
+          "oee_sigma": 2.58,
+          "oee_q10": 60.7,
+          "oee_q50": 63.91,
+          "oee_q90": 67.3
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 63.32,
+          "oee_sigma": 2.54,
+          "oee_q10": 60.46,
+          "oee_q50": 63.27,
+          "oee_q90": 66.28
+        }
+      ]
+    },
+    "JERINGAS": {
+      "line": "JERINGAS",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 20.0,
+          "oee_sigma": 0.0,
+          "oee_q10": 20.0,
+          "oee_q50": 20.0,
+          "oee_q90": 20.0
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 61.08,
+          "oee_sigma": 3.04,
+          "oee_q10": 57.41,
+          "oee_q50": 61.24,
+          "oee_q90": 65.16
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 58.58,
+          "oee_sigma": 2.45,
+          "oee_q10": 55.41,
+          "oee_q50": 58.88,
+          "oee_q90": 61.33
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 46.84,
+          "oee_sigma": 4.2,
+          "oee_q10": 41.88,
+          "oee_q50": 46.78,
+          "oee_q90": 52.38
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 34.52,
+          "oee_sigma": 5.21,
+          "oee_q10": 27.86,
+          "oee_q50": 34.55,
+          "oee_q90": 41.24
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 46.4,
+          "oee_sigma": 4.69,
+          "oee_q10": 40.3,
+          "oee_q50": 46.47,
+          "oee_q90": 52.01
+        }
+      ]
+    },
+    "OFT": {
+      "line": "OFT",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 61.89,
+          "oee_sigma": 1.99,
+          "oee_q10": 59.4,
+          "oee_q50": 61.61,
+          "oee_q90": 64.38
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 61.84,
+          "oee_sigma": 2.29,
+          "oee_q10": 58.69,
+          "oee_q50": 61.82,
+          "oee_q90": 64.58
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 60.27,
+          "oee_sigma": 2.37,
+          "oee_q10": 57.51,
+          "oee_q50": 60.17,
+          "oee_q90": 63.18
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 62.16,
+          "oee_sigma": 2.57,
+          "oee_q10": 59.0,
+          "oee_q50": 62.14,
+          "oee_q90": 65.14
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 61.98,
+          "oee_sigma": 2.92,
+          "oee_q10": 58.25,
+          "oee_q50": 62.18,
+          "oee_q90": 65.51
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 62.73,
+          "oee_sigma": 2.95,
+          "oee_q10": 59.44,
+          "oee_q50": 62.52,
+          "oee_q90": 66.46
+        }
+      ]
+    },
+    "POLVOS": {
+      "line": "POLVOS",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 68.16,
+          "oee_sigma": 2.63,
+          "oee_q10": 65.19,
+          "oee_q50": 68.29,
+          "oee_q90": 71.62
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 61.35,
+          "oee_sigma": 2.41,
+          "oee_q10": 58.21,
+          "oee_q50": 61.38,
+          "oee_q90": 64.41
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 60.45,
+          "oee_sigma": 2.08,
+          "oee_q10": 57.85,
+          "oee_q50": 60.41,
+          "oee_q90": 63.18
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 60.91,
+          "oee_sigma": 2.49,
+          "oee_q10": 57.21,
+          "oee_q50": 61.24,
+          "oee_q90": 63.47
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 61.85,
+          "oee_sigma": 2.62,
+          "oee_q10": 58.21,
+          "oee_q50": 61.99,
+          "oee_q90": 65.33
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 64.23,
+          "oee_sigma": 2.96,
+          "oee_q10": 60.57,
+          "oee_q50": 64.45,
+          "oee_q90": 68.04
+        }
+      ]
+    },
+    "SOV": {
+      "line": "SOV",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 58.58,
+          "oee_sigma": 2.54,
+          "oee_q10": 55.61,
+          "oee_q50": 58.95,
+          "oee_q90": 61.42
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 61.71,
+          "oee_sigma": 2.26,
+          "oee_q10": 58.79,
+          "oee_q50": 61.99,
+          "oee_q90": 64.39
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 60.18,
+          "oee_sigma": 2.55,
+          "oee_q10": 56.39,
+          "oee_q50": 60.63,
+          "oee_q90": 62.69
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 61.36,
+          "oee_sigma": 2.37,
+          "oee_q10": 58.5,
+          "oee_q50": 61.01,
+          "oee_q90": 64.77
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 61.43,
+          "oee_sigma": 2.63,
+          "oee_q10": 57.64,
+          "oee_q50": 61.57,
+          "oee_q90": 64.69
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 61.23,
+          "oee_sigma": 2.89,
+          "oee_q10": 57.96,
+          "oee_q50": 60.98,
+          "oee_q90": 65.26
+        }
+      ]
+    },
+    "SV1": {
+      "line": "SV1",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 46.53,
+          "oee_sigma": 6.12,
+          "oee_q10": 38.87,
+          "oee_q50": 45.92,
+          "oee_q90": 55.19
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 20.33,
+          "oee_sigma": 1.51,
+          "oee_q10": 20.0,
+          "oee_q50": 20.0,
+          "oee_q90": 20.0
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 37.89,
+          "oee_sigma": 4.67,
+          "oee_q10": 32.45,
+          "oee_q50": 37.71,
+          "oee_q90": 45.38
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 51.34,
+          "oee_sigma": 3.58,
+          "oee_q10": 46.54,
+          "oee_q50": 51.18,
+          "oee_q90": 56.09
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 59.56,
+          "oee_sigma": 2.49,
+          "oee_q10": 56.03,
+          "oee_q50": 59.53,
+          "oee_q90": 62.6
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 61.28,
+          "oee_sigma": 2.56,
+          "oee_q10": 58.27,
+          "oee_q50": 61.03,
+          "oee_q90": 64.89
+        }
+      ]
+    },
+    "VA1": {
+      "line": "VA1",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 22.07,
+          "oee_sigma": 3.13,
+          "oee_q10": 20.0,
+          "oee_q50": 20.0,
+          "oee_q90": 27.3
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 29.09,
+          "oee_sigma": 5.18,
+          "oee_q10": 21.89,
+          "oee_q50": 29.21,
+          "oee_q90": 35.74
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 28.66,
+          "oee_sigma": 5.18,
+          "oee_q10": 21.27,
+          "oee_q50": 28.57,
+          "oee_q90": 35.25
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 30.01,
+          "oee_sigma": 5.48,
+          "oee_q10": 22.19,
+          "oee_q50": 30.29,
+          "oee_q90": 37.02
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 33.72,
+          "oee_sigma": 4.75,
+          "oee_q10": 27.54,
+          "oee_q50": 34.6,
+          "oee_q90": 39.24
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 26.95,
+          "oee_sigma": 4.61,
+          "oee_q10": 20.59,
+          "oee_q50": 27.29,
+          "oee_q90": 33.37
+        }
+      ]
+    },
+    "VA2": {
+      "line": "VA2",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 55.48,
+          "oee_sigma": 2.15,
+          "oee_q10": 52.93,
+          "oee_q50": 55.11,
+          "oee_q90": 58.16
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 53.45,
+          "oee_sigma": 2.59,
+          "oee_q10": 50.61,
+          "oee_q50": 53.63,
+          "oee_q90": 56.58
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 54.47,
+          "oee_sigma": 2.56,
+          "oee_q10": 51.13,
+          "oee_q50": 54.6,
+          "oee_q90": 57.14
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 53.59,
+          "oee_sigma": 3.33,
+          "oee_q10": 49.3,
+          "oee_q50": 53.77,
+          "oee_q90": 57.23
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 52.77,
+          "oee_sigma": 2.52,
+          "oee_q10": 49.59,
+          "oee_q50": 52.77,
+          "oee_q90": 55.82
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 50.94,
+          "oee_sigma": 3.43,
+          "oee_q10": 45.91,
+          "oee_q50": 51.43,
+          "oee_q90": 55.17
+        }
+      ]
+    },
+    "VA3": {
+      "line": "VA3",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 47.79,
+          "oee_sigma": 2.73,
+          "oee_q10": 44.58,
+          "oee_q50": 48.04,
+          "oee_q90": 51.25
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 55.93,
+          "oee_sigma": 1.79,
+          "oee_q10": 53.65,
+          "oee_q50": 55.9,
+          "oee_q90": 58.44
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 55.16,
+          "oee_sigma": 2.01,
+          "oee_q10": 52.85,
+          "oee_q50": 54.97,
+          "oee_q90": 57.75
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 56.25,
+          "oee_sigma": 2.1,
+          "oee_q10": 53.09,
+          "oee_q50": 56.42,
+          "oee_q90": 58.8
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 55.35,
+          "oee_sigma": 2.23,
+          "oee_q10": 52.62,
+          "oee_q50": 55.16,
+          "oee_q90": 58.47
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 58.08,
+          "oee_sigma": 2.37,
+          "oee_q10": 55.46,
+          "oee_q50": 57.98,
+          "oee_q90": 60.81
+        }
+      ]
+    },
+    "VA4": {
+      "line": "VA4",
+      "horizonte_meses": 6,
+      "trayectoria": [
+        {
+          "mes_indice": 1,
+          "mes_nombre": "Nov 2026 (M1)",
+          "oee_mu": 68.44,
+          "oee_sigma": 2.75,
+          "oee_q10": 65.49,
+          "oee_q50": 68.02,
+          "oee_q90": 72.52
+        },
+        {
+          "mes_indice": 2,
+          "mes_nombre": "Dic 2026 (M2)",
+          "oee_mu": 66.54,
+          "oee_sigma": 2.78,
+          "oee_q10": 63.28,
+          "oee_q50": 66.75,
+          "oee_q90": 70.1
+        },
+        {
+          "mes_indice": 3,
+          "mes_nombre": "Ene 2027 (M3)",
+          "oee_mu": 65.82,
+          "oee_sigma": 2.65,
+          "oee_q10": 62.19,
+          "oee_q50": 66.07,
+          "oee_q90": 69.21
+        },
+        {
+          "mes_indice": 4,
+          "mes_nombre": "Feb 2027 (M4)",
+          "oee_mu": 65.59,
+          "oee_sigma": 2.47,
+          "oee_q10": 62.82,
+          "oee_q50": 65.39,
+          "oee_q90": 68.67
+        },
+        {
+          "mes_indice": 5,
+          "mes_nombre": "Mar 2027 (M5)",
+          "oee_mu": 64.75,
+          "oee_sigma": 2.62,
+          "oee_q10": 61.83,
+          "oee_q50": 64.51,
+          "oee_q90": 68.04
+        },
+        {
+          "mes_indice": 6,
+          "mes_nombre": "Abr 2027 (M6)",
+          "oee_mu": 66.1,
+          "oee_sigma": 3.0,
+          "oee_q10": 61.84,
+          "oee_q50": 66.23,
+          "oee_q90": 69.8
+        }
+      ]
+    }
+  }
+}

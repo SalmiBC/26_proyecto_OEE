@@ -1,0 +1,710 @@
+{
+  "A4": {
+    "line": "A4",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 0.0,
+    "horas_en_riesgo": 0.0,
+    "volumen_en_riesgo": 0.0,
+    "oee_planeado_pct": 43.5,
+    "oee_proyectado_pct": 51.7,
+    "resumen_causa": "La línea A4 mantiene un desempeño estable (0.0% de riesgo). El OEE proyectado (51.7%) cubre holgadamente la meta del plan (43.5%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Lavadora de Ampolletas Bosch 4'.",
+    "equipo_critico": "Lavadora de Ampolletas Bosch 4",
+    "subsistema_critico": "Lavado y Esterilización",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Lavadora de Ampolletas Bosch 4 (Lavado y Esterilización): Síntoma: 'Rompimiento en elevadores'. Causa: 'Espesor de tablilla de peine Mobil erron'. [22.3 hrs paro]",
+      "Dosificadora Bosch C/Aislador L-4 (Dosificación y Llenado): Síntoma: 'Cabezal'. Causa: 'Centrar trenzas y ajustar chicotes'. [18.6 hrs paro]",
+      "Lavadora de Ampolletas Bosch 4 (Lavado y Esterilización): Síntoma: 'nan'. Causa: 'nan'. [9.7 hrs paro]",
+      "Lavadora de Ampolletas Bosch 4 (Lavado y Esterilización): Síntoma: 'nan'. Causa: 'nan'. [8.4 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Lavadora de Ampolletas Bosch 4.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "A5": {
+    "line": "A5",
+    "estado": "Alerta",
+    "prioridad": "MEDIA / PREVENTIVA",
+    "prob_incumplimiento_pct": 55.1,
+    "horas_en_riesgo": 3.4,
+    "volumen_en_riesgo": 97787.0,
+    "oee_planeado_pct": 45.7,
+    "oee_proyectado_pct": 45.0,
+    "resumen_causa": "La línea A5 se encuentra en zona de alerta (55.1% de riesgo de incumplimiento). El OEE proyectado (45.0%) se sitúa ligeramente por debajo o al borde de la meta (45.7%). El factor limitante es 'Ineficiencia', manifestándose en eventos de 'Dosificación y Llenado' en 'Dosificadora Bosch C/Aislador L-5'. Existe volatilidad operacional que puede traducirse en 3.4 horas faltantes si se presentan fallas de ajuste.",
+    "equipo_critico": "Dosificadora Bosch C/Aislador L-5",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Dosificadora Bosch C/Aislador L-5 (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'nan'. [24.0 hrs paro]",
+      "Dosificadora Bosch C/Aislador L-5 (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'nan'. [24.0 hrs paro]",
+      "Tanque de Preparacion #3 de 3000L (Mecanismo General): Síntoma: 'nan'. Causa: 'nan'. [24.0 hrs paro]",
+      "Lavadora de Ampolletas Bosch L-5 (Lavado y Esterilización): Síntoma: 'nan'. Causa: 'nan'. [24.0 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Monitoreo Predictivo de Ajustes en 'Dosificadora Bosch C/Aislador L-5'",
+        "detalle": "Revisión de parámetros de torque, vibración y alineación de guías en cambios de formato para mitigar paros en Dosificación y Llenado.",
+        "responsable": "Técnicos de Mantenimiento de Turno"
+      },
+      {
+        "accion": "Optimización del Loteo y Secuenciamiento de SKUs",
+        "detalle": "Agrupar órdenes de fabricación por formato idéntico de envase/volumen para minimizar transiciones de formato y limpiezas profundas.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Verificación de Tiempos de Comedor y Relevos",
+        "detalle": "Supervisar traslapes de turno y relevos de descanso de operarios para abatir las horas muertas de ineficiencia.",
+        "responsable": "Supervisión de Producción"
+      }
+    ]
+  },
+  "ANES": {
+    "line": "ANES",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 13.0,
+    "horas_en_riesgo": 0.0,
+    "volumen_en_riesgo": 0.0,
+    "oee_planeado_pct": 57.8,
+    "oee_proyectado_pct": 60.8,
+    "resumen_causa": "La línea ANES mantiene un desempeño estable (13.0% de riesgo). El OEE proyectado (60.8%) cubre holgadamente la meta del plan (57.8%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Etiquetadora de Frascos Harland L-3'.",
+    "equipo_critico": "Etiquetadora de Frascos Harland L-3",
+    "subsistema_critico": "Etiquetado e Impresión",
+    "tipo_falla_predominante": "Ajuste",
+    "ejemplos_bitacora": [
+      "Etiquetadora de Frascos Harland L-3 (Etiquetado e Impresión): Síntoma: 'nan'. Causa: 'nan'. [5.5 hrs paro]",
+      "Lavadora de Frasco Semiautomatica (Lavado y Esterilización): Síntoma: 'nan'. Causa: 'Se soldar base del piston'. [2.7 hrs paro]",
+      "Taponadora de Mordaza Strunck (Sellado y Engargolado): Síntoma: 'No jira el disco'. Causa: 'Se programa variador de disco'. [2.3 hrs paro]",
+      "Llenadora Filamatic Anestesicos (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'flujometro sucio'. [2.3 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Etiquetadora de Frascos Harland L-3.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "AV1": {
+    "line": "AV1",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 0.0,
+    "horas_en_riesgo": 17.5,
+    "volumen_en_riesgo": 96861.0,
+    "oee_planeado_pct": 40.4,
+    "oee_proyectado_pct": 63.9,
+    "resumen_causa": "La línea AV1 presenta una probabilidad crítica de incumplimiento (0.0%), con una brecha proyectada de -23.5 puntos porcentuales (Meta: 40.4% vs Proyectado: 63.9%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Mecánica' en el subsistema 'Lavado y Esterilización'. El equipo cuello de botella con mayor severidad histórica es 'Dosificadora Bosch AV1', con 167.1 hrs de paro registradas.",
+    "equipo_critico": "Dosificadora Bosch AV1",
+    "subsistema_critico": "Lavado y Esterilización",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Tanque de Preparación1,200 lts #1 (Mecanismo General): Síntoma: 'No se logra realizar el trasavase.'. Causa: 'nan'. [24.0 hrs paro]",
+      "Dosificadora Bosch AV1 (Dosificación y Llenado): Síntoma: 'Ajuste de carro trasportador'. Causa: 'nan'. [7.1 hrs paro]",
+      "Lavadora RQU 2160 (Lavado y Esterilización): Síntoma: 'Se atoracarrusel'. Causa: 'Se pone a tiempo'. [6.7 hrs paro]",
+      "Dosificadora Bosch AV1 (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'Necesario cambiar cuenta vueltas'. [6.3 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Dosificadora Bosch AV1'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por mecánica.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 7 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Lavado y Esterilización.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "AV2": {
+    "line": "AV2",
+    "estado": "Alerta",
+    "prioridad": "MEDIA / PREVENTIVA",
+    "prob_incumplimiento_pct": 0.9,
+    "horas_en_riesgo": 0.0,
+    "volumen_en_riesgo": 0.0,
+    "oee_planeado_pct": 44.5,
+    "oee_proyectado_pct": 53.6,
+    "resumen_causa": "La línea AV2 se encuentra en zona de alerta (0.9% de riesgo de incumplimiento). El OEE proyectado (53.6%) se sitúa ligeramente por debajo o al borde de la meta (44.5%). El factor limitante es 'Ineficiencia', manifestándose en eventos de 'Dosificación y Llenado' en 'Dosificadora de Ampolletas BOSCH AV2'. Existe volatilidad operacional que puede traducirse en 0.0 horas faltantes si se presentan fallas de ajuste.",
+    "equipo_critico": "Dosificadora de Ampolletas BOSCH AV2",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Dosificadora de Ampolletas BOSCH AV2 (Dosificación y Llenado): Síntoma: 'Válvula Festo alarmada'. Causa: 'Sensor dañado da mal lectura'. [24.0 hrs paro]",
+      "Dosificadora de Ampolletas BOSCH AV2 (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'nan'. [24.0 hrs paro]",
+      "Lavadora de Interiores BOSCH AV2 (Lavado y Esterilización): Síntoma: 'Salirse de tiempo banda de celulas'. Causa: 'rodamientos amarrados'. [15.9 hrs paro]",
+      "Lavadora de Interiores BOSCH AV2 (Lavado y Esterilización): Síntoma: 'Alarma en servo'. Causa: 'Se atoro una sillita'. [13.5 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Monitoreo Predictivo de Ajustes en 'Dosificadora de Ampolletas BOSCH AV2'",
+        "detalle": "Revisión de parámetros de torque, vibración y alineación de guías en cambios de formato para mitigar paros en Dosificación y Llenado.",
+        "responsable": "Técnicos de Mantenimiento de Turno"
+      },
+      {
+        "accion": "Optimización del Loteo y Secuenciamiento de SKUs",
+        "detalle": "Agrupar órdenes de fabricación por formato idéntico de envase/volumen para minimizar transiciones de formato y limpiezas profundas.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Verificación de Tiempos de Comedor y Relevos",
+        "detalle": "Supervisar traslapes de turno y relevos de descanso de operarios para abatir las horas muertas de ineficiencia.",
+        "responsable": "Supervisión de Producción"
+      }
+    ]
+  },
+  "AV3": {
+    "line": "AV3",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 24.9,
+    "horas_en_riesgo": 298.2,
+    "volumen_en_riesgo": 2222528.0,
+    "oee_planeado_pct": 38.3,
+    "oee_proyectado_pct": 41.9,
+    "resumen_causa": "La línea AV3 presenta una probabilidad crítica de incumplimiento (24.9%), con una brecha proyectada de -3.6 puntos porcentuales (Meta: 38.3% vs Proyectado: 41.9%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Mecánica' en el subsistema 'Dosificación y Llenado'. El equipo cuello de botella con mayor severidad histórica es 'Dosificadora BOSCH AV3', con 224.8 hrs de paro registradas.",
+    "equipo_critico": "Dosificadora BOSCH AV3",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Dosificadora BOSCH AV3 (Dosificación y Llenado): Síntoma: 'Rompimiento'. Causa: 'Cuña de sinfin floja'. [24.0 hrs paro]",
+      "Autoclave AV 3 (Sellado y Engargolado): Síntoma: 'Alargarse etapa de enfriamiento'. Causa: 'Intercambiador tapado'. [24.0 hrs paro]",
+      "Autoclave AV 3 (Sellado y Engargolado): Síntoma: 'Alargarse etapa de enfriamiento'. Causa: 'nan'. [23.1 hrs paro]",
+      "Autoclave AV 3 (Sellado y Engargolado): Síntoma: 'nan'. Causa: 'Válvula check de retorno agua hel tapada'. [19.4 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Dosificadora BOSCH AV3'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por mecánica.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 48 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Dosificación y Llenado.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "AV6": {
+    "line": "AV6",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 27.4,
+    "horas_en_riesgo": 147.1,
+    "volumen_en_riesgo": 400337.0,
+    "oee_planeado_pct": 39.6,
+    "oee_proyectado_pct": 42.5,
+    "resumen_causa": "La línea AV6 presenta una probabilidad crítica de incumplimiento (27.4%), con una brecha proyectada de -2.9 puntos porcentuales (Meta: 39.6% vs Proyectado: 42.5%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Mecánica' en el subsistema 'Lavado y Esterilización'. El equipo cuello de botella con mayor severidad histórica es 'Lavadora Interiores Corima AV6', con 167.8 hrs de paro registradas.",
+    "equipo_critico": "Lavadora Interiores Corima AV6",
+    "subsistema_critico": "Lavado y Esterilización",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Dosificadora Corima AV6 (Dosificación y Llenado): Síntoma: 'Rompimiento en expulsor'. Causa: 'Carro transportado suelto parte inferior'. [12.0 hrs paro]",
+      "Lavadora Interiores Corima AV6 (Lavado y Esterilización): Síntoma: 'nan'. Causa: 'nan'. [9.2 hrs paro]",
+      "Lavadora Interiores Corima AV6 (Lavado y Esterilización): Síntoma: 'Rompiento en estrella de salida'. Causa: 'Se ajusta altura de lavadora y rampa de'. [8.6 hrs paro]",
+      "Lavadora Interiores Corima AV6 (Lavado y Esterilización): Síntoma: 'No baja compuerta'. Causa: 'Compuerta atascada'. [6.1 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Lavadora Interiores Corima AV6'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por mecánica.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 48 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Lavado y Esterilización.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "AV7": {
+    "line": "AV7",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 39.7,
+    "horas_en_riesgo": 0.0,
+    "volumen_en_riesgo": 0.0,
+    "oee_planeado_pct": 53.0,
+    "oee_proyectado_pct": 53.1,
+    "resumen_causa": "La línea AV7 mantiene un desempeño estable (39.7% de riesgo). El OEE proyectado (53.1%) cubre holgadamente la meta del plan (53.0%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Dosificadora BOSCH AV7'.",
+    "equipo_critico": "Dosificadora BOSCH AV7",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Autoclave GETINGE AV7 (Mecanismo General): Síntoma: 'nan'. Causa: 'nan'. [24.0 hrs paro]",
+      "Dosificadora BOSCH AV7 (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'Sinfin de salida dañado, se repara'. [24.0 hrs paro]",
+      "Tanque 02 2000 lts AV7 (Mecanismo General): Síntoma: 'Válvula de nitrógeno'. Causa: 'nan'. [24.0 hrs paro]",
+      "Dosificadora BOSCH AV7 (Dosificación y Llenado): Síntoma: 'Rompimiento en expulsor'. Causa: 'limpieza de contador'. [11.9 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Dosificadora BOSCH AV7.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "BP": {
+    "line": "BP",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 97.5,
+    "horas_en_riesgo": 21.2,
+    "volumen_en_riesgo": 2163.0,
+    "oee_planeado_pct": 83.4,
+    "oee_proyectado_pct": 76.4,
+    "resumen_causa": "La línea BP mantiene un desempeño estable (97.5% de riesgo). El OEE proyectado (76.4%) cubre holgadamente la meta del plan (83.4%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Selladora de Bolsa Bipodial A.Inox #1'.",
+    "equipo_critico": "Selladora de Bolsa Bipodial A.Inox #1",
+    "subsistema_critico": "Sellado y Engargolado",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Selladora de Bolsa Bipodial A.Inox #1 (Sellado y Engargolado): Síntoma: 'nan'. Causa: 'cinta teflon sucia(polvo)'. [12.2 hrs paro]",
+      "Selladora de Bolsa Bipodial A.Inox #1 (Sellado y Engargolado): Síntoma: 'nan'. Causa: 'nan'. [4.4 hrs paro]",
+      "Selladora de Bolsa Bipodial A.Inox #1 (Sellado y Engargolado): Síntoma: 'nan'. Causa: 'nan'. [2.9 hrs paro]",
+      "Selladora de Bolsa Bipodial A.Inox #1 (Sellado y Engargolado): Síntoma: 'nan'. Causa: 'Goma de base deformada'. [2.1 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Selladora de Bolsa Bipodial A.Inox #1.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "HM": {
+    "line": "HM",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 100.0,
+    "horas_en_riesgo": 74.4,
+    "volumen_en_riesgo": 9096.0,
+    "oee_planeado_pct": 68.8,
+    "oee_proyectado_pct": 61.9,
+    "resumen_causa": "La línea HM presenta una probabilidad crítica de incumplimiento (100.0%), con una brecha proyectada de 7.0 puntos porcentuales (Meta: 68.8% vs Proyectado: 61.9%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Mecánica' en el subsistema 'Dosificación y Llenado'. El equipo cuello de botella con mayor severidad histórica es 'Sopladora de Porron L-F', con 75.3 hrs de paro registradas.",
+    "equipo_critico": "Sopladora de Porron L-F",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Dosificadora de Porron (Dosificación y Llenado): Síntoma: 'Fuga de agua'. Causa: 'se ajusta pantalla y se mete programa'. [15.2 hrs paro]",
+      "Sopladora de Porron L-F (Mecanismo General): Síntoma: 'nan'. Causa: 'Protección electrica activada'. [7.2 hrs paro]",
+      "Etiquetadora Tecni Pac L-F (Etiquetado e Impresión): Síntoma: 'nan'. Causa: 'Pirómetro y termopar dañados'. [4.2 hrs paro]",
+      "Sopladora de Porron L-F (Dosificación y Llenado): Síntoma: 'Falla en aguja'. Causa: 'nan'. [3.7 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Sopladora de Porron L-F'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por mecánica.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 29 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Dosificación y Llenado.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "JERINGAS": {
+    "line": "JERINGAS",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 100.0,
+    "horas_en_riesgo": 1216.4,
+    "volumen_en_riesgo": 97203.0,
+    "oee_planeado_pct": 75.0,
+    "oee_proyectado_pct": 5.7,
+    "resumen_causa": "La línea JERINGAS presenta una probabilidad crítica de incumplimiento (100.0%), con una brecha proyectada de 69.3 puntos porcentuales (Meta: 75.0% vs Proyectado: 5.7%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Ajuste' en el subsistema 'Dosificación y Llenado'. El equipo cuello de botella con mayor severidad histórica es 'Dosificadora Dara', con 58.5 hrs de paro registradas.",
+    "equipo_critico": "Dosificadora Dara",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Ajuste",
+    "ejemplos_bitacora": [
+      "Dosificadora Dara (Dosificación y Llenado): Síntoma: 'Falla'. Causa: 'Servo y mecanismo desacoplado'. [24.0 hrs paro]",
+      "Etiquetadora Semiautom. Autolabe (Etiquetado e Impresión): Síntoma: 'nan'. Causa: 'Personal sin experiencia'. [11.5 hrs paro]",
+      "Dosificadora Dara (Dosificación y Llenado): Síntoma: 'Temperatura baja'. Causa: 'nan'. [4.5 hrs paro]",
+      "Tanque 1 de 400 L Jeringas Prellenadas (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'Presión neumática a 5.45 bar'. [3.4 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Dosificadora Dara'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por ajuste.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 48 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Dosificación y Llenado.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "OFT": {
+    "line": "OFT",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 10.7,
+    "horas_en_riesgo": 0.0,
+    "volumen_en_riesgo": 0.0,
+    "oee_planeado_pct": 64.2,
+    "oee_proyectado_pct": 68.8,
+    "resumen_causa": "La línea OFT mantiene un desempeño estable (10.7% de riesgo). El OEE proyectado (68.8%) cubre holgadamente la meta del plan (64.2%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Maquina Dosificadora y Cerrad. Capmatic'.",
+    "equipo_critico": "Maquina Dosificadora y Cerrad. Capmatic",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Ajuste",
+    "ejemplos_bitacora": [
+      "Maquina Dosificadora y Cerrad. Capmatic (Dosificación y Llenado): Síntoma: 'Falla de agitador'. Causa: 'Falta del correcto apriete del chuck'. [24.0 hrs paro]",
+      "Etiquetadora Avery (Etiquetado e Impresión): Síntoma: 'No imprime'. Causa: 'nan'. [24.0 hrs paro]",
+      "Tanque Enchaquetado #1 1000L INOX (Servicios y Neumática): Síntoma: 'No calienta la chaqueta'. Causa: 'nan'. [14.2 hrs paro]",
+      "Etiquetadora Avery (Etiquetado e Impresión): Síntoma: 'nan'. Causa: 'etiqueta chueca y arrugada'. [9.7 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Maquina Dosificadora y Cerrad. Capmatic.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "POLVOS": {
+    "line": "POLVOS",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 11.2,
+    "horas_en_riesgo": 70.9,
+    "volumen_en_riesgo": 198327.0,
+    "oee_planeado_pct": 72.5,
+    "oee_proyectado_pct": 77.4,
+    "resumen_causa": "La línea POLVOS presenta una probabilidad crítica de incumplimiento (11.2%), con una brecha proyectada de -4.9 puntos porcentuales (Meta: 72.5% vs Proyectado: 77.4%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Ajuste' en el subsistema 'Lavado y Esterilización'. El equipo cuello de botella con mayor severidad histórica es 'Lavadora Bosch Polvos Iny', con 231.2 hrs de paro registradas.",
+    "equipo_critico": "Lavadora Bosch Polvos Iny",
+    "subsistema_critico": "Lavado y Esterilización",
+    "tipo_falla_predominante": "Ajuste",
+    "ejemplos_bitacora": [
+      "Lavadora Bosch Polvos Iny (Lavado y Esterilización): Síntoma: 'Ruido extraño en bomba'. Causa: 'nan'. [24.0 hrs paro]",
+      "Encintadora de Caja #2 (Empaque y Encartonado): Síntoma: 'nan'. Causa: 'nan'. [24.0 hrs paro]",
+      "Encasquilladora SF600SSLH (Sellado y Engargolado): Síntoma: 'Casquillo con faldilla'. Causa: 'se ajusta navaja de cierre de engargolad'. [12.6 hrs paro]",
+      "Lavadora Exter. Seidenaider (Lavado y Esterilización): Síntoma: 'nan'. Causa: 'nan'. [12.6 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Lavadora Bosch Polvos Iny'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por ajuste.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 28 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Lavado y Esterilización.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "SOV": {
+    "line": "SOV",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 63.6,
+    "horas_en_riesgo": 44.2,
+    "volumen_en_riesgo": 45615.0,
+    "oee_planeado_pct": 70.1,
+    "oee_proyectado_pct": 68.7,
+    "resumen_causa": "La línea SOV presenta una probabilidad crítica de incumplimiento (63.6%), con una brecha proyectada de 1.5 puntos porcentuales (Meta: 70.1% vs Proyectado: 68.7%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Ajuste' en el subsistema 'Etiquetado e Impresión'. El equipo cuello de botella con mayor severidad histórica es 'Etiquetadora de Hologramas', con 266.0 hrs de paro registradas.",
+    "equipo_critico": "Etiquetadora de Hologramas",
+    "subsistema_critico": "Etiquetado e Impresión",
+    "tipo_falla_predominante": "Ajuste",
+    "ejemplos_bitacora": [
+      "Tanque preparación S. Steel Tech. 1500L (Mecanismo General): Síntoma: 'Fuga de nitrógeno'. Causa: 'nan'. [24.0 hrs paro]",
+      "Etiquetadora de Hologramas (Etiquetado e Impresión): Síntoma: 'Hologramas'. Causa: 'Tiempo desajustado de salida de etiqueta'. [24.0 hrs paro]",
+      "Etiquetadora de Hologramas (Etiquetado e Impresión): Síntoma: 'nan'. Causa: 'Guias desajustadas'. [21.4 hrs paro]",
+      "Tanque preparación S. Steel Tech. 1500L (Mecanismo General): Síntoma: 'VALVULA DE NITROGENO SE QUEDA ABIERTA AL'. Causa: 'nan'. [7.9 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Etiquetadora de Hologramas'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por ajuste.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 17 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Etiquetado e Impresión.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "SV1": {
+    "line": "SV1",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 3.1,
+    "horas_en_riesgo": 0.0,
+    "volumen_en_riesgo": 0.0,
+    "oee_planeado_pct": 51.4,
+    "oee_proyectado_pct": 61.2,
+    "resumen_causa": "La línea SV1 mantiene un desempeño estable (3.1% de riesgo). El OEE proyectado (61.2%) cubre holgadamente la meta del plan (51.4%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Etiquetadora Accraply Sol. Vidrio'.",
+    "equipo_critico": "Etiquetadora Accraply Sol. Vidrio",
+    "subsistema_critico": "Etiquetado e Impresión",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Tanque de Preparacion 6500L (Mecanismo General): Síntoma: 'Poner en manual agitador'. Causa: 'Poner en manual'. [12.2 hrs paro]",
+      "Dosificadora STORK Sol. Vidrio (Dosificación y Llenado): Síntoma: 'nan'. Causa: 'nan'. [10.8 hrs paro]",
+      "Etiquetadora Accraply Sol. Vidrio (Etiquetado e Impresión): Síntoma: 'nan'. Causa: 'nan'. [5.0 hrs paro]",
+      "Etiquetadora Accraply Sol. Vidrio (Etiquetado e Impresión): Síntoma: 'nan'. Causa: 'nan'. [4.7 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Etiquetadora Accraply Sol. Vidrio.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "VA1": {
+    "line": "VA1",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 100.0,
+    "horas_en_riesgo": 194.2,
+    "volumen_en_riesgo": 126455.0,
+    "oee_planeado_pct": 56.7,
+    "oee_proyectado_pct": 18.5,
+    "resumen_causa": "La línea VA1 mantiene un desempeño estable (100.0% de riesgo). El OEE proyectado (18.5%) cubre holgadamente la meta del plan (56.7%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Lavadora VA1'.",
+    "equipo_critico": "Lavadora VA1",
+    "subsistema_critico": "Lavado y Esterilización",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Tunel de Despirogenizacion VA 1 (Lavado y Esterilización): Síntoma: 'Falla en resistencia'. Causa: 'nan'. [20.2 hrs paro]",
+      "Tunel de Despirogenizacion VA 1 (Lavado y Esterilización): Síntoma: 'Falla'. Causa: 'nan'. [14.0 hrs paro]",
+      "Tanque de Proceso 600 litros (Control y Sensores): Síntoma: 'No marca el aforo final en el radal'. Causa: 'nan'. [12.1 hrs paro]",
+      "Lavadora VA1 (Lavado y Esterilización): Síntoma: 'Falla en servo elevador'. Causa: 'Alarma en srvo'. [9.4 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Lavadora VA1.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "VA2": {
+    "line": "VA2",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 99.8,
+    "horas_en_riesgo": 160.3,
+    "volumen_en_riesgo": 385748.0,
+    "oee_planeado_pct": 55.1,
+    "oee_proyectado_pct": 45.3,
+    "resumen_causa": "La línea VA2 presenta una probabilidad crítica de incumplimiento (99.8%), con una brecha proyectada de 9.8 puntos porcentuales (Meta: 55.1% vs Proyectado: 45.3%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Ajuste' en el subsistema 'Dosificación y Llenado'. El equipo cuello de botella con mayor severidad histórica es 'Dosificadora BOSCH VA2', con 300.8 hrs de paro registradas.",
+    "equipo_critico": "Dosificadora BOSCH VA2",
+    "subsistema_critico": "Dosificación y Llenado",
+    "tipo_falla_predominante": "Ajuste",
+    "ejemplos_bitacora": [
+      "Dosificadora BOSCH VA2 (Dosificación y Llenado): Síntoma: 'Agujas fuera de tiempo'. Causa: 'nan'. [24.0 hrs paro]",
+      "Autoclave de Materiales LAST Envase VA2 (Mecanismo General): Síntoma: 'No abre puerta'. Causa: 'nan'. [23.0 hrs paro]",
+      "Autoclave de Materiales LAST Envase VA2 (Mecanismo General): Síntoma: 'Puerta de área limpia no abre'. Causa: 'nan'. [22.0 hrs paro]",
+      "Autoclave de Materiales LAST Envase VA2 (Control y Sensores): Síntoma: 'Falla en ps12 sensor de presión'. Causa: 'se ajusta presion de aire'. [18.0 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Dosificadora BOSCH VA2'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por ajuste.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 48 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Dosificación y Llenado.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  },
+  "VA3": {
+    "line": "VA3",
+    "estado": "Estable",
+    "prioridad": "RUTINARIA / CONTROL",
+    "prob_incumplimiento_pct": 99.6,
+    "horas_en_riesgo": 46.6,
+    "volumen_en_riesgo": 59545.0,
+    "oee_planeado_pct": 63.1,
+    "oee_proyectado_pct": 52.4,
+    "resumen_causa": "La línea VA3 mantiene un desempeño estable (99.6% de riesgo). El OEE proyectado (52.4%) cubre holgadamente la meta del plan (63.1%). Los eventos de paro se concentran principalmente en cambios de formato programados y desgastes normales en 'Dosificadora Schucomatic VA3'.",
+    "equipo_critico": "Dosificadora Schucomatic VA3",
+    "subsistema_critico": "Lavado y Esterilización",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Dosificadora Schucomatic VA3 (Dosificación y Llenado): Síntoma: 'Ajuste taponado'. Causa: 'nan'. [24.0 hrs paro]",
+      "Dosificadora Schucomatic VA3 (Dosificación y Llenado): Síntoma: 'Falla en taponado'. Causa: 'nan'. [24.0 hrs paro]",
+      "Dosificadora Schucomatic VA3 (Dosificación y Llenado): Síntoma: 'Falla taponado'. Causa: 'nan'. [17.0 hrs paro]",
+      "Dosificadora Schucomatic VA3 (Dosificación y Llenado): Síntoma: 'No permite correr cip de tuberia'. Causa: 'valvula dañada'. [14.4 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Mantenimiento Autónomo y Lubricación",
+        "detalle": "Continuar con las rutinas estándar de limpieza e inspección de guías y transportadores en Dosificadora Schucomatic VA3.",
+        "responsable": "Operadores de Línea"
+      },
+      {
+        "accion": "Soporte para Absorción de Capacidad Excedente",
+        "detalle": "Línea candidata para absorber transferencias de volumen en caso de contingencia en líneas críticas del mismo formato.",
+        "responsable": "Planeación Central"
+      }
+    ]
+  },
+  "VA4": {
+    "line": "VA4",
+    "estado": "Crítico",
+    "prioridad": "ALTA / INMEDIATA",
+    "prob_incumplimiento_pct": 31.6,
+    "horas_en_riesgo": 118.8,
+    "volumen_en_riesgo": 178617.0,
+    "oee_planeado_pct": 70.0,
+    "oee_proyectado_pct": 71.6,
+    "resumen_causa": "La línea VA4 presenta una probabilidad crítica de incumplimiento (31.6%), con una brecha proyectada de -1.6 puntos porcentuales (Meta: 70.0% vs Proyectado: 71.6%). El análisis multivariado LSTM y de bitácoras identifica que la principal fuga de disponibilidad proviene de 'Ineficiencia', combinada con fallas recurrentes de tipo 'Mecánica' en el subsistema 'Lavado y Esterilización'. El equipo cuello de botella con mayor severidad histórica es 'Lavadora Bosch RRU 2020', con 221.3 hrs de paro registradas.",
+    "equipo_critico": "Lavadora Bosch RRU 2020",
+    "subsistema_critico": "Lavado y Esterilización",
+    "tipo_falla_predominante": "Mecánica",
+    "ejemplos_bitacora": [
+      "Dosificadora Bosch VA4 (Dosificación y Llenado): Síntoma: 'falla en banda detenida'. Causa: 'nan'. [20.0 hrs paro]",
+      "Dosificadora Bosch VA4 (Dosificación y Llenado): Síntoma: 'SE PRESENGA ERROR DE CIERRE EN PANTALLA'. Causa: 'base suelta'. [15.5 hrs paro]",
+      "Lavadora Bosch RRU 2020 (Lavado y Esterilización): Síntoma: 'nan'. Causa: 'nan'. [12.4 hrs paro]",
+      "Lavadora Bosch RRU 2020 (Lavado y Esterilización): Síntoma: 'Tira frasco'. Causa: 'Balero dañado de flecha transmisión cabe'. [11.2 hrs paro]"
+    ],
+    "prescripciones": [
+      {
+        "accion": "Inspección Pre-Arranque y Alineación en 'Lavadora Bosch RRU 2020'",
+        "detalle": "Auditar galgas, centradores, fotoceldas de túnel/expulsor y coples mecánicos antes de cada inicio de turno. Reducir desajustes dinámicos que provocan paros por mecánica.",
+        "responsable": "Mantenimiento Mecánico y Ajustadores de Línea"
+      },
+      {
+        "accion": "Ajuste Dinámico de Colchón de Horas en Programación",
+        "detalle": "Incorporar un colchón preventivo de al menos 47 horas en el secuenciamiento del mes para amortiguar la varianza de entrega de los SKUs más voluminosos.",
+        "responsable": "Planeación de la Producción"
+      },
+      {
+        "accion": "Kit de Refacciones Críticas en Piso",
+        "detalle": "Garantizar stock inmediato en planta de agujas de carrusel, dedos de expulsor, sellos neumáticos y sensores de paso de Lavado y Esterilización.",
+        "responsable": "Almacén de Refacciones y Mantenimiento"
+      },
+      {
+        "accion": "Estandarización SMED en Cambios y Limpiezas",
+        "detalle": "Desplegar checklist predeterminado con pre-calentamiento y pre-calibración de formato fuera de línea para acortar tiempos muertos.",
+        "responsable": "Producción y Mejora Continua"
+      }
+    ]
+  }
+}

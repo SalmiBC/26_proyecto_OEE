@@ -1,0 +1,219 @@
+{
+  "periodo_entrenamiento": "Mayo 2024 a 2026-01-31",
+  "periodo_prueba_comparativa": "2026-02-01 a 2026-09-30",
+  "muestras_evaluadas": 5326,
+  "metricas_globales": {
+    "mae_oee_pct": 14.55,
+    "rmse_oee_pct": 20.17,
+    "mape_oee_pct": 73.28
+  },
+  "mae_paros_no_planeados_horas": {
+    "Ineficiencia": 2.387,
+    "Cambios y limpiezas": 2.198,
+    "Exceso Cambios y limpiezas": 0.441,
+    "Falta de material": 0.081,
+    "Falta de personal": 0.051,
+    "Falta de servicios": 0.212,
+    "Comedor": 0.378
+  },
+  "metricas_por_linea": {
+    "A4": {
+      "registros_test": 242,
+      "oee_real_promedio": 47.81,
+      "oee_predicho_promedio": 46.61,
+      "mae_pct": 17.13,
+      "rmse_pct": 21.13,
+      "mape_pct": 81.66,
+      "correlacion": 0.341
+    },
+    "A5": {
+      "registros_test": 242,
+      "oee_real_promedio": 54.88,
+      "oee_predicho_promedio": 52.53,
+      "mae_pct": 14.68,
+      "rmse_pct": 19.67,
+      "mape_pct": 74.3,
+      "correlacion": 0.413
+    },
+    "ANES": {
+      "registros_test": 243,
+      "oee_real_promedio": 49.75,
+      "oee_predicho_promedio": 51.18,
+      "mae_pct": 13.17,
+      "rmse_pct": 18.73,
+      "mape_pct": 58.94,
+      "correlacion": 0.588
+    },
+    "AV1": {
+      "registros_test": 242,
+      "oee_real_promedio": 71.88,
+      "oee_predicho_promedio": 65.65,
+      "mae_pct": 14.09,
+      "rmse_pct": 18.4,
+      "mape_pct": 43.46,
+      "correlacion": 0.383
+    },
+    "AV2": {
+      "registros_test": 242,
+      "oee_real_promedio": 52.77,
+      "oee_predicho_promedio": 50.64,
+      "mae_pct": 19.45,
+      "rmse_pct": 24.23,
+      "mape_pct": 88.47,
+      "correlacion": 0.123
+    },
+    "AV3": {
+      "registros_test": 242,
+      "oee_real_promedio": 56.16,
+      "oee_predicho_promedio": 54.07,
+      "mae_pct": 17.65,
+      "rmse_pct": 22.44,
+      "mape_pct": 81.0,
+      "correlacion": 0.128
+    },
+    "AV6": {
+      "registros_test": 242,
+      "oee_real_promedio": 32.94,
+      "oee_predicho_promedio": 36.23,
+      "mae_pct": 17.92,
+      "rmse_pct": 22.55,
+      "mape_pct": 138.46,
+      "correlacion": 0.172
+    },
+    "BP": {
+      "registros_test": 242,
+      "oee_real_promedio": 68.94,
+      "oee_predicho_promedio": 68.96,
+      "mae_pct": 9.81,
+      "rmse_pct": 14.35,
+      "mape_pct": 31.89,
+      "correlacion": 0.356
+    },
+    "CALCIO": {
+      "registros_test": 247,
+      "oee_real_promedio": 55.4,
+      "oee_predicho_promedio": 53.76,
+      "mae_pct": 1.83,
+      "rmse_pct": 3.03,
+      "mape_pct": 3.08,
+      "correlacion": 0.881
+    },
+    "HM": {
+      "registros_test": 242,
+      "oee_real_promedio": 51.92,
+      "oee_predicho_promedio": 51.39,
+      "mae_pct": 12.54,
+      "rmse_pct": 17.09,
+      "mape_pct": 41.59,
+      "correlacion": 0.38
+    },
+    "JERINGAS": {
+      "registros_test": 242,
+      "oee_real_promedio": 42.94,
+      "oee_predicho_promedio": 42.76,
+      "mae_pct": 12.11,
+      "rmse_pct": 21.24,
+      "mape_pct": 94.71,
+      "correlacion": 0.837
+    },
+    "LÍNEA 1": {
+      "registros_test": 241,
+      "oee_real_promedio": 58.13,
+      "oee_predicho_promedio": 57.53,
+      "mae_pct": 7.62,
+      "rmse_pct": 12.36,
+      "mape_pct": 27.22,
+      "correlacion": 0.427
+    },
+    "LÍNEA 2": {
+      "registros_test": 241,
+      "oee_real_promedio": 75.81,
+      "oee_predicho_promedio": 72.3,
+      "mae_pct": 9.8,
+      "rmse_pct": 14.48,
+      "mape_pct": 42.13,
+      "correlacion": 0.571
+    },
+    "LÍNEA 4": {
+      "registros_test": 241,
+      "oee_real_promedio": 53.68,
+      "oee_predicho_promedio": 53.07,
+      "mae_pct": 10.48,
+      "rmse_pct": 15.65,
+      "mape_pct": 56.82,
+      "correlacion": 0.628
+    },
+    "OFT": {
+      "registros_test": 242,
+      "oee_real_promedio": 56.61,
+      "oee_predicho_promedio": 58.78,
+      "mae_pct": 20.43,
+      "rmse_pct": 25.69,
+      "mape_pct": 100.96,
+      "correlacion": 0.41
+    },
+    "POLVOS": {
+      "registros_test": 242,
+      "oee_real_promedio": 62.46,
+      "oee_predicho_promedio": 65.48,
+      "mae_pct": 15.46,
+      "rmse_pct": 20.96,
+      "mape_pct": 71.61,
+      "correlacion": 0.43
+    },
+    "SOV": {
+      "registros_test": 242,
+      "oee_real_promedio": 62.62,
+      "oee_predicho_promedio": 66.13,
+      "mae_pct": 16.79,
+      "rmse_pct": 21.01,
+      "mape_pct": 58.28,
+      "correlacion": 0.115
+    },
+    "SV1": {
+      "registros_test": 242,
+      "oee_real_promedio": 56.09,
+      "oee_predicho_promedio": 53.6,
+      "mae_pct": 11.7,
+      "rmse_pct": 17.24,
+      "mape_pct": 53.81,
+      "correlacion": 0.719
+    },
+    "VA1": {
+      "registros_test": 241,
+      "oee_real_promedio": 38.32,
+      "oee_predicho_promedio": 41.6,
+      "mae_pct": 19.67,
+      "rmse_pct": 24.76,
+      "mape_pct": 117.62,
+      "correlacion": 0.158
+    },
+    "VA2": {
+      "registros_test": 242,
+      "oee_real_promedio": 43.37,
+      "oee_predicho_promedio": 46.68,
+      "mae_pct": 23.98,
+      "rmse_pct": 28.78,
+      "mape_pct": 198.22,
+      "correlacion": 0.123
+    },
+    "VA3": {
+      "registros_test": 242,
+      "oee_real_promedio": 51.71,
+      "oee_predicho_promedio": 49.51,
+      "mae_pct": 19.21,
+      "rmse_pct": 24.88,
+      "mape_pct": 108.23,
+      "correlacion": 0.522
+    },
+    "VA4": {
+      "registros_test": 242,
+      "oee_real_promedio": 70.35,
+      "oee_predicho_promedio": 66.77,
+      "mae_pct": 14.82,
+      "rmse_pct": 19.36,
+      "mape_pct": 41.04,
+      "correlacion": 0.247
+    }
+  }
+}

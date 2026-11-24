@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación de Consulta - Predicción de OEE, Saturación y Riesgo (API REST)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+
+        <!-- Encabezado Principal -->
+        <header class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 text-indigo-600 font-semibold text-xs tracking-wider uppercase mb-1">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                    <span>Criterio 4 MLOps: Integración con Endpoint Publicado</span>
+                </div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Evaluación de Capacidad, Saturación y OEE Predictivo</h1>
+                <p class="text-slate-500 text-sm mt-0.5">Laboratorios PiSA S.A. de C.V. — Planeación de la Producción (Cliente Web desacoplado que consume FastAPI REST)</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div id="statusBadge" class="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span>Verificando API...</span>
+                </div>
+                <button onclick="checkHealth()" class="text-slate-400 hover:text-indigo-600 transition p-2 rounded-lg hover:bg-slate-100" title="Revisar estado de la API">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Barra de Configuración de Endpoint y Documentación -->
+        <div class="bg-slate-900 text-slate-300 rounded-xl p-4 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
+            <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-mono text-indigo-400 font-semibold">Endpoint Publicado:</span>
+                <input id="apiUrl" type="text" value="http://127.0.0.1:8000" class="bg-slate-800 text-white font-mono px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-indigo-500 w-64 text-xs">
+            </div>
+            <div class="flex items-center gap-4 text-slate-300">
+                <a id="swaggerLink" href="http://127.0.0.1:8000/docs" target="_blank" class="hover:text-white flex items-center gap-1.5 transition font-medium">
+                    <i class="fa-solid fa-book-open text-indigo-400"></i>
+                    <span>Documentación OpenAPI / Swagger</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Alertas de Red, Timeout o Validación 422 -->
+        <div id="alertBox" class="hidden rounded-xl p-4 border text-sm flex items-start gap-3 transition">
+            <i id="alertIcon" class="fa-solid fa-triangle-exclamation text-lg mt-0.5"></i>
+            <div class="flex-1">
+                <h4 id="alertTitle" class="font-semibold"></h4>
+                <p id="alertMessage" class="text-xs mt-1 leading-relaxed"></p>
+                <div id="alertHint" class="text-xs mt-2 pt-2 border-t font-mono hidden"></div>
+            </div>
+            <button onclick="hideAlert()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Cuadrícula Principal: Formulario y Resultados -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Panel Izquierdo: Formulario de Parámetros de Consulta (Idéntico a Imagen 1) -->
+            <div class="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-5">
+                <div class="flex items-center gap-2.5 text-slate-900 font-bold text-base border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-sliders text-indigo-600"></i>
+                    <h2>Parámetros de Consulta</h2>
+                </div>
+
+                <form id="queryForm" onsubmit="event.preventDefault(); submitQuery();" class="space-y-4">
+                    <!-- Selector de Línea de Producción -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">LÍNEA DE PRODUCCIÓN</label>
+                        <select id="inputLinea" onchange="onLineSelected()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-semibold text-slate-800 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                            <option value="A4">Línea A4</option>
+                            <option value="A5">Línea A5</option>
+                            <option value="ANES">Línea ANES</option>
+                            <option value="AV1">Línea AV1</option>
+                            <option value="AV2">Línea AV2</option>
+                            <option value="AV3" selected>Línea AV3</option>
+                            <option value="AV6">Línea AV6</option>
+                            <option value="AV7">Línea AV7</option>
+                            <option value="BP">Línea BP</option>
+                            <option value="HM">Línea HM</option>
+                            <option value="JERINGAS">Línea Jeringas</option>
+                            <option value="OFT">Línea OFT</option>
+                            <option value="POLVOS">Línea POLVOS</option>
+                            <option value="SOV">Línea SOV</option>
+                            <option value="SV1">Línea SV1</option>
+                            <option value="VA1">Línea VA1</option>
+                            <option value="VA2">Línea VA2</option>
+                            <option value="VA3">Línea VA3</option>
+                            <option value="VA4">Línea VA4</option>
+                        </select>
+                        <div class="flex justify-between items-center text-[11px] text-slate-400 mt-1 px-1">
+                            <span>Velocidad Nominal: <strong id="lblVelNom" class="text-slate-600 font-mono">17,782 pvo/h</strong></span>
+                            <span>Meta Estándar: <strong id="lblMetaEst" class="text-slate-600 font-mono">55.7%</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Fila 2: OEE Meta y Horas Programadas -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">OEE Meta (%)</label>
+                            <input id="inputMeta" type="number" step="0.1" min="10" max="100" value="65.0" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Horas Prog. (h) <span class="text-slate-400 font-normal text-[10px]">(Máx 744h)</span></label>
+                            <input id="inputHoras" type="number" step="1" min="1" max="744" value="600" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <!-- Fila 3: Volumen Programado en Piezas (PVOs) -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Volumen Programado (Piezas)</label>
+                        <input id="inputPiezas" type="number" step="1" min="1" value="50000" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                    </div>
+
+                    <!-- Fila 4: Slider Monte Carlo Dropout -->
+                    <div class="pt-1">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <label class="text-xs font-semibold text-slate-700">Muestras Monte Carlo Dropout</label>
+                            <span id="samplesValue" class="text-xs font-mono text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">200</span>
+                        </div>
+                        <input id="inputSamples" type="range" min="50" max="500" step="50" value="200" oninput="document.getElementById('samplesValue').innerText = this.value" class="w-full accent-indigo-600 h-2 bg-slate-200 rounded-lg cursor-pointer">
+                    </div>
+
+                    <!-- Botón de Envío -->
+                    <button id="btnSubmit" type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-semibold py-3.5 px-4 rounded-xl shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Consultar Modelo Publicado</span>
+                    </button>
+                </form>
+
+                <div class="pt-3 border-t border-slate-100 text-slate-400 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                    <span>Cálculo de saturación en línea: <code>PVOs / (VelNom × OEE × Horas)</code></span>
+                </div>
+            </div>
+
+            <!-- Panel Derecho: Respuesta del Modelo y Análisis de Capacidad -->
+            <div class="lg:col-span-7 space-y-6">
+
+                <!-- Estado Inicial Vacío -->
+                <div id="emptyState" class="bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center text-slate-400">
+                    <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <i class="fa-solid fa-chart-pie text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-700 text-base">Esperando Parámetros de Consulta</h3>
+                    <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Selecciona una línea, define las horas y el volumen de piezas, y presiona "Consultar Modelo Publicado" para enviar la petición HTTP REST.</p>
+                </div>
+
+                <!-- Spinner de Inferencia -->
+                <div id="loadingState" class="hidden bg-white rounded-2xl border border-slate-200 p-12 text-center">
+                    <div class="inline-block animate-spin rounded-full h-11 w-11 border-4 border-indigo-600 border-t-transparent"></div>
+                    <p class="text-sm font-bold text-slate-800 mt-4">Consultando Endpoint REST Publicado...</p>
+                    <p class="text-xs text-slate-400 mt-1">Calculando distribución bayesiana de OEE con simulación Monte Carlo Dropout y saturación de línea.</p>
+                </div>
+
+                <!-- Tarjeta de Resultados -->
+                <div id="resultCard" class="hidden space-y-5">
+
+                    <!-- Banner Principal de Decisión de Incumplimiento -->
+                    <div id="bannerDecision" class="rounded-2xl p-6 border shadow-sm transition">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span id="decisionIcon" class="text-xl"></span>
+                                    <h3 id="decisionTitle" class="text-lg font-black tracking-tight"></h3>
+                                </div>
+                                <p id="decisionSubtitle" class="text-xs text-slate-600"></p>
+                            </div>
+                            <div id="decisionBadge" class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-right whitespace-nowrap"></div>
+                        </div>
+
+                        <!-- Métricas Destacadas de Incumplimiento -->
+                        <div id="boxIncumplimientoDetalle" class="mt-4 pt-4 border-t grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                            <div class="bg-white/80 backdrop-blur-sm p-2.5 rounded-xl border">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase block">% Incumplimiento Piezas</span>
+                                <span id="resPctIncumplimiento" class="text-lg font-black text-rose-600">-</span>
+                            </div>
+                            <div class="bg-white/80 backdrop-blur-sm p-2.5 rounded-xl border">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase block">% Sobre-Saturación</span>
+                                <span id="resPctSobresaturacion" class="text-lg font-black text-rose-600">-</span>
+                            </div>
+                            <div class="bg-white/80 backdrop-blur-sm p-2.5 rounded-xl border">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase block">Piezas Faltantes</span>
+                                <span id="resPiezasFaltantes" class="text-lg font-black text-slate-800">-</span>
+                            </div>
+                            <div class="bg-white/80 backdrop-blur-sm p-2.5 rounded-xl border">
+                                <span class="text-[10px] font-bold text-slate-500 uppercase block">Horas Faltantes</span>
+                                <span id="resHorasFaltantes" class="text-lg font-black text-slate-800">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparativa Dual: Capacidad Teórica vs Proyectada Real -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-scale-balanced text-indigo-600"></i>
+                                Comparativa de Saturación de Capacidad (Teórica vs Real)
+                            </h4>
+                            <span id="resHeaderLinea" class="text-xs font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100"></span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Tarjeta Saturación Teórica -->
+                            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-semibold text-slate-600">Saturación Teórica (con OEE Meta)</span>
+                                    <span id="resSatTeoricaBadge" class="font-bold font-mono text-slate-700"></span>
+                                </div>
+                                <div class="text-2xl font-black text-slate-800 font-mono" id="resSatTeoricaVal">-</div>
+                                <div class="w-full bg-slate-200 rounded-full h-2">
+                                    <div id="barSatTeorica" class="bg-slate-500 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <div class="flex justify-between text-[11px] text-slate-500">
+                                    <span>Horas requeridas: <b id="resHrsReqTeorica" class="text-slate-700">-</b></span>
+                                    <span>OEE Meta: <b id="resOeeMeta" class="text-slate-700">-</b></span>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta Saturación Proyectada Real -->
+                            <div class="p-4 rounded-xl border border-indigo-100 bg-indigo-50/50 space-y-2">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-semibold text-indigo-900">Saturación Proyectada (con LSTM Real)</span>
+                                    <span id="resSatProyBadge" class="font-bold font-mono text-indigo-700"></span>
+                                </div>
+                                <div class="text-2xl font-black text-indigo-600 font-mono" id="resSatProyVal">-</div>
+                                <div class="w-full bg-indigo-100 rounded-full h-2">
+                                    <div id="barSatProy" class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <div class="flex justify-between text-[11px] text-slate-500">
+                                    <span>Horas requeridas: <b id="resHrsReqProy" class="text-slate-700">-</b></span>
+                                    <span>OEE Proyectado (μ): <b id="resOeeProy" class="text-indigo-600 font-bold">-</b></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Intervalo Bayesiano y Probabilidad -->
+                        <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-2">
+                            <div class="flex justify-between items-center font-medium">
+                                <span class="text-slate-700">Incertidumbre Monte Carlo del OEE (Desv. Std. σ): <b id="resSigma" class="text-indigo-600 font-mono">-</b></span>
+                                <span class="text-slate-700">Probabilidad P(Saturación > 100%): <b id="resProbSat" class="text-rose-600 font-mono">-</b></span>
+                            </div>
+                            <div class="flex justify-between text-[11px] font-mono text-slate-600 pt-1 border-t border-slate-200">
+                                <span>P10 (Pesimista): <b id="resP10" class="text-slate-900">-</b></span>
+                                <span>P50 (Mediana): <b id="resP50" class="text-slate-900">-</b></span>
+                                <span>P90 (Optimista): <b id="resP90" class="text-slate-900">-</b></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Desglose de Paros No Planeados Proyectados (7 Categorías) -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+                                    Desglose de Paros No Planeados Proyectados (Causas Raíz)
+                                </h4>
+                                <p class="text-[11px] text-slate-500 mt-0.5">
+                                    Estimado por <span class="font-semibold text-slate-700">Día Típico (base 24h)</span> y <span class="font-semibold text-indigo-700">Total Proyectado (<span id="lblHorasPeriodo">510</span> h programadas)</span>
+                                </p>
+                            </div>
+                            <span class="text-xs text-slate-500 font-medium bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg self-start sm:self-auto">7 Categorías Oficiales</span>
+                        </div>
+                        <div id="stoppageList" class="space-y-3 pt-1">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Script del Cliente de Integración (Criterio 4) -->
+    <script>
+        const TIMEOUT_MS = 12000;
+        let cachedLineSpecs = {};
+
+        function getBaseUrl() {
+            return document.getElementById('apiUrl').value.trim().replace(/\/+$/, '');
+        }
+
+        async function fetchLineSpecs() {
+            try {
+                const res = await fetch(`${getBaseUrl()}/line-specs`);
+                if (res.ok) {
+                    cachedLineSpecs = await res.json();
+                    onLineSelected();
+                }
+            } catch (e) {
+                console.warn("No se pudieron cargar line-specs dinámicas:", e);
+            }
+        }
+
+        function onLineSelected() {
+            const line = document.getElementById('inputLinea').value;
+            const spec = cachedLineSpecs[line];
+            if (spec) {
+                document.getElementById('lblVelNom').innerText = `${Number(spec.velocidad_nominal).toLocaleString()} pvo/h`;
+                document.getElementById('lblMetaEst').innerText = `${spec.oee_meta_pct.toFixed(1)}%`;
+                // Auto-actualizar sugerencia de meta si el usuario no la ha alterado manualmente
+                document.getElementById('inputMeta').value = spec.oee_meta_pct.toFixed(1);
+            }
+        }
+
+        async function checkHealth() {
+            const badge = document.getElementById('statusBadge');
+            badge.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200";
+            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>Probando conexión...</span>`;
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+            try {
+                const res = await fetch(`${getBaseUrl()}/health`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    badge.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200";
+                    badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>API Online (${data.available_lines_count} líneas)</span>`;
+                    hideAlert();
+                    await fetchLineSpecs();
+                } else {
+                    throw new Error(`HTTP ${res.status}`);
+                }
+            } catch (err) {
+                badge.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span>API Desconectada</span>`;
+                const isLocal = getBaseUrl().includes("127.0.0.1") || getBaseUrl().includes("localhost");
+                showAlert(
+                    "Servicio API REST no disponible",
+                    `No se pudo conectar a ${getBaseUrl()}. Verifica la URL del endpoint o el estado del servicio en la red.`,
+                    isLocal 
+                        ? 'Ejecución local: python -m uvicorn src.api:app --port 8000'
+                        : 'AWS / Cloud: Verifica el estado del contenedor en AWS App Runner / ECS y revisa CloudWatch Logs.',
+                    "rose"
+                );
+            }
+        }
+
+        async function submitQuery() {
+            hideAlert();
+            const linea = document.getElementById('inputLinea').value;
+            const meta = parseFloat(document.getElementById('inputMeta').value);
+            const horas = parseFloat(document.getElementById('inputHoras').value);
+            const piezas = parseFloat(document.getElementById('inputPiezas').value);
+            const samples = parseInt(document.getElementById('inputSamples').value);
+
+            // Validaciones cliente antes de enviar
+            if (horas <= 0 || piezas <= 0) {
+                showAlert("Datos Inválidos", "Las horas programadas y el volumen de piezas deben ser mayores a 0.", null, "amber");
+                return;
+            }
+            if (horas > 744) {
+                showAlert("Límite Mensual Excedido", "Las horas programadas no pueden exceder 744 horas (equivalente a 31 días naturales de 24 horas).", null, "amber");
+                return;
+            }
+
+            // Transición UI
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('resultCard').classList.add('hidden');
+            document.getElementById('loadingState').classList.remove('hidden');
+
+            const payload = {
+                linea: linea,
+                oee_meta_pct: meta,
+                horas_disponibles: horas,
+                pvos_a_fabricar: piezas,
+                mc_samples: samples
+            };
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+            try {
+                const res = await fetch(`${getBaseUrl()}/evaluate-risk`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!res.ok) {
+                    let errMsg = `Error en el servicio REST (HTTP ${res.status})`;
+                    try {
+                        const errData = await res.json();
+                        errMsg = errData.detail || errMsg;
+                    } catch (e) {}
+
+                    if (res.status === 422) {
+                        showAlert("Validación de Entrada Rechazada (HTTP 422)", JSON.stringify(errMsg), "Revisa los campos numéricos y la línea seleccionada.", "amber");
+                    } else {
+                        showAlert(`Falla de Servicio (HTTP ${res.status})`, errMsg, "Revisa la consola de uvicorn en el servidor.", "rose");
+                    }
+                    document.getElementById('loadingState').classList.add('hidden');
+                    document.getElementById('emptyState').classList.remove('hidden');
+                    return;
+                }
+
+                const data = await res.json();
+                renderResults(data);
+
+            } catch (err) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('emptyState').classList.remove('hidden');
+
+                if (err.name === 'AbortError') {
+                    showAlert("Tiempo de Espera Excedido (Timeout)", `La inferencia probabilística superó los ${TIMEOUT_MS / 1000}s de tolerancia.`, "Prueba reduciendo las muestras Monte Carlo a 100 o 200.", "amber");
+                } else {
+                    showAlert("Error de Red / Conexión", `No se logró contactar al endpoint en ${getBaseUrl()}.`, "Asegúrate de que uvicorn esté corriendo.", "rose");
+                }
+            }
+        }
+
+        function renderResults(data) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('resultCard').classList.remove('hidden');
+
+            document.getElementById('resHeaderLinea').innerText = `Línea ${data.linea} | Vel Nom: ${Number(data.velocidad_nominal).toLocaleString()} pvo/h`;
+
+            // 1. Configuración del Banner Principal de Decisión de Incumplimiento
+            const banner = document.getElementById('bannerDecision');
+            const icon = document.getElementById('decisionIcon');
+            const title = document.getElementById('decisionTitle');
+            const subtitle = document.getElementById('decisionSubtitle');
+            const badge = document.getElementById('decisionBadge');
+            const detalleBox = document.getElementById('boxIncumplimientoDetalle');
+
+            if (data.incumple_plan) {
+                banner.className = "rounded-2xl p-6 border shadow-sm transition bg-rose-50 border-rose-200 text-rose-950";
+                icon.innerHTML = '<i class="fa-solid fa-circle-xmark text-rose-600"></i>';
+                title.innerText = "INCUMPLE PLAN DE FABRICACIÓN (Saturación > 100%)";
+                subtitle.innerText = `La saturación proyectada de ${data.saturacion_proyectada_pct.toFixed(1)}% excede la capacidad productiva disponible (${data.horas_disponibles.toFixed(1)} horas).`;
+                badge.className = "px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-600 text-white shadow-sm";
+                badge.innerText = `INCUMPLIMIENTO: ${data.pct_incumplimiento_piezas.toFixed(1)}%`;
+                
+                detalleBox.classList.remove('hidden');
+                document.getElementById('resPctIncumplimiento').innerText = `${data.pct_incumplimiento_piezas.toFixed(1)}%`;
+                document.getElementById('resPctSobresaturacion').innerText = `+${data.pct_sobresaturacion_capacidad.toFixed(1)}%`;
+                document.getElementById('resPiezasFaltantes').innerText = Number(data.piezas_faltantes).toLocaleString();
+                document.getElementById('resHorasFaltantes').innerText = `${data.horas_faltantes.toFixed(1)} h`;
+            } else {
+                banner.className = "rounded-2xl p-6 border shadow-sm transition bg-emerald-50 border-emerald-200 text-emerald-950";
+                icon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
+                title.innerText = "CUMPLE PLAN DE FABRICACIÓN FACTIBLEMENTE";
+                subtitle.innerText = `La capacidad proyectada es suficiente para absorber las ${Number(data.pvos_a_fabricar).toLocaleString()} piezas solicitadas en las ${data.horas_disponibles.toFixed(1)} horas programadas.`;
+                badge.className = "px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-600 text-white shadow-sm";
+                badge.innerText = `SATURACIÓN: ${data.saturacion_proyectada_pct.toFixed(1)}%`;
+                
+                detalleBox.classList.add('hidden');
+            }
+
+            // 2. Comparativa de Saturación
+            document.getElementById('resSatTeoricaVal').innerText = `${data.saturacion_teorica_pct.toFixed(1)}%`;
+            document.getElementById('barSatTeorica').style.width = `${Math.min(data.saturacion_teorica_pct, 100)}%`;
+            document.getElementById('resHrsReqTeorica').innerText = `${data.horas_requeridas_teoricas.toFixed(1)} h`;
+            document.getElementById('resOeeMeta').innerText = `${data.oee_meta_pct.toFixed(1)}%`;
+            document.getElementById('resSatTeoricaBadge').innerText = data.saturacion_teorica_pct > 100 ? "Sobresaturada" : "En Rango";
+
+            document.getElementById('resSatProyVal').innerText = `${data.saturacion_proyectada_pct.toFixed(1)}%`;
+            document.getElementById('barSatProy').style.width = `${Math.min(data.saturacion_proyectada_pct, 100)}%`;
+            document.getElementById('resHrsReqProy').innerText = `${data.horas_requeridas_proyectadas.toFixed(1)} h`;
+            document.getElementById('resOeeProy').innerText = `${data.oee_proyectado_mu_pct.toFixed(1)}%`;
+            document.getElementById('resSatProyBadge').innerText = data.saturacion_proyectada_pct > 100 ? "Crítica" : "Holgada";
+
+            // 3. Intervalo y Probabilidad
+            document.getElementById('resSigma').innerText = `±${data.oee_proyectado_sigma_pct.toFixed(2)}%`;
+            document.getElementById('resProbSat').innerText = `${data.probabilidad_saturacion_pct.toFixed(1)}%`;
+            document.getElementById('resP10').innerText = `${data.q10_oee_pct.toFixed(1)}% (Sat: ${data.saturacion_q90_pct.toFixed(1)}%)`;
+            document.getElementById('resP50').innerText = `${data.q50_oee_pct.toFixed(1)}% (Sat: ${data.saturacion_q50_pct.toFixed(1)}%)`;
+            document.getElementById('resP90').innerText = `${data.q90_oee_pct.toFixed(1)}% (Sat: ${data.saturacion_q10_pct.toFixed(1)}%)`;
+
+            // 4. Desglose de Paros No Planeados (7 categorías)
+            const list = document.getElementById('stoppageList');
+            list.innerHTML = "";
+            const hDisp = data.horas_disponibles || 600;
+            const lblH = document.getElementById('lblHorasPeriodo');
+            if (lblH) lblH.innerText = Number(hDisp).toLocaleString();
+
+            const parosPeriodo = data.detalle_paros_periodo || {};
+            const maxVal = Math.max(...Object.values(data.detalle_paros_no_planeados), 1.0);
+
+            for (const [nombre, horasDia] of Object.entries(data.detalle_paros_no_planeados)) {
+                const horasTot = parosPeriodo[nombre] !== undefined ? parosPeriodo[nombre] : (horasDia * (hDisp / 24.0));
+                const pct = Math.min((horasDia / maxVal) * 100, 100);
+                list.innerHTML += `
+                    <div>
+                        <div class="flex justify-between items-center text-xs font-semibold mb-1">
+                            <span class="text-slate-700">${nombre}</span>
+                            <div class="flex items-center gap-2 text-right">
+                                <span class="text-slate-400 font-mono text-[11px]">${horasDia.toFixed(1)} h/día</span>
+                                <span class="font-bold text-slate-800 font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-xs">
+                                    ${horasTot.toFixed(1)} h en período
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            <div class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function showAlert(title, message, hint, type = "rose") {
+            const box = document.getElementById('alertBox');
+            const t = document.getElementById('alertTitle');
+            const m = document.getElementById('alertMessage');
+            const h = document.getElementById('alertHint');
+            const i = document.getElementById('alertIcon');
+
+            box.className = type === "rose" 
+                ? "rounded-xl p-4 border text-sm flex items-start gap-3 bg-rose-50 border-rose-200 text-rose-900"
+                : "rounded-xl p-4 border text-sm flex items-start gap-3 bg-amber-50 border-amber-200 text-amber-900";
+            i.className = type === "rose" ? "fa-solid fa-circle-xmark text-rose-600 text-lg mt-0.5" : "fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5";
+
+            t.innerText = title;
+            m.innerText = message;
+
+            if (hint) {
+                h.innerText = hint;
+                h.classList.remove('hidden');
+            } else {
+                h.classList.add('hidden');
+            }
+            box.classList.remove('hidden');
+        }
+
+        function hideAlert() {
+            document.getElementById('alertBox').classList.add('hidden');
+        }
+
+        function initEndpointDetection() {
+            const apiInput = document.getElementById('apiUrl');
+            const swaggerLink = document.getElementById('swaggerLink');
+            
+            // Si la aplicación se sirve desde un servidor web / nube (AWS App Runner, ECS, CloudFront, Nginx, etc.)
+            if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+                apiInput.value = window.location.origin;
+            }
+            
+            const updateLinks = () => {
+                const base = apiInput.value.trim().replace(/\/+$/, '');
+                swaggerLink.href = `${base}/docs`;
+            };
+            
+            apiInput.addEventListener('input', updateLinks);
+            apiInput.addEventListener('change', () => {
+                updateLinks();
+                checkHealth();
+            });
+            updateLinks();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initEndpointDetection();
+            checkHealth();
+        });
+    </script>
+</body>
+</html>

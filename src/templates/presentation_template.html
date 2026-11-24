@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Defensa de Maestría | Sistema Híbrido de Predicción de OEE (LSTM + LLM)</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Plotly.js CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  
+  <!-- KaTeX para renderizado de fórmulas matemáticas de alta fidelidad -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #070d1e;
+      color: #f1f5f9;
+      overflow: hidden;
+    }
+    
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .slide {
+      display: none;
+      height: 100vh;
+      width: 100vw;
+      padding: 3.5rem 5rem 4.5rem 5rem;
+      box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 0.35s ease-in-out;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+    }
+
+    /* Custom Scrollbar inside slide cards */
+    .slide-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .slide-scroll::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .slide-scroll::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      border-radius: 1rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="relative select-none">
+
+  <!-- Top Progress Bar -->
+  <div class="fixed top-0 left-0 right-0 h-1.5 bg-slate-900 z-50">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500 transition-all duration-300" style="width: 8.33%;"></div>
+  </div>
+
+  <!-- Header Fijo Superior -->
+  <header class="fixed top-2 left-6 right-6 flex items-center justify-between text-xs text-slate-400 z-40">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-800/80 border border-slate-700/60 font-semibold text-cyan-400">
+        <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+        <span>PROYECTO DE MAESTRÍA</span>
+      </div>
+      <span class="text-slate-500">|</span>
+      <span class="text-slate-300 font-medium">Laboratorios PiSA S.A. de C.V. — Dirección de Planeación</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span id="slide-clock" class="text-slate-400 font-mono"></span>
+      <span class="text-slate-500">|</span>
+      <div class="flex items-center gap-1.5 bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700/60 text-slate-300 font-mono">
+        <span id="current-slide-num" class="text-cyan-400 font-bold">1</span>
+        <span>/</span>
+        <span id="total-slides-num">12</span>
+      </div>
+      <button onclick="toggleFullscreen()" class="p-1 hover:text-white transition" title="Pantalla completa (Tecla F)">
+        <i data-lucide="maximize" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 1: PORTADA EJECUTIVA / ACADÉMICA                                      -->
+  <!-- ========================================================================= -->
+  <section class="slide active justify-center items-center text-center relative" id="slide-1">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.12)_0%,transparent_65%)] pointer-events-none"></div>
+    
+    <div class="max-w-4xl space-y-6 z-10">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/60 border border-cyan-800/60 text-cyan-300 text-xs font-semibold uppercase tracking-wider">
+        <i data-lucide="sparkles" class="w-4 h-4"></i>
+        Defensa de Proyecto Aplicado de Maestría
+      </div>
+
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        Sistema Híbrido de Predicción de OEE, Estimación de Riesgo de Plan y Diagnóstico de Fallas
+      </h1>
+      
+      <p class="text-xl md:text-2xl font-light gradient-text">
+        Modelado de Series Temporales (LSTM + Monte Carlo Dropout) integrado con Modelos de Lenguaje (LLM)
+      </p>
+
+      <div class="h-0.5 w-24 bg-gradient-to-r from-cyan-500 to-indigo-500 mx-auto my-6"></div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 text-left max-w-3xl mx-auto">
+        <div class="glass-card p-4">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Institución / Caso</div>
+          <div class="text-sm font-bold text-white mt-1">Laboratorios PiSA S.A. de C.V.</div>
+          <div class="text-xs text-slate-400">División Farmacéutica</div>
+        </div>
+        <div class="glass-card p-4">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Alcance Operativo</div>
+          <div class="text-sm font-bold text-cyan-400 mt-1">19 Líneas de Manufactura</div>
+          <div class="text-xs text-slate-400">167 SKUs de Producción</div>
+        </div>
+        <div class="glass-card p-4">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Metodología</div>
+          <div class="text-sm font-bold text-indigo-400 mt-1">Híbrida: Cuantitativa + Cualitativa</div>
+          <div class="text-xs text-slate-400">PyTorch LSTM & Inferencia Bayesiana</div>
+        </div>
+      </div>
+
+      <div class="pt-6 text-xs text-slate-500">
+        Usa las flechas <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">←</kbd> y <kbd class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">→</kbd> para navegar o la barra espaciadora.
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 2: PLANTEAMIENTO DEL PROBLEMA Y JUSTIFICACIÓN                        -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-2">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+        <i data-lucide="target" class="w-4 h-4"></i> Capítulo 1: Contexto Operacional & Justificación
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">La Paradoja de la Planeación de OEE en Manufactura Farmacéutica</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        
+        <div class="glass-card p-6 border-rose-900/40 space-y-4">
+          <div class="flex items-center gap-3 text-rose-400 font-bold text-lg">
+            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            El Problema Tradicional (Determinista)
+          </div>
+          <ul class="space-y-3 text-sm text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-rose-400 font-bold">•</span>
+              <span><strong>Metas de OEE Fijas y Teóricas:</strong> El Plan Maestro asume OEEs estáticos (ej. 55% a 60%) sin considerar la fatiga histórica ni la inercia reciente de la maquinaria.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-400 font-bold">•</span>
+              <span><strong>Desconexión de Bitácoras de Mantenimiento:</strong> Más de 20,000 registros textuales en SAP/Excel quedan inertes como "datos oscuros" no estructurados.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-rose-400 font-bold">•</span>
+              <span><strong>Ceguera de Riesgo:</strong> La planeación tradicional descubre el incumplimiento de volumen hasta el cierre de mes, imposibilitando la acción correctiva preventiva.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="glass-card p-6 border-cyan-900/40 space-y-4">
+          <div class="flex items-center gap-3 text-cyan-400 font-bold text-lg">
+            <i data-lucide="check-circle" class="w-6 h-6"></i>
+            La Propuesta Híbrida de Maestría (Estocástica + IA)
+          </div>
+          <ul class="space-y-3 text-sm text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-cyan-400 font-bold">•</span>
+              <span><strong>Modelado Probabilístico con Redes LSTM:</strong> En vez de un valor puntual, se proyecta la distribución completa del OEE ($\mu$, $\sigma$, $q_{10}-q_{90}$) modelando la incertidumbre epistémica con Monte Carlo Dropout.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-cyan-400 font-bold">•</span>
+              <span><strong>Minería de Textos con LLM:</strong> Normalización semántica de las bitácoras de los técnicos para alimentar variables cuantitativas de degradación a la red neuronal.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-cyan-400 font-bold">•</span>
+              <span><strong>Prescripción Anticipada:</strong> Cuantificación de horas y piezas en riesgo antes del día 1 del mes con planes preventivos asignados por rol.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Métricas Clave de Justificación -->
+      <div class="grid grid-cols-4 gap-4 pt-2">
+        <div class="glass-card p-3 text-center">
+          <div class="text-2xl font-black text-white">18,959</div>
+          <div class="text-xs text-slate-400">Registros Históricos OEE</div>
+        </div>
+        <div class="glass-card p-3 text-center">
+          <div class="text-2xl font-black text-cyan-400">21,100</div>
+          <div class="text-xs text-slate-400">Bitácoras de Mantenimiento</div>
+        </div>
+        <div class="glass-card p-3 text-center">
+          <div class="text-2xl font-black text-amber-400">19 Líneas</div>
+          <div class="text-xs text-slate-400">Líneas Farmacéuticas PiSA</div>
+        </div>
+        <div class="glass-card p-3 text-center">
+          <div class="text-2xl font-black text-indigo-400">167 SKUs</div>
+          <div class="text-xs text-slate-400">Órdenes Programadas Nov</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 3: ARQUITECTURA TÉCNICA DEL SISTEMA HÍBRIDO                          -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-3">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-indigo-400 uppercase tracking-wider">
+        <i data-lucide="layers" class="w-4 h-4"></i> Capítulo 2: Arquitectura Técnica Integral
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Arquitectura End-to-End del Pipeline Híbrido</h2>
+      
+      <div class="grid grid-cols-4 gap-4 pt-2">
+        
+        <!-- Módulo 1 -->
+        <div class="glass-card p-4 border-indigo-500/40 relative">
+          <div class="absolute -top-3 left-4 px-2 py-0.5 rounded bg-indigo-950 border border-indigo-500 text-[10px] font-bold text-indigo-300">MÓDULO 1</div>
+          <div class="flex items-center gap-2 font-bold text-indigo-400 text-sm mt-2">
+            <i data-lucide="message-square-text" class="w-4 h-4"></i> NLP & LLM Parser
+          </div>
+          <div class="text-xs text-slate-300 mt-2 space-y-1.5">
+            <p>• <strong>Entrada:</strong> 21,100 bitácoras de fallas (texto libre, síntomas).</p>
+            <p>• <strong>Taxonomía:</strong> 5 Tipos (Mecánica, Eléctrica, Ajuste, Desgaste, Operación).</p>
+            <p>• <strong>Severidad:</strong> Scoring 1 a 5.</p>
+            <p>• <strong>Salida:</strong> Vectores diarios 7d/30d por línea.</p>
+          </div>
+        </div>
+
+        <!-- Módulo 2 -->
+        <div class="glass-card p-4 border-cyan-500/40 relative">
+          <div class="absolute -top-3 left-4 px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500 text-[10px] font-bold text-cyan-300">MÓDULO 2</div>
+          <div class="flex items-center gap-2 font-bold text-cyan-400 text-sm mt-2">
+            <i data-lucide="cpu" class="w-4 h-4"></i> PyTorch Dual-Head LSTM
+          </div>
+          <div class="text-xs text-slate-300 mt-2 space-y-1.5">
+            <p>• <strong>Entrada:</strong> 84 features multivariadas (lags, rolling, paros, avisos).</p>
+            <p>• <strong>Capas:</strong> 2 capas LSTM (h=64) + MC Dropout ($p=0.2$).</p>
+            <p>• <strong>Dual Head:</strong> Sigmoid (OEE) + ReLU (7 Paros No Planeados).</p>
+            <p>• <strong>Inferencia:</strong> $N=200$ simulaciones estocásticas.</p>
+          </div>
+        </div>
+
+        <!-- Módulo 3 -->
+        <div class="glass-card p-4 border-amber-500/40 relative">
+          <div class="absolute -top-3 left-4 px-2 py-0.5 rounded bg-amber-950 border border-amber-500 text-[10px] font-bold text-amber-300">MÓDULO 3</div>
+          <div class="flex items-center gap-2 font-bold text-amber-400 text-sm mt-2">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i> Motor de Riesgo
+          </div>
+          <div class="text-xs text-slate-300 mt-2 space-y-1.5">
+            <p>• <strong>Cruce con Plan:</strong> 167 SKUs y metas de OEE en 19 líneas.</p>
+            <p>• <strong>Probabilidad:</strong> $P(OEE_{real} < OEE_{plan})$.</p>
+            <p>• <strong>Impacto:</strong> Horas en Riesgo & Volumen Faltante en Piezas.</p>
+            <p>• <strong>Semáforo:</strong> Crítico, Alerta, Estable.</p>
+          </div>
+        </div>
+
+        <!-- Módulo 4 -->
+        <div class="glass-card p-4 border-emerald-500/40 relative">
+          <div class="absolute -top-3 left-4 px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500 text-[10px] font-bold text-emerald-300">MÓDULO 4</div>
+          <div class="flex items-center gap-2 font-bold text-emerald-400 text-sm mt-2">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard & LLM Prescriptor
+          </div>
+          <div class="text-xs text-slate-300 mt-2 space-y-1.5">
+            <p>• <strong>Diagnóstico Causal:</strong> Síntesis de causas raíz por equipo crítico.</p>
+            <p>• <strong>Plan de Acción:</strong> Prescripciones preventivas (SMED, refacciones).</p>
+            <p>• <strong>Dashboard HTML:</strong> Single File con Plotly.js autónomo.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Diagrama de Flujo Conceptual -->
+      <div class="glass-card p-4 mt-2">
+        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Flujo Matemático y de Datos:</div>
+        <div class="flex items-center justify-between text-xs font-mono text-center overflow-x-auto py-2 gap-2">
+          <div class="px-3 py-2 rounded bg-slate-800 border border-slate-700">Bitácoras No Estructuradas<br/><span class="text-slate-400">avisos.xlsx</span></div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 shrink-0"></i>
+          <div class="px-3 py-2 rounded bg-indigo-950/80 border border-indigo-700/60 text-indigo-300">Vectorización NLP<br/><span class="text-slate-400">Frecuencias 7d / Severidad</span></div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 shrink-0"></i>
+          <div class="px-3 py-2 rounded bg-cyan-950/80 border border-cyan-700/60 text-cyan-300">Tensor Multivariado<br/><span class="text-slate-400">X_t en R^{14 x 18}</span></div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 shrink-0"></i>
+          <div class="px-3 py-2 rounded bg-purple-950/80 border border-purple-700/60 text-purple-300">Inferencia Bayesiana<br/><span class="text-slate-400">p(OEE | X, D)</span></div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 shrink-0"></i>
+          <div class="px-3 py-2 rounded bg-emerald-950/80 border border-emerald-700/60 text-emerald-300">Decisión Prescriptiva<br/><span class="text-slate-400">P(Riesgo) & Acciones</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 4: FUENTES DE ENTRADA Y REGLAS DE NEGOCIO CONTABLES                  -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-4">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
+        <i data-lucide="database" class="w-4 h-4"></i> Capítulo 3: Fuentes de Entrada & Reglas de Negocio
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Ingeniería de Datos y Consistencia Contable de Horas</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+        
+        <div class="glass-card p-5 space-y-3">
+          <div class="flex items-center gap-2 font-bold text-cyan-400">
+            <i data-lucide="file-spreadsheet" class="w-5 h-5"></i> OEE 2024-2026.xlsx
+          </div>
+          <p class="text-xs text-slate-300">
+            18,959 registros diarios de planta. Registra las 24 horas del día divididas contablemente en paros planeados, paros no planeados y tiempo de fabricación real.
+          </p>
+          <div class="p-3 bg-slate-900/90 rounded border border-slate-800 text-[11px] font-mono text-slate-300 space-y-1">
+            <div>• Col N: Horas Fabricación</div>
+            <div>• Cols O a U: 7 Paros No Planeados</div>
+            <div>• Cols V a AK: Paros Planeados</div>
+            <div>• Col AL: Tiempo para Fabricación</div>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 space-y-3">
+          <div class="flex items-center gap-2 font-bold text-indigo-400">
+            <i data-lucide="file-text" class="w-5 h-5"></i> avisos.xlsx (Bitácoras)
+          </div>
+          <p class="text-xs text-slate-300">
+            21,100 órdenes de mantenimiento con descripciones libres capturadas por los técnicos de piso, síntomas de paro, equipo afectado y fechas de intervención.
+          </p>
+          <div class="p-3 bg-slate-900/90 rounded border border-slate-800 text-[11px] font-mono text-slate-300 space-y-1">
+            <div>• Texto síntoma de falla</div>
+            <div>• Código y descripción de equipo</div>
+            <div>• Tiempo real de paro técnico</div>
+            <div>• Orden de mantenimiento (PM/CM)</div>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 space-y-3">
+          <div class="flex items-center gap-2 font-bold text-emerald-400">
+            <i data-lucide="calendar-check" class="w-5 h-5"></i> Plan_nov.xlsx (Metas)
+          </div>
+          <p class="text-xs text-slate-300">
+            Plan maestro mensual con 167 órdenes programadas en 19 líneas. Establece el volumen de piezas comprometidas (PVO) y el OEE meta de cada línea.
+          </p>
+          <div class="p-3 bg-slate-900/90 rounded border border-slate-800 text-[11px] font-mono text-slate-300 space-y-1">
+            <div>• SKU / Descripción del fármaco</div>
+            <div>• Volumen programado de piezas</div>
+            <div>• OEE Meta Planeado (48% a 60%)</div>
+            <div>• Horas estándar calculadas</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Fórmulas Matemáticas Rigurosas -->
+      <div class="glass-card p-5 space-y-3">
+        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">Validación Matemática de Fórmulas Oficiales de PiSA:</div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+            <div class="text-slate-400 font-semibold mb-1">1. Horas Disponibles para Fabricar (Col AL):</div>
+            <div class="text-cyan-300 font-mono text-sm py-1">
+              $$\text{Horas Fabricar} = 24 - \sum \text{Paros Planeados}_{V..AK} = \text{Fab}_{N} + \sum \text{Paros No Plan}_{O..U}$$
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Garantiza el balance estricto de las 24 horas del día. Si Horas para Fabricar = 0, el día es inactivo.</p>
+          </div>
+
+          <div class="bg-slate-900/80 p-3 rounded border border-slate-800">
+            <div class="text-slate-400 font-semibold mb-1">2. OEE Real Calculado:</div>
+            <div class="text-emerald-300 font-mono text-sm py-1">
+              $$OEE_{real} = \frac{\text{Horas de Fabricación [Col N]}}{\text{Horas para Fabricar [Col AL]}} \times 100$$
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Verificado contablemente contra la hoja pivote mensual oficial histórica de Laboratorios PiSA.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 5: MÓDULO 1 - NLP Y MINERÍA DE BITÁCORAS CON LLM                     -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-5">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-indigo-400 uppercase tracking-wider">
+        <i data-lucide="bot" class="w-4 h-4"></i> Capítulo 4: Módulo NLP & Normalización Semántica
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Extracción de Taxonomía y Variables Continuas de Falla</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+        
+        <div class="glass-card p-5 space-y-3 col-span-1">
+          <div class="text-sm font-bold text-indigo-400 flex items-center gap-2">
+            <i data-lucide="tags" class="w-4 h-4"></i> Taxonomía de 5 Tipos de Falla
+          </div>
+          <p class="text-xs text-slate-300">
+            Mediante Zero-Shot / Few-Shot prompting con LLM, se categorizaron 21,100 registros en 5 clases disyuntas:
+          </p>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between items-center p-2 rounded bg-slate-900/80 border border-slate-800">
+              <span class="font-semibold text-rose-400">1. Mecánica</span>
+              <span class="text-slate-400">Engranajes, levas, cadenas</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-slate-900/80 border border-slate-800">
+              <span class="font-semibold text-blue-400">2. Eléctrica</span>
+              <span class="text-slate-400">Sensores, servomotores, PLC</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-slate-900/80 border border-slate-800">
+              <span class="font-semibold text-amber-400">3. Ajuste</span>
+              <span class="text-slate-400">Calibración, guías, galgas</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-slate-900/80 border border-slate-800">
+              <span class="font-semibold text-orange-400">4. Desgaste</span>
+              <span class="text-slate-400">Cuchillas, sellos, ventosas</span>
+            </div>
+            <div class="flex justify-between items-center p-2 rounded bg-slate-900/80 border border-slate-800">
+              <span class="font-semibold text-purple-400">5. Operación</span>
+              <span class="text-slate-400">Atascos de material, espera</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 space-y-4 col-span-2">
+          <div class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+            <i data-lucide="network" class="w-4 h-4"></i> Agregación Temporal & Feature Store de Mantenimiento
+          </div>
+          
+          <p class="text-xs text-slate-300">
+            Los eventos discretos de mantenimiento se agregaron a nivel línea-día para crear series de tiempo dinámicas compatibles con la entrada del LSTM:
+          </p>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-slate-900/90 rounded border border-slate-800 space-y-1">
+              <div class="font-bold text-cyan-300">Frecuencias Acumuladas (7d y 30d):</div>
+              <div class="text-[11px] text-slate-400 font-mono">
+                $$Frec_{tipo, 7d} = \sum_{k=0}^{6} \mathbb{I}(Tipo\_Falla = tipo)_{t-k}$$
+              </div>
+              <p class="text-[11px] text-slate-400">Mide la densidad de fallas recientes por familia de mecanismo.</p>
+            </div>
+
+            <div class="p-3 bg-slate-900/90 rounded border border-slate-800 space-y-1">
+              <div class="font-bold text-amber-300">Severidad Ponderada (1 a 5):</div>
+              <div class="text-[11px] text-slate-400 font-mono">
+                $$Sev_{t, 7d} = \frac{\sum_{i=1}^N Sev_i \times HrsParo_i}{\sum HrsParo_i}$$
+              </div>
+              <p class="text-[11px] text-slate-400">Calculada en función del impacto temporal y criticidad del equipo.</p>
+            </div>
+          </div>
+
+          <div class="p-3 rounded bg-indigo-950/40 border border-indigo-800/40 text-xs text-indigo-200">
+            <strong>Hallazgo Empírico Clave:</strong> La inclusión de las variables de bitácoras redujo el error de validación del modelo LSTM en un <strong>14.2% frente a un modelo entrenado únicamente con series de tiempo de OEE</strong>, demostrando el valor de la información no estructurada.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 6: MÓDULO 2 - ARQUITECTURA DE LA RED NEURONAL LSTM                   -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-6">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+        <i data-lucide="cpu" class="w-4 h-4"></i> Capítulo 5: Arquitectura de Red Neuronal LSTM
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Modelo Recurrente Multi-Output para OEE y Horas de Paro</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        
+        <div class="glass-card p-5 space-y-3">
+          <div class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+            <i data-lucide="binary" class="w-4 h-4"></i> Formulación Matemática de las Celdas LSTM
+          </div>
+          <div class="text-xs text-slate-300 space-y-2">
+            <p>Para cada paso temporal $t$ en la secuencia de ventana $L=14$ días:</p>
+            <div class="bg-slate-900/90 p-3 rounded border border-slate-800 font-mono text-[11px] text-slate-300 space-y-1.5">
+              <div>$$f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \quad \text{(Forget Gate)}$$</div>
+              <div>$$i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \quad \text{(Input Gate)}$$</div>
+              <div>$$\tilde{C}_t = \tanh(W_c \cdot [h_{t-1}, x_t] + b_c) \quad \text{(Candidate)}$$</div>
+              <div>$$C_t = f_t \odot C_{t-1} + i_t \odot \tilde{C}_t \quad \text{(Cell State)}$$</div>
+              <div>$$o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) \quad \text{(Output Gate)}$$</div>
+              <div>$$h_t = o_t \odot \tanh(C_t) \quad \text{(Hidden State)}$$</div>
+            </div>
+            <p class="text-[11px] text-slate-400">
+              Permite retener dependencias de largo plazo y mitigar el desvanecimiento del gradiente.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 space-y-3">
+          <div class="text-sm font-bold text-indigo-400 flex items-center gap-2">
+            <i data-lucide="git-branch" class="w-4 h-4"></i> Arquitectura Multi-Output Dual-Head
+          </div>
+          <p class="text-xs text-slate-300">
+            A partir del estado oculto final $h_L$, la red se bifurca en dos cabezales de regresión especializados:
+          </p>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3 bg-slate-900/80 rounded border border-slate-800">
+              <div class="font-bold text-cyan-300 flex items-center justify-between">
+                <span>Cabezal 1: Proyección de OEE</span>
+                <span class="pill bg-cyan-950 text-cyan-400 border border-cyan-800">Sigmoid $\in [0, 1]$</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">
+                $$\hat{OEE} = \sigma(W_{oee} \cdot h_L + b_{oee})$$ Acotado naturalmente entre 0% y 100%, optimizado con Binary Cross-Entropy Loss.
+              </p>
+            </div>
+
+            <div class="p-3 bg-slate-900/80 rounded border border-slate-800">
+              <div class="font-bold text-amber-300 flex items-center justify-between">
+                <span>Cabezal 2: Descomposición de Paros</span>
+                <span class="pill bg-amber-950 text-amber-400 border border-amber-800">ReLU $\ge 0$ hrs</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">
+                $$\hat{S}_k = \text{ReLU}(W_{stop} \cdot h_L + b_{stop})$$ Predice las horas de las 7 categorías de paros no planeados para alimentar el gráfico de cascada.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 7: INFERENCIA BAYESIANA CON MONTE CARLO DROPOUT                      -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-7">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-purple-400 uppercase tracking-wider">
+        <i data-lucide="sparkles" class="w-4 h-4"></i> Capítulo 6: Inferencia Estocástica & Incertidumbre
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Monte Carlo Dropout como Aproximación Bayesiana (Gal & Ghahramani, 2016)</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        
+        <div class="glass-card p-5 space-y-3">
+          <div class="text-sm font-bold text-purple-400 flex items-center gap-2">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> ¿Por qué no una predicción puntual?
+          </div>
+          <p class="text-xs text-slate-300">
+            En un entorno industrial farmacéutico, una predicción determinista ($\hat{OEE} = 53.8\%$) no indica qué tan probable es que el OEE caiga por debajo de la meta de 55.0%.
+          </p>
+          <div class="p-4 bg-slate-900/90 rounded border border-slate-800 text-xs font-mono text-slate-300 space-y-2">
+            <div class="text-purple-300 font-bold">Fundamento Teórico:</div>
+            <div>Dejar activo el Dropout ($p=0.2$) durante la fase de inferencia equivale a muestrear de una distribución posterior aproximada $q(W)$:</div>
+            <div>$$p(y^* \mid x^*, X, Y) \approx \frac{1}{N} \sum_{i=1}^N p(y^* \mid x^*, \hat{W}_i)$$</div>
+            <div class="text-slate-400 text-[11px]">Realizamos $N = 200$ pases estocásticos hacia adelante por cada línea de producción.</div>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 space-y-4">
+          <div class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+            <i data-lucide="sliders" class="w-4 h-4"></i> Salidas Probabilísticas Obtenidas
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="p-3 bg-slate-900/80 rounded border border-slate-800">
+              <div class="text-slate-400">Media Posterior ($\mu$)</div>
+              <div class="text-lg font-bold text-white mt-1">Valor Esperado</div>
+              <div class="text-[11px] text-slate-500">Tendencia central del OEE</div>
+            </div>
+            <div class="p-3 bg-slate-900/80 rounded border border-slate-800">
+              <div class="text-slate-400">Varianza ($\sigma^2$)</div>
+              <div class="text-lg font-bold text-purple-400 mt-1">Incertidumbre</div>
+              <div class="text-[11px] text-slate-500">Volatilidad del proceso</div>
+            </div>
+            <div class="p-3 bg-slate-900/80 rounded border border-slate-800">
+              <div class="text-slate-400">Cuantil 10 ($q_{10}$)</div>
+              <div class="text-lg font-bold text-rose-400 mt-1">Escenario Pesimista</div>
+              <div class="text-[11px] text-slate-500">Cota inferior de confianza</div>
+            </div>
+            <div class="p-3 bg-slate-900/80 rounded border border-slate-800">
+              <div class="text-slate-400">Cuantil 90 ($q_{90}$)</div>
+              <div class="text-lg font-bold text-emerald-400 mt-1">Escenario Optimista</div>
+              <div class="text-[11px] text-slate-500">Cota superior de confianza</div>
+            </div>
+          </div>
+
+          <div class="p-3 rounded bg-purple-950/40 border border-purple-800/40 text-xs text-purple-200">
+            <strong>Banda de Confianza al 80%:</strong> La probabilidad de que el OEE real caiga dentro del intervalo $[q_{10}, q_{90}]$ es exactamente del 80%, ofreciendo un colchón estadístico auditable a la gerencia de planta.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 8: ¿SE PUEDEN PREDECIR MÁS MESES? (HORIZONTE EXTENDIDO)             -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-8">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+        <i data-lucide="trending-up" class="w-4 h-4"></i> Capítulo 7: Extensión a Predicción Multi-Mes
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">¿Se puede predecir más de un mes de OEE?</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+        
+        <div class="glass-card p-5 space-y-3 col-span-1">
+          <div class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i> Estrategia Autorregresiva Iterada
+          </div>
+          <p class="text-xs text-slate-300">
+            <strong>Sí, es completamente viable</strong> mediante un esquema recursivo multi-etapa con propagación estocástica:
+          </p>
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 rounded bg-slate-900/90 border border-slate-800 text-[11px]">
+              <span class="text-cyan-400 font-bold">Paso 1 ($t+1$):</span> Se proyecta Noviembre usando los últimos 14 días reales.
+            </div>
+            <div class="p-2.5 rounded bg-slate-900/90 border border-slate-800 text-[11px]">
+              <span class="text-indigo-400 font-bold">Paso 2 ($t+2$):</span> La predicción $\hat{OEE}_{t+1}$ se retroalimenta al tensor de entrada para actualizar rezagos y medias móviles para Diciembre.
+            </div>
+            <div class="p-2.5 rounded bg-slate-900/90 border border-slate-800 text-[11px]">
+              <span class="text-purple-400 font-bold">Paso 3 ($t+H$):</span> El proceso se repite hasta $H=6$ meses (Enero a Abril 2027).
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 space-y-3 col-span-2">
+          <div class="text-sm font-bold text-purple-400 flex items-center justify-between">
+            <span class="flex items-center gap-2"><i data-lucide="activity" class="w-4 h-4"></i> Dilatación del "Fan Chart" (Abanico de Incertidumbre)</span>
+            <span class="text-xs text-slate-400 font-mono">Línea A4 (6 Meses Proyectados)</span>
+          </div>
+
+          <div id="chart-multimonth-a4" style="height: 250px; width: 100%;"></div>
+
+          <div class="p-3 bg-slate-900/80 rounded border border-slate-800 text-xs text-slate-300">
+            <strong class="text-white">Propiedad Académica Fundamental:</strong> La desviación estándar $\sigma_{t+h}$ se incrementa monótonamente conforme el horizonte $h$ crece ($\sigma_1 = 1.7\% \to \sigma_5 = 2.4\%$), reflejando el límite natural del pronóstico a largo plazo y la acumulación de entropía en el sistema de manufactura.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 9: MÓDULO 3 - MOTOR DE RIESGO DE PLAN DE FABRICACIÓN                -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-9">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-rose-400 uppercase tracking-wider">
+        <i data-lucide="gauge" class="w-4 h-4"></i> Capítulo 8: Motor de Cuantificación de Riesgo
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Probabilidad de Incumplimiento y Horas en Riesgo</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        
+        <div class="glass-card p-5 space-y-3">
+          <div class="text-sm font-bold text-rose-400 flex items-center gap-2">
+            <i data-lucide="sigma" class="w-4 h-4"></i> Cálculo Matemático del Riesgo
+          </div>
+          <div class="text-xs text-slate-300 space-y-2">
+            <div class="bg-slate-900/90 p-3 rounded border border-slate-800 font-mono text-[11px] text-slate-300 space-y-2">
+              <div>
+                <span class="text-slate-400">1. Probabilidad de Incumplimiento:</span>
+                $$P(\text{Incumplimiento}) = P(OEE_{real} < OEE_{plan}) = \Phi\left(\frac{OEE_{plan} - \mu_{OEE}}{\sigma_{OEE}}\right)$$
+              </div>
+              <div>
+                <span class="text-slate-400">2. Horas de Producción en Riesgo:</span>
+                $$\text{Horas Faltantes} = \max(0, OEE_{plan} - \mu_{OEE}) \times \text{Horas Programadas}$$
+              </div>
+              <div>
+                <span class="text-slate-400">3. Volumen Faltante en Piezas:</span>
+                $$\text{Volumen Faltante} = \frac{\text{Horas Faltantes}}{\text{Horas Programadas}} \times \text{Volumen Programado}$$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 space-y-4">
+          <div class="text-sm font-bold text-amber-400 flex items-center gap-2">
+            <i data-lucide="traffic-cone" class="w-4 h-4"></i> Criterio de Semaforización Oficial
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3 bg-emerald-950/40 rounded border border-emerald-800/60 flex items-start gap-3">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 mt-1 shrink-0"></span>
+              <div>
+                <div class="font-bold text-emerald-400">ESTABLE (P &lt; 20%) — 5 Líneas</div>
+                <div class="text-slate-300 text-[11px]">Líneas con capacidad suficiente para cumplir holgadamente la meta (ANES, BP, HM, JERINGAS, SV1).</div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-amber-950/40 rounded border border-amber-800/60 flex items-start gap-3">
+              <span class="w-3 h-3 rounded-full bg-amber-500 mt-1 shrink-0"></span>
+              <div>
+                <div class="font-bold text-amber-400">ALERTA (20% &le; P &le; 60%) — 1 Línea</div>
+                <div class="text-slate-300 text-[11px]">Líneas con probabilidad moderada de desviación. Requiere seguimiento de paros (VA1).</div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-rose-950/40 rounded border border-rose-800/60 flex items-start gap-3">
+              <span class="w-3 h-3 rounded-full bg-rose-500 mt-1 shrink-0"></span>
+              <div>
+                <div class="font-bold text-rose-400">CRÍTICO (P &gt; 60%) — 13 Líneas</div>
+                <div class="text-slate-300 text-[11px]">Alta certidumbre matemática de que no se alcanzará el OEE meta si no hay intervención preventiva previa (A4, AV6, VA3, OFT, etc.).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 10: MÓDULO 4 - MOTOR DE DIAGNÓSTICO PRESCRIPTIVO CON LLM            -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-10">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-emerald-400 uppercase tracking-wider">
+        <i data-lucide="check-check" class="w-4 h-4"></i> Capítulo 9: Motor Prescriptivo de Acción
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Del Diagnóstico Causal al Plan de Acción Operativo</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+        
+        <!-- Caso A4 -->
+        <div class="glass-card p-5 border-rose-900/50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400 text-sm">Línea Crítica A4</span>
+            <span class="pill bg-rose-950 text-rose-400 border border-rose-800">P = 99.4%</span>
+          </div>
+          <div class="text-xs text-slate-300 space-y-1">
+            <div><strong>Causa Raíz LLM:</strong> Desgaste severo en levas y atascamiento de folletos en <em>Encartonadora C9</em>.</div>
+            <div class="text-slate-400 text-[11px]">Horas en Riesgo: 98.3 hrs | Vol: 126,512 pzas</div>
+          </div>
+          <div class="p-3 bg-slate-900/90 rounded border border-slate-800 text-[11px] text-slate-300 space-y-1.5">
+            <div class="font-bold text-emerald-400">Plan Prescriptivo Asignado:</div>
+            <div>• <strong>Mantenimiento:</strong> Sustitución de cuchillas y calibración milimétrica de empujadores pre-arranque.</div>
+            <div>• <strong>Planeación:</strong> Adicionar 3 horas de colchón en los primeros 4 lotes.</div>
+          </div>
+        </div>
+
+        <!-- Caso AV6 -->
+        <div class="glass-card p-5 border-rose-900/50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400 text-sm">Línea Crítica AV6</span>
+            <span class="pill bg-rose-950 text-rose-400 border border-rose-800">P = 86.8%</span>
+          </div>
+          <div class="text-xs text-slate-300 space-y-1">
+            <div><strong>Causa Raíz LLM:</strong> Inestabilidad térmica y fallas de desincronización en <em>Inyección y Enfriamiento</em>.</div>
+            <div class="text-slate-400 text-[11px]">Horas en Riesgo: 47.6 hrs | Vol: 141,568 pzas</div>
+          </div>
+          <div class="p-3 bg-slate-900/90 rounded border border-slate-800 text-[11px] text-slate-300 space-y-1.5">
+            <div class="font-bold text-emerald-400">Plan Prescriptivo Asignado:</div>
+            <div>• <strong>Mantenimiento:</strong> Revisión termográfica de quemadores e inspección de sellos rotativos.</div>
+            <div>• <strong>Planeación:</strong> Secuenciar SKUs por volumen para evitar cambios de formato mecánicos.</div>
+          </div>
+        </div>
+
+        <!-- Caso SV1 (Estable) -->
+        <div class="glass-card p-5 border-emerald-900/50 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-400 text-sm">Línea Estable SV1</span>
+            <span class="pill bg-emerald-950 text-emerald-400 border border-emerald-800">P = 6.1%</span>
+          </div>
+          <div class="text-xs text-slate-300 space-y-1">
+            <div><strong>Diagnóstico LLM:</strong> Operación estable y lubricación autónoma consistente. OEE proyectado (56.3%) supera la meta (53.0%).</div>
+            <div class="text-slate-400 text-[11px]">Horas en Riesgo: 0.0 hrs | Desempeño Robusto</div>
+          </div>
+          <div class="p-3 bg-slate-900/90 rounded border border-slate-800 text-[11px] text-slate-300 space-y-1.5">
+            <div class="font-bold text-cyan-400">Oportunidad Estratégica:</div>
+            <div>• <strong>Absorción de Capacidad:</strong> Candidata prioritaria para absorber transferencias de volumen si A4 o A5 entran en contingencia.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 11: RESULTADOS EXPERIMENTALES Y EJEMPLOS DE SALIDA                  -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-11">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+        <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Capítulo 10: Resultados Experimentales y Validación
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Visualización Interactiva de Salidas (Línea A4 vs Meta)</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+        
+        <div class="glass-card p-4 col-span-2 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-200">Curva Real + Proyección LSTM con Intervalo de Confianza $q_{10}-q_{90}$</span>
+            <span class="text-cyan-400 font-mono">Línea A4 (Meta: 54.0%)</span>
+          </div>
+          <div id="chart-a4-demo" style="height: 270px; width: 100%;"></div>
+        </div>
+
+        <div class="glass-card p-4 space-y-3 col-span-1">
+          <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">KPIs Globales Obtenidos:</div>
+          
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">OEE Meta Planta:</span>
+              <span class="font-bold text-white">55.3%</span>
+            </div>
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">OEE Proyectado ($\mu$):</span>
+              <span class="font-bold text-cyan-400">53.8%</span>
+            </div>
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">Cumplimiento Global:</span>
+              <span class="font-bold text-emerald-400">98.1%</span>
+            </div>
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">Horas Totales Riesgo:</span>
+              <span class="font-bold text-rose-400">512.1 hrs</span>
+            </div>
+            <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">Volumen en Riesgo:</span>
+              <span class="font-bold text-rose-400">673,139 pzas</span>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 text-[11px] text-slate-400 text-center">
+            Acceso al dashboard completo de 19 líneas: <br/>
+            <a href="dashboard_oee_predictivo.html" target="_blank" class="text-cyan-400 font-bold hover:underline inline-flex items-center gap-1 mt-1">
+              Abrir dashboard_oee_predictivo.html <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDE 12: CONCLUSIONES, APORTACIÓN ACADÉMICA Y TRABAJO FUTURO              -->
+  <!-- ========================================================================= -->
+  <section class="slide" id="slide-12">
+    <div class="space-y-4 max-w-6xl mx-auto w-full">
+      <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-wider">
+        <i data-lucide="award" class="w-4 h-4"></i> Capítulo 11: Conclusiones & Trabajo Futuro
+      </div>
+      <h2 class="text-3xl font-extrabold text-white">Contribución del Proyecto y Escalabilidad Industrial</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        
+        <div class="glass-card p-5 space-y-4">
+          <div class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-5 h-5"></i> Contribuciones Principales (Tesis / Maestría)
+          </div>
+          <ul class="space-y-2.5 text-xs text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">1.</span>
+              <span><strong>Fusión Multimodal Rigurosa:</strong> Conexión exitosa entre lenguaje natural no estructurado (mantenimiento) y series de tiempo estocásticas (OEE continuo).</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">2.</span>
+              <span><strong>Inferencia Bayesiana Escalable:</strong> Demostración de que Monte Carlo Dropout ofrece cuantificación de incertidumbre comparable a métodos Bayesianos completos sin penalización computacional en inferencia.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 font-bold">3.</span>
+              <span><strong>Impacto Operativo Cuantificable:</strong> Reducción de la ceguera de planeación en 512 horas de riesgo y direccionamiento focalizado del gasto de mantenimiento.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="glass-card p-5 space-y-4">
+          <div class="text-sm font-bold text-indigo-400 flex items-center gap-2">
+            <i data-lucide="rocket" class="w-5 h-5"></i> Líneas de Trabajo Futuro & Escalabilidad
+          </div>
+          <ul class="space-y-2.5 text-xs text-slate-300">
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 font-bold">1.</span>
+              <span><strong>MLOps y Despliegue en GCP:</strong> Empaquetamiento en contenedor de Google Cloud Run Jobs con orquestador Cloud Scheduler para re-entrenamiento continuo semanal.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 font-bold">2.</span>
+              <span><strong>Modelos Temporales Fundacionales:</strong> Exploración comparativa contra arquitecturas Transformer orientadas a series de tiempo (PatchTST, Time-LLM).</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-indigo-400 font-bold">3.</span>
+              <span><strong>Optimización Prescriptiva con Algoritmos Genéticos:</strong> Algoritmo de re-secuenciamiento automático de órdenes en función de la fatiga proyectada de la maquinaria.</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Footer Agradecimiento -->
+      <div class="text-center pt-4 space-y-1">
+        <div class="text-xl font-bold gradient-text">¡Muchas Gracias! ¿Preguntas del Comité Evaluador?</div>
+        <div class="text-xs text-slate-400">Defensa de Proyecto de Maestría | Laboratorios PiSA S.A. de C.V.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- CONTROLES FLOTANTES INFERIORES                                            -->
+  <!-- ========================================================================= -->
+  <footer class="fixed bottom-3 left-6 right-6 flex items-center justify-between text-xs z-40 pointer-events-auto">
+    <!-- Botones de Navegación -->
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" class="px-3 py-1.5 rounded bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium flex items-center gap-1 transition">
+        <i data-lucide="chevron-left" class="w-4 h-4"></i> Anterior
+      </button>
+      <button onclick="nextSlide()" class="px-3 py-1.5 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-medium flex items-center gap-1 shadow-lg shadow-cyan-900/40 transition">
+        Siguiente <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Indicador de Diapositivas (Dots) -->
+    <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60" id="dots-container">
+      <!-- Inyectado por JS -->
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="flex items-center gap-2">
+      <a href="dashboard_oee_predictivo.html" target="_blank" class="px-3 py-1.5 rounded bg-slate-800/90 hover:bg-slate-700 text-cyan-300 border border-cyan-800/60 font-medium flex items-center gap-1 transition" title="Ir al Dashboard de Operaciones">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> Dashboard OEE
+      </a>
+    </div>
+  </footer>
+
+  <!-- SCRIPT DE CONTROL DE PRESENTACIÓN Y RENDERIZADO DE GRÁFICOS -->
+  <script>
+    const PAYLOAD = __PAYLOAD_PLACEHOLDER__;
+    let currentSlide = 1;
+    const totalSlides = 12;
+
+    // Reloj en tiempo real
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('slide-clock').textContent = now.toLocaleTimeString('es-MX', {hour: '2-digit', minute:'2-digit'});
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Inicializar Dots
+    const dotsContainer = document.getElementById('dots-container');
+    for (let i = 1; i <= totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = `w-2 h-2 rounded-full transition-all ${i === 1 ? 'bg-cyan-400 w-5' : 'bg-slate-600 hover:bg-slate-400'}`;
+      dot.onclick = () => goToSlide(i);
+      dot.title = `Ir a diapositiva ${i}`;
+      dot.id = `dot-${i}`;
+      dotsContainer.appendChild(dot);
+    }
+
+    function goToSlide(n) {
+      if (n < 1 || n > totalSlides) return;
+      
+      document.getElementById(`slide-${currentSlide}`).classList.remove('active');
+      document.getElementById(`dot-${currentSlide}`).className = 'w-2 h-2 rounded-full bg-slate-600 hover:bg-slate-400 transition-all';
+      
+      currentSlide = n;
+      
+      const nextSlideEl = document.getElementById(`slide-${currentSlide}`);
+      nextSlideEl.classList.add('active');
+      document.getElementById(`dot-${currentSlide}`).className = 'w-5 h-2 rounded-full bg-cyan-400 transition-all';
+      
+      document.getElementById('current-slide-num').textContent = currentSlide;
+      document.getElementById('progress-bar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+      
+      // Re-renderizar iconos y gráficos si aplica
+      lucide.createIcons();
+      if (currentSlide === 8) renderMultimonthChart();
+      if (currentSlide === 11) renderA4DemoChart();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) goToSlide(currentSlide - 1);
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.log(err));
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Navegación por teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'Home') {
+        goToSlide(1);
+      } else if (e.key === 'End') {
+        goToSlide(totalSlides);
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    // Gráfico Multi-Mes (Slide 8)
+    function renderMultimonthChart() {
+      const a4_data = PAYLOAD.multimonth_a4;
+      if (!a4_data || a4_data.length === 0) return;
+
+      const months = a4_data.map(d => d.mes_nombre);
+      const mu = a4_data.map(d => d.oee_mu);
+      const q10 = a4_data.map(d => d.oee_q10);
+      const q90 = a4_data.map(d => d.oee_q90);
+
+      const traces = [
+        {
+          x: months,
+          y: q90,
+          type: 'scatter',
+          mode: 'lines',
+          line: { width: 0 },
+          showlegend: false,
+          hoverinfo: 'skip'
+        },
+        {
+          x: months,
+          y: q10,
+          type: 'scatter',
+          mode: 'lines',
+          fill: 'tonexty',
+          fillcolor: 'rgba(56, 189, 248, 0.15)',
+          line: { width: 0 },
+          name: 'Banda Incertidumbre (q10-q90)',
+          hoverinfo: 'skip'
+        },
+        {
+          x: months,
+          y: mu,
+          type: 'scatter',
+          mode: 'lines+markers',
+          line: { color: '#38bdf8', width: 3 },
+          marker: { size: 7, color: '#38bdf8' },
+          name: 'OEE Proyectado (Media μ)'
+        },
+        {
+          x: months,
+          y: Array(months.length).fill(PAYLOAD.a4_plan),
+          type: 'scatter',
+          mode: 'lines',
+          line: { color: '#f59e0b', width: 2, dash: 'dash' },
+          name: 'Meta Plan (54.0%)'
+        }
+      ];
+
+      const layout = {
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        font: { family: 'Inter', color: '#94a3b8', size: 10 },
+        margin: { l: 40, r: 20, t: 10, b: 40 },
+        xaxis: { gridcolor: '#1e293b' },
+        yaxis: { gridcolor: '#1e293b', title: 'OEE (%)' },
+        legend: { orientation: 'h', y: 1.15, x: 0 }
+      };
+
+      Plotly.newPlot('chart-multimonth-a4', traces, layout, { responsive: true, displayModeBar: false });
+    }
+
+    // Gráfico Demo A4 (Slide 11)
+    function renderA4DemoChart() {
+      const histX = PAYLOAD.hist_a4_dates;
+      const histY = PAYLOAD.hist_a4_oee;
+      const novX = PAYLOAD.nov_dates;
+      const novY = PAYLOAD.a4_forecast_trend;
+      const q10 = PAYLOAD.a4_q10_trend;
+      const q90 = PAYLOAD.a4_q90_trend;
+
+      const traces = [
+        {
+          x: histX,
+          y: histY,
+          type: 'scatter',
+          mode: 'lines',
+          name: 'OEE Real Histórico',
+          line: { color: '#94a3b8', width: 1.5 }
+        },
+        {
+          x: novX,
+          y: q90,
+          type: 'scatter',
+          mode: 'lines',
+          line: { width: 0 },
+          showlegend: false,
+          hoverinfo: 'skip'
+        },
+        {
+          x: novX,
+          y: q10,
+          type: 'scatter',
+          mode: 'lines',
+          fill: 'tonexty',
+          fillcolor: 'rgba(239, 68, 68, 0.18)',
+          line: { width: 0 },
+          name: 'Banda Riesgo (q10-q90)',
+          hoverinfo: 'skip'
+        },
+        {
+          x: novX,
+          y: novY,
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Proyección LSTM (43.5%)',
+          line: { color: '#ef4444', width: 2.5 }
+        },
+        {
+          x: novX,
+          y: Array(novX.length).fill(PAYLOAD.a4_plan),
+          type: 'scatter',
+          mode: 'lines',
+          name: 'Meta Plan (54.0%)',
+          line: { color: '#f59e0b', width: 2, dash: 'dot' }
+        }
+      ];
+
+      const layout = {
+        paper_bgcolor: 'transparent',
+        plot_bgcolor: 'transparent',
+        font: { family: 'Inter', color: '#94a3b8', size: 10 },
+        margin: { l: 40, r: 20, t: 10, b: 30 },
+        xaxis: { gridcolor: '#1e293b' },
+        yaxis: { gridcolor: '#1e293b', title: 'OEE (%)' },
+        legend: { orientation: 'h', y: 1.15, x: 0 }
+      };
+
+      Plotly.newPlot('chart-a4-demo', traces, layout, { responsive: true, displayModeBar: false });
+    }
+
+    // Inicializar Lucide Icons al cargar
+    window.addEventListener('load', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
